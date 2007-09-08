@@ -1,0 +1,12 @@
+diff -up cheese-0.2.4/toc2/make/toc2-install.make.stripmenot cheese-0.2.4/toc2/make/toc2-install.make
+--- cheese-0.2.4/toc2/make/toc2-install.make.stripmenot	2007-09-07 00:41:13.000000000 -0400
++++ cheese-0.2.4/toc2/make/toc2-install.make	2007-09-07 00:41:55.000000000 -0400
+@@ -147,7 +147,7 @@ toc2.call.install-dll =  $(call toc2.cal
+ ##			}
+ 
+ toc2.install.flags.nonbins = -m 0644
+-toc2.install.flags.bins = -s -m 0755
++toc2.install.flags.bins = -m 0755
+ toc2.install.flags.bin-scripts = -m 0755
+ toc2.install.flags.dlls = -m 0755
+ 
