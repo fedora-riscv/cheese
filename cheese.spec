@@ -25,6 +25,7 @@ BuildRequires: libXxf86vm-devel
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: perl(XML::Parser)
+BuildRequires: gnome-doc-utils
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
