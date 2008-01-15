@@ -1,25 +1,26 @@
 Name:           cheese
-Version:        0.3.0
+Version:        2.21.5
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
-Source0:        http://download.gnome.org/sources/cheese/0.3/%{name}-%{version}.tar.gz
+Source0:        http://download.gnome.org/sources/cheese/2.21/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
-BuildRequires: libglade2-devel >= 2.0.0
+BuildRequires: libglade2-devel >= 2.6.0
 BuildRequires: dbus-devel
 BuildRequires: dbus-glib-devel
-BuildRequires: gstreamer-devel >= 0.10.12
+BuildRequires: gstreamer-devel >= 0.10.15
 BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
 BuildRequires: gnome-vfs2-devel
 BuildRequires: GConf2-devel
-BuildRequires: cairo-devel
-BuildRequires: hal-devel
+BuildRequires: cairo-devel >= 1.2.4
+BuildRequires: hal-devel >= 0.5.9
 BuildRequires: libgnomeui-devel
+BuildRequires: librsvg2-devel >= 2.18.0
 BuildRequires: evolution-data-server-devel
 BuildRequires: libXxf86vm-devel
 BuildRequires: desktop-file-utils
@@ -102,6 +103,9 @@ fi
 %{_sysconfdir}/gconf/schemas/cheese.schemas
 
 %changelog
+* Mon Jan 14 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.5-1
+- Update to 2.21.5
+
 * Mon Dec 24 2007  Matthias Clasen  <mclasen@redhat.com> 0.3.0-1
 - Update to 0.3.0
 
