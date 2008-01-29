@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.21.5
+Version:        2.21.91
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
@@ -103,6 +103,9 @@ fi
 %{_sysconfdir}/gconf/schemas/cheese.schemas
 
 %changelog
+* Tue Jan 29 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.91-1
+- Update to 2.21.91
+
 * Mon Jan 14 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.5-1
 - Update to 2.21.5
 
