@@ -7,6 +7,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
 Source0:        http://download.gnome.org/sources/cheese/2.21/%{name}-%{version}.tar.bz2
+Source1:	cheese-bugreport.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -40,6 +41,7 @@ gstreamer-backend.
 
 %prep
 %setup -q
+cp %{SOURCE1} data
 
 %build
 %configure
