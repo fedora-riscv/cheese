@@ -8,6 +8,7 @@ License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
 Source0:        http://download.gnome.org/sources/cheese/2.21/%{name}-%{version}.tar.bz2
 Source1:	cheese-bugreport.sh
+Patch0:		libexecdir.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -41,7 +42,10 @@ gstreamer-backend.
 
 %prep
 %setup -q
+%patch0 -p1 -b .libexecdir
 cp %{SOURCE1} data
+
+autoreconf
 
 %build
 %configure
@@ -103,6 +107,7 @@ fi
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_sysconfdir}/gconf/schemas/cheese.schemas
+%{_libexecdir}/cheese-bugreport.sh
 
 %changelog
 * Tue Jan 29 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.91-1

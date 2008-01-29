@@ -1,0 +1,21 @@
+diff -up cheese-2.21.91/data/cheese.desktop.in.in.libexecdir cheese-2.21.91/data/cheese.desktop.in.in
+--- cheese-2.21.91/data/cheese.desktop.in.in.libexecdir	2008-01-29 10:00:39.000000000 -0500
++++ cheese-2.21.91/data/cheese.desktop.in.in	2008-01-29 10:00:54.000000000 -0500
+@@ -11,4 +11,4 @@ X-GNOME-Bugzilla-Bugzilla=GNOME
+ X-GNOME-Bugzilla-Product=cheese
+ X-GNOME-Bugzilla-Component=general
+ X-GNOME-Bugzilla-Version=@VERSION@
+-X-GNOME-Bugzilla-ExtraInfoScript=@FULL_LIBDIR@/cheese/cheese-bugreport.sh
++X-GNOME-Bugzilla-ExtraInfoScript=@LIBEXECDIR@/cheese-bugreport.sh
+diff -up cheese-2.21.91/data/Makefile.am.libexecdir cheese-2.21.91/data/Makefile.am
+--- cheese-2.21.91/data/Makefile.am.libexecdir	2008-01-29 10:01:15.000000000 -0500
++++ cheese-2.21.91/data/Makefile.am	2008-01-29 10:01:35.000000000 -0500
+@@ -20,7 +20,7 @@ EXTRA_DIST =						\
+ 	$(schema_in_files)				\
+ 	$(pkgdata_DATA)
+ 
+-bugreportdir      = $(libdir)/cheese
++bugreportdir      = $(libexecdir)
+ bugreport_SCRIPTS = cheese-bugreport.sh
+ 
+ if GCONF_SCHEMAS_INSTALL
