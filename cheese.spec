@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.21.91
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
@@ -111,6 +111,9 @@ fi
 %{_libexecdir}/cheese-bugreport.sh
 
 %changelog
+* Fri Feb  8 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.91-2
+- Rebuild for gcc 4.3
+
 * Tue Jan 29 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.91-1
 - Update to 2.21.91
 
