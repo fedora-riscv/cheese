@@ -1,0 +1,13 @@
+diff -up cheese-2.21.91/src/cheese-window.c.lockup cheese-2.21.91/src/cheese-window.c
+--- cheese-2.21.91/src/cheese-window.c.lockup	2008-02-15 11:36:20.000000000 -0500
++++ cheese-2.21.91/src/cheese-window.c	2008-02-15 11:36:58.000000000 -0500
+@@ -1129,7 +1129,9 @@ setup_camera (CheeseWindow *cheese_windo
+                             cheese_effect_chooser_get_selection (CHEESE_EFFECT_CHOOSER (cheese_window->effect_chooser)));
+ 
+   cheese_webcam_play (cheese_window->webcam);
++  gdk_threads_enter ();
+   gtk_notebook_set_current_page (GTK_NOTEBOOK(cheese_window->notebook), 0);
++  gdk_threads_leave ();
+   ephy_spinner_stop (EPHY_SPINNER (cheese_window->throbber));
+ }
+ 
