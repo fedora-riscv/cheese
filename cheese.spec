@@ -1,16 +1,13 @@
 Name:           cheese
-Version:        2.21.91
-Release:        3%{?dist}
+Version:        2.21.92
+Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
 Source0:        http://download.gnome.org/sources/cheese/2.21/%{name}-%{version}.tar.bz2
-Source1:	cheese-bugreport.sh
 Patch0:		libexecdir.patch
-# http://bugzilla.gnome.org/show_bug.cgi?id=516697
-Patch1:		lockup.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -46,8 +43,6 @@ gstreamer-backend.
 %prep
 %setup -q
 %patch0 -p1 -b .libexecdir
-%patch1 -p1 -b .lockup
-cp %{SOURCE1} data
 
 autoreconf
 
@@ -114,6 +109,9 @@ fi
 %{_libexecdir}/cheese-bugreport.sh
 
 %changelog
+* Tue Feb 26 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.92-1
+- Update to 2.21.92
+
 * Fri Feb 15 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.91-3
 - Fix a locking problem that causes the UI to freeze
 
