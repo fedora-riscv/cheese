@@ -7,7 +7,6 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
 Source0:        http://download.gnome.org/sources/cheese/2.21/%{name}-%{version}.tar.bz2
-Patch0:		libexecdir.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -42,7 +41,6 @@ gstreamer-backend.
 
 %prep
 %setup -q
-%patch0 -p1 -b .libexecdir
 
 autoreconf
 
