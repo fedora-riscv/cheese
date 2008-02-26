@@ -104,7 +104,7 @@ fi
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_sysconfdir}/gconf/schemas/cheese.schemas
-%{_libexecdir}/cheese-bugreport.sh
+%{_libexecdir}/cheese
 
 %changelog
 * Tue Feb 26 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.92-1
