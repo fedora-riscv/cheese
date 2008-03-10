@@ -1,12 +1,12 @@
 Name:           cheese
-Version:        2.21.92
+Version:        2.22.0
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
-Source0:        http://download.gnome.org/sources/cheese/2.21/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.22/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -107,6 +107,9 @@ fi
 %{_libexecdir}/cheese
 
 %changelog
+* Mon Mar 10 2008 Matthias Clasen  <mclasen@redhat.com> 2.22.0-1
+- Update to 2.22.0
+
 * Tue Feb 26 2008  Matthias Clasen  <mclasen@redhat.com> 2.21.92-1
 - Update to 2.21.92
 
