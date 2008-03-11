@@ -42,6 +42,7 @@ gstreamer-backend.
 %prep
 %setup -q
 
+libtoolize --force --copy
 autoreconf
 
 %build
