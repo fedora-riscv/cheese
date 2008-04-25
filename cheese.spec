@@ -34,8 +34,6 @@ Requires(post): GConf2
 Requires(pre): GConf2
 Requires(preun): GConf2 
 
-Patch0: invalid-free.patch
-
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and 
 videos from a webcam. It also includes fancy graphical effects based on the 
@@ -43,7 +41,6 @@ gstreamer-backend.
 
 %prep
 %setup -q
-%patch0 -p1 -b .invalid-free
 
 libtoolize --force --copy
 autoreconf
