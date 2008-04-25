@@ -52,7 +52,9 @@ make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 make install DESTDIR=$RPM_BUILD_ROOT
+unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
 desktop-file-install --delete-original --vendor="" 	\
  	--dir=$RPM_BUILD_ROOT%{_datadir}/applications 	\
@@ -102,6 +104,7 @@ fi
 %{_bindir}/cheese
 %{_datadir}/applications/cheese.desktop
 %{_datadir}/cheese
+%{_datadir}/icons/hicolor/*/actions/*.png
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_sysconfdir}/gconf/schemas/cheese.schemas
