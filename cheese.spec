@@ -1,12 +1,12 @@
 Name:           cheese
-Version:        2.22.1
+Version:        2.23.1
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
-Source0:        http://download.gnome.org/sources/cheese/2.22/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.23/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -34,6 +34,8 @@ Requires(post): GConf2
 Requires(pre): GConf2
 Requires(preun): GConf2 
 
+Patch0: invalid-free.patch
+
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and 
 videos from a webcam. It also includes fancy graphical effects based on the 
@@ -41,6 +43,7 @@ gstreamer-backend.
 
 %prep
 %setup -q
+%patch0 -p1 -b .invalid-free
 
 libtoolize --force --copy
 autoreconf
@@ -108,6 +111,12 @@ fi
 %{_libexecdir}/cheese
 
 %changelog
+* Fri Apr 25 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.1-1
+- Update to 2.23.1
+
+* Tue Apr 22 2008 Matthias Clasen  <mclasen@redhat.com> 2.22.1-2
+- Fix an invalid free
+
 * Mon Apr  7 2008 Matthias Clasen  <mclasen@redhat.com> 2.22.1-1
 - Update to 2.22.1
 
