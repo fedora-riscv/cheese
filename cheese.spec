@@ -104,7 +104,6 @@ fi
 %{_bindir}/cheese
 %{_datadir}/applications/cheese.desktop
 %{_datadir}/cheese
-%{_datadir}/icons/hicolor/*/actions/*.png
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_sysconfdir}/gconf/schemas/cheese.schemas
