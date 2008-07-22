@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.23.4
+Version:        2.23.5
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
@@ -13,7 +13,7 @@ BuildRequires: gtk2-devel >= 2.10.0
 BuildRequires: libglade2-devel >= 2.6.0
 BuildRequires: dbus-devel
 BuildRequires: dbus-glib-devel
-BuildRequires: gstreamer-devel >= 0.10.15
+BuildRequires: gstreamer-devel >= 0.10.16
 BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
 BuildRequires: gnome-vfs2-devel
 BuildRequires: GConf2-devel
@@ -110,6 +110,9 @@ fi
 %{_libexecdir}/cheese
 
 %changelog
+* Tue Jul 22 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.5-1
+- Update to 2.23.5
+
 * Wed Jun 18 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.4-1
 - Update to 2.23.4
 
