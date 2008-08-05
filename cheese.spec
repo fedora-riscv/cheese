@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.23.5
+Version:        2.23.6
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
@@ -110,6 +110,9 @@ fi
 %{_libexecdir}/cheese
 
 %changelog
+* Tue Aug  5 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.6-1
+- Update to 2.23.6
+
 * Tue Jul 22 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.5-1
 - Update to 2.23.5
 
