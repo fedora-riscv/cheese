@@ -105,6 +105,7 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_sysconfdir}/gconf/schemas/cheese.schemas
 %{_libexecdir}/cheese
+%{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
 * Fri Aug 22 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.90-1
