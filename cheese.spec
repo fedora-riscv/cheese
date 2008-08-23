@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.23.6
+Version:        2.23.90
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
@@ -27,7 +27,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: perl(XML::Parser)
 BuildRequires: gnome-doc-utils
-BuildRequires: autoconf, automake, libtool, intltool
+BuildRequires: intltool
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
@@ -41,9 +41,6 @@ gstreamer-backend.
 
 %prep
 %setup -q
-
-libtoolize --force --copy
-autoreconf
 
 %build
 %configure
@@ -110,6 +107,9 @@ fi
 %{_libexecdir}/cheese
 
 %changelog
+* Fri Aug 22 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.90-1
+- Update to 2.23.90
+
 * Tue Aug  5 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.6-1
 - Update to 2.23.6
 
