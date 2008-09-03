@@ -1,12 +1,22 @@
 Name:           cheese
 Version:        2.23.91
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
 Source0:        http://download.gnome.org/sources/cheese/2.23/%{name}-%{version}.tar.bz2
+# Following 3 patches reported upstream here:
+# http://bugzilla.gnome.org/show_bug.cgi?id=546868
+Patch0:         cheese-2.23.91-dont-use-non-capture-devices.patch
+Patch1:         cheese-2.23.91-supported-resolutions-per-device.patch
+Patch2:         cheese-2.23.91-let-gstreamer-choose-yuv-or-rgb.patch
+# Following 3 patches reported upstream here:
+# http://bugzilla.gnome.org/show_bug.cgi?id=547144
+Patch3:         cheese-2.23.91-cheese_webcam_get_supported_video_formats-shuffle.patch
+Patch4:         cheese-2.23.90-only-list-resolutions-once.patch
+Patch5:         cheese-2.23.90-sort-resolutions.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -39,8 +49,16 @@ Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It also includes fancy graphical effects based on the 
 gstreamer-backend.
 
+
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+
 
 %build
 %configure
@@ -108,6 +126,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Wed Sep  3 2008 Hans de Goede <hdegoede@redhat.com> 2.23.91-2
+- Fix use with multiple v4l devices (rh 460956, gnome 546868, gnome 547144)
+
 * Tue Sep  2 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.91-1
 - Update to 2.23.91
 

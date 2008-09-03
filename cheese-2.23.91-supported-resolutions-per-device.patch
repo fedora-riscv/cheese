@@ -1,0 +1,88 @@
+diff -up cheese-2.23.91/src/cheese-webcam.c.foo cheese-2.23.91/src/cheese-webcam.c
+--- cheese-2.23.91/src/cheese-webcam.c.foo	2008-09-03 20:27:25.000000000 +0200
++++ cheese-2.23.91/src/cheese-webcam.c	2008-09-03 20:30:32.000000000 +0200
+@@ -90,7 +90,6 @@ typedef struct
+   int y_resolution;
+   int selected_device;
+   CheeseVideoFormat *current_format;
+-  GHashTable *supported_resolutions;
+ 
+   CheeseFlash *flash;
+ } CheeseWebcamPrivate;
+@@ -359,6 +358,8 @@ cheese_webcam_get_video_devices_from_hal
+     priv->webcam_devices[priv->num_webcam_devices].num_video_formats = 0;
+     priv->webcam_devices[priv->num_webcam_devices].video_formats = 
+       g_array_new (FALSE, FALSE, sizeof (CheeseVideoFormat));
++    priv->webcam_devices[priv->num_webcam_devices].supported_resolutions =
++      g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+     priv->num_webcam_devices++;
+ 
+     libhal_free_string (device);
+@@ -533,8 +534,6 @@ static void
+ cheese_webcam_get_webcam_device_data (CheeseWebcam       *webcam,
+                                       CheeseWebcamDevice *webcam_device)
+ {
+-  CheeseWebcamPrivate *priv = CHEESE_WEBCAM_GET_PRIVATE (webcam);
+-
+   char                *pipeline_desc;
+   GstElement          *pipeline;
+   GError              *err;
+@@ -597,7 +596,7 @@ cheese_webcam_get_webcam_device_data (Ch
+     CheeseVideoFormat video_format;
+ 
+     video_format = g_array_index (webcam_device->video_formats, CheeseVideoFormat, i);
+-    g_hash_table_insert (priv->supported_resolutions,
++    g_hash_table_insert (webcam_device->supported_resolutions,
+                          g_strdup_printf ("%ix%i", video_format.width,
+                                           video_format.height),
+                          &g_array_index (webcam_device->video_formats,
+@@ -715,7 +714,7 @@ cheese_webcam_create_webcam_source_bin (
+     /* Use the previously set resolution from gconf if it is set and the
+      * camera supports it. */
+     if (priv->x_resolution != 0 && priv->y_resolution != 0)
+-      format = g_hash_table_lookup (priv->supported_resolutions, resolution);
++      format = g_hash_table_lookup (selected_webcam->supported_resolutions, resolution);
+ 
+     if (!format)
+     {
+@@ -1260,13 +1259,15 @@ cheese_webcam_finalize (GObject *object)
+       g_free (g_array_index (priv->webcam_devices[i].video_formats, CheeseVideoFormat, j).framerates);
+       g_free (g_array_index (priv->webcam_devices[i].video_formats, CheeseVideoFormat, j).mimetype);
+     }
++    g_free (priv->webcam_devices[i].video_device);
+     g_free (priv->webcam_devices[i].hal_udi);
++    g_free (priv->webcam_devices[i].gstreamer_src);
++    g_free (priv->webcam_devices[i].product_name);
+     g_array_free (priv->webcam_devices[i].video_formats, TRUE);
++    g_hash_table_destroy (priv->webcam_devices[i].supported_resolutions);
+   }
+   g_free (priv->webcam_devices);
+ 
+-  g_hash_table_destroy (priv->supported_resolutions);
+-
+   G_OBJECT_CLASS (cheese_webcam_parent_class)->finalize (object);
+ }
+ 
+@@ -1403,10 +1404,6 @@ cheese_webcam_init (CheeseWebcam *webcam
+   priv->webcam_devices      = NULL;
+   priv->device_name         = NULL;
+ 
+-  priv->supported_resolutions = g_hash_table_new_full (g_str_hash,
+-                                                       g_str_equal,
+-                                                       g_free, NULL);
+-
+   priv->flash = cheese_flash_new ();
+ }
+ 
+diff -up cheese-2.23.91/src/cheese-webcam.h.foo cheese-2.23.91/src/cheese-webcam.h
+--- cheese-2.23.91/src/cheese-webcam.h.foo	2008-09-01 20:47:10.000000000 +0200
++++ cheese-2.23.91/src/cheese-webcam.h	2008-09-03 20:27:59.000000000 +0200
+@@ -59,6 +59,8 @@ typedef struct
+   char *product_name;
+   int   num_video_formats;
+   GArray *video_formats;
++  /* Hash table for resolution based lookup of video_formats */
++  GHashTable *supported_resolutions;
+ } CheeseWebcamDevice;
+ 
+ typedef enum

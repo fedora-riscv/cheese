@@ -1,0 +1,49 @@
+diff -up cheese-2.23.90/src/cheese-webcam.c.qwerty cheese-2.23.90/src/cheese-webcam.c
+--- cheese-2.23.90/src/cheese-webcam.c.qwerty	2008-09-02 17:14:30.000000000 +0200
++++ cheese-2.23.90/src/cheese-webcam.c	2008-09-02 19:38:50.000000000 +0200
+@@ -442,6 +442,7 @@ cheese_webcam_add_video_format (CheeseWe
+   CheeseVideoFormat *video_format, GstStructure *format_structure)
+ {
+   int i;
++  gchar *resolution;
+ 
+   cheese_webcam_get_supported_framerates (video_format, format_structure);
+   find_highest_framerate (video_format);
+@@ -453,12 +454,33 @@ cheese_webcam_add_video_format (CheeseWe
+     g_print ("%d/%d ", video_format->framerates[i].numerator,
+              video_format->framerates[i].denominator);
+   }
+-  g_print ("\n");
++  
++  resolution = g_strdup_printf ("%ix%i", video_format->width,
++                                video_format->height);
++  i = GPOINTER_TO_INT(g_hash_table_lookup (
++                                     webcam_device->supported_resolutions,
++                                     resolution));
++  if (i) { /* Resolution already added ? */
++    CheeseVideoFormat *curr_format = &g_array_index(
++                                                webcam_device->video_formats,
++                                                CheeseVideoFormat, i - 1);
++    float new_framerate = (float)video_format->highest_framerate.numerator /
++                                 video_format->highest_framerate.denominator;
++    float curr_framerate = (float)curr_format->highest_framerate.numerator /
++                                  curr_format->highest_framerate.denominator;
++    if (new_framerate > curr_framerate) {
++      g_print ("higher framerate replacing existing format\n");
++      *curr_format = *video_format;
++    }
++    else
++      g_print ("already added, skipping\n");
++
++    g_free (resolution);
++    return;
++  }
+ 
+   g_array_append_val (webcam_device->video_formats, *video_format);
+-  g_hash_table_insert (webcam_device->supported_resolutions, 
+-                       g_strdup_printf ("%ix%i", video_format->width,
+-                                        video_format->height), 
++  g_hash_table_insert (webcam_device->supported_resolutions, resolution,
+                        GINT_TO_POINTER(webcam_device->num_video_formats + 1));
+ 
+   webcam_device->num_video_formats++;
