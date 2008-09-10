@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.23.92
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
@@ -110,7 +110,7 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
-* Tue Sep  9 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.92-1
+* Tue Sep  9 2008 Matthias Clasen  <mclasen@redhat.com> 2.23.92-2
 - Update to 2.23.92
 - Drop upstreamed patches
 
