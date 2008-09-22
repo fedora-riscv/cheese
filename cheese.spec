@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.24,0
+Version:        2.24.0
 Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
