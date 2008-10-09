@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.24.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
@@ -59,6 +59,22 @@ desktop-file-install --delete-original --vendor="" 	\
  	--dir=$RPM_BUILD_ROOT%{_datadir}/applications 	\
 	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
+# save space by linking identical images in translated docs
+helpdir=$RPM_BUILD_ROOT%{_datadir}/gnome/help/%{name}
+for f in $helpdir/C/figures/*.jpg; do
+  b="$(basename $f)"
+  for d in $helpdir/*; do
+    if [ -d "$d" -a "$d" != "$helpdir/C" ]; then
+      g="$d/figures/$b"
+      if [ -f "$g" ]; then
+        if cmp -s $f $g; then
+          rm "$g"; ln -s "../../C/figures/$b" "$g"
+        fi
+      fi
+    fi
+  done
+done
+
 %find_lang %{name} --with-gnome
 
 
@@ -110,6 +126,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Wed Oct  8 2008 Matthias Clasen  <mclasen@redhat.com> 2.24.0-2
+- Save space
+
 * Mon Sep 22 2008 Matthias Clasen  <mclasen@redhat.com> 2.24.0-1
 - Update to 2.24.0
 
