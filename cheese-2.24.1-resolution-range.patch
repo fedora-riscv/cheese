@@ -1,0 +1,14 @@
+diff -up cheese-2.24.1/src/cheese-webcam.c~ cheese-2.24.1/src/cheese-webcam.c
+--- cheese-2.24.1/src/cheese-webcam.c~	2008-11-09 17:05:26.000000000 +0100
++++ cheese-2.24.1/src/cheese-webcam.c	2008-11-09 17:05:26.000000000 +0100
+@@ -567,7 +567,9 @@ cheese_webcam_get_supported_video_format
+ 
+       cur_width  = min_width;
+       cur_height = min_height;
+-      while (cur_width < max_width && cur_height < max_height)
++      /* Gstreamer will sometimes give us a range with min_xxx == max_xxx,
++         we use <= here (and not below) to make this work */
++      while (cur_width <= max_width && cur_height <= max_height)
+       {
+         CheeseVideoFormat video_format;
+ 
