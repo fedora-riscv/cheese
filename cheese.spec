@@ -1,6 +1,6 @@
 Name:           cheese
-Version:        2.24.1
-Release:        2%{?dist}
+Version:        2.25.1
+Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
@@ -129,6 +129,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Thu Nov 13 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-1
+- Update to 2.25.1
+
 * Sun Nov  9 2008 Hans de Goede <hdegoede@redhat.com> 2.24.1-2
 - Fix cams which only support 1 resolution not working (rh470698, gnome560032)
 
