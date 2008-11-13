@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.25.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
@@ -30,7 +30,7 @@ BuildRequires: gettext
 BuildRequires: perl(XML::Parser)
 BuildRequires: gnome-doc-utils
 BuildRequires: intltool
-BuildRequires: gnome-desktop-devel
+BuildRequires: gnome-desktop-devel >= 2.25.1
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
@@ -130,7 +130,7 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
-* Thu Nov 13 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-2
+* Thu Nov 13 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-3
 - Update to 2.25.1
 
 * Sun Nov  9 2008 Hans de Goede <hdegoede@redhat.com> 2.24.1-2
