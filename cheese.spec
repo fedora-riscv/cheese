@@ -1,11 +1,11 @@
 Name:           cheese
 Version:        2.25.1
-Release:        3%{?dist}
-Summary:        A webcam application for snapshots and movies
+Release:        4%{?dist}
+Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
-URL:            http://live.gnome.org/Cheese
+URL:            http://projects.gnome.org/cheese/
 Source0:        http://download.gnome.org/sources/cheese/2.24/%{name}-%{version}.tar.bz2
 # Submitted upstream: http://bugzilla.gnome.org/show_bug.cgi?id=560032
 Patch0:         cheese-2.24.1-resolution-range.patch
@@ -39,9 +39,7 @@ Requires(preun): GConf2
 
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and 
-videos from a webcam. It also includes fancy graphical effects based on the 
-gstreamer-backend.
-
+videos from a webcam. It can also apply fancy graphical effects.
 
 %prep
 %setup -q
@@ -130,6 +128,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Thu Nov 21 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-4
+- Better URL
+
 * Thu Nov 13 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-3
 - Update to 2.25.1
 
