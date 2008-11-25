@@ -1,14 +1,12 @@
 Name:           cheese
-Version:        2.24.1
-Release:        2%{?dist}
+Version:        2.24.2
+Release:        1%{?dist}
 Summary:        A webcam application for snapshots and movies
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://live.gnome.org/Cheese
 Source0:        http://download.gnome.org/sources/cheese/2.24/%{name}-%{version}.tar.bz2
-# Submitted upstream: http://bugzilla.gnome.org/show_bug.cgi?id=560032
-Patch0:         cheese-2.24.1-resolution-range.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -44,7 +42,6 @@ gstreamer-backend.
 
 %prep
 %setup -q
-%patch0 -p1
 
 
 %build
@@ -129,6 +126,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Tue Nov 25 2008 Matthias Clasen  <mclasen@redhat.com> 2.24.2-1
+- Update to 2.24.2
+
 * Sun Nov  9 2008 Hans de Goede <hdegoede@redhat.com> 2.24.1-2
 - Fix cams which only support 1 resolution not working (rh470698, gnome560032)
 
