@@ -1,14 +1,12 @@
 Name:           cheese
-Version:        2.25.1
-Release:        4%{?dist}
+Version:        2.25.2
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
-Source0:        http://download.gnome.org/sources/cheese/2.24/%{name}-%{version}.tar.bz2
-# Submitted upstream: http://bugzilla.gnome.org/show_bug.cgi?id=560032
-Patch0:         cheese-2.24.1-resolution-range.patch
+Source0:        http://download.gnome.org/sources/cheese/2.25/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.10.0
@@ -43,7 +41,6 @@ videos from a webcam. It can also apply fancy graphical effects.
 
 %prep
 %setup -q
-%patch0 -p1
 
 
 %build
@@ -128,6 +125,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Wed Dec  3 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.2-1
+- Update to 2.25.2
+
 * Thu Nov 21 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-4
 - Better URL
 
