@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.25.4
+Version:        2.25.90
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -125,6 +125,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Tue Feb  3 2009 Matthias Clasen  <mclasen@redhat.com> 2.25.90-1
+- Update to 2.25.90
+
 * Tue Jan  6 2009 Matthias Clasen  <mclasen@redhat.com> 2.25.4-1
 - Update to 2.25.4
 
