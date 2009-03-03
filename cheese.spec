@@ -1,6 +1,6 @@
 Name:           cheese
-Version:        2.25.91
-Release:        2%{?dist}
+Version:        2.25.92
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -25,7 +25,6 @@ BuildRequires: evolution-data-server-devel
 BuildRequires: libXxf86vm-devel
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
-BuildRequires: perl(XML::Parser)
 BuildRequires: gnome-doc-utils
 BuildRequires: intltool
 BuildRequires: gnome-desktop-devel >= 2.25.1
@@ -33,10 +32,10 @@ BuildRequires: gnome-desktop-devel >= 2.25.1
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
 Requires(pre): GConf2
-Requires(preun): GConf2 
+Requires(preun): GConf2
 
 %description
-Cheese is a Photobooth-inspired GNOME application for taking pictures and 
+Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
 
 %prep
@@ -125,6 +124,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Mon Mar  2 2009 Matthias Clasen  <mclasen@redhat.com> 2.25.92-1
+- Update to 2.25.92
+
 * Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.25.91-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
