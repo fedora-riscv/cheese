@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.27.90
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -37,6 +37,9 @@ Requires(preun): GConf2
 #
 Patch0: fix-schemas.patch
 
+# http://bugzilla.gnome.org/show_bug.cgi?id=592663
+Patch1: trash-menu.patch
+
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
@@ -44,6 +47,7 @@ videos from a webcam. It can also apply fancy graphical effects.
 %prep
 %setup -q
 %patch0 -p1 -b .fix-schemas
+%patch1 -p1 -b .trash-menu
 
 %build
 %configure
@@ -126,6 +130,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Sat Aug 22 2009 Matthias Clasen  <mclasen@redhat.com> 2.27.90-3
+- Update sensitivity of menu items
+
 * Fri Aug 14 2009 Matthias Clasen  <mclasen@redhat.com> 2.27.90-2
 - Fix schemas file syntax
 
