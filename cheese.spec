@@ -1,6 +1,6 @@
 Name:           cheese
-Version:        2.27.90
-Release:        3%{?dist}
+Version:        2.27.91
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -34,9 +34,6 @@ Requires(post): GConf2
 Requires(pre): GConf2
 Requires(preun): GConf2
 
-#
-Patch0: fix-schemas.patch
-
 # http://bugzilla.gnome.org/show_bug.cgi?id=592663
 Patch1: trash-menu.patch
 
@@ -46,7 +43,6 @@ videos from a webcam. It can also apply fancy graphical effects.
 
 %prep
 %setup -q
-%patch0 -p1 -b .fix-schemas
 %patch1 -p1 -b .trash-menu
 
 %build
@@ -130,6 +126,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Mon Aug 24 2009 Matthias Clasen  <mclasen@redhat.com> 2.27.91-1
+- Update to 2.27.91
+
 * Sat Aug 22 2009 Matthias Clasen  <mclasen@redhat.com> 2.27.90-3
 - Update sensitivity of menu items
 
