@@ -1,12 +1,12 @@
 Name:           cheese
-Version:        2.27.92
+Version:        2.28.0
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
-Source0:        http://download.gnome.org/sources/cheese/2.27/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.28/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.17.3
@@ -126,6 +126,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Mon Sep 21 2009 Matthias Clasen  <mclasen@redhat.com> 2.28.0-1
+- Update to 2.28.0
+
 * Mon Sep  7 2009 Matthias Clasen  <mclasen@redhat.com> 2.27.92-1
 - Update to 2.27.92
 
