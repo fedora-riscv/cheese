@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -58,6 +58,7 @@ unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
 desktop-file-install --delete-original --vendor="" 	\
  	--dir=$RPM_BUILD_ROOT%{_datadir}/applications 	\
+	--add-category X-AudioVideoImport		\
 	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
 # save space by linking identical images in translated docs
@@ -126,6 +127,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Sun Sep 27 2009 Orcan Ogetbil <oget[DOT]fedora[AT]gmail[DOT]com> 2.28.0-2
+- Update desktop file according to F-12 FedoraStudio feature
+
 * Mon Sep 21 2009 Matthias Clasen  <mclasen@redhat.com> 2.28.0-1
 - Update to 2.28.0
 
