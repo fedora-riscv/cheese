@@ -1,6 +1,6 @@
 Name:           cheese
-Version:        2.28.0
-Release:        2%{?dist}
+Version:        2.28.0.1
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -127,6 +127,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Tue Sep 29 2009 Matthias Clasen  <mclasen@redhat.com> 2.28.0.1-1
+- Update to 2.28.0.1
+
 * Sun Sep 27 2009 Orcan Ogetbil <oget[DOT]fedora[AT]gmail[DOT]com> 2.28.0-2
 - Update desktop file according to F-12 FedoraStudio feature
 
