@@ -130,7 +130,7 @@ fi
 %{_sysconfdir}/gconf/schemas/cheese.schemas
 %{_libexecdir}/cheese
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
-%{_libdir}/libcheese.so*
+%{_libdir}/libcheese-gtk.so*
 
 %changelog
 * Tue Jan 12 2010 Matthias Clasen  <mclasen@redhat.com> 2.29.5-1
