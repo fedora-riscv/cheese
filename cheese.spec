@@ -47,7 +47,7 @@ videos from a webcam. It can also apply fancy graphical effects.
 %patch1 -p1 -b .trash-menu
 
 %build
-%configure
+%configure --disable-static
 make %{?_smp_mflags}
 
 
@@ -56,6 +56,8 @@ rm -rf $RPM_BUILD_ROOT
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 make install DESTDIR=$RPM_BUILD_ROOT
 unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
 
 desktop-file-install --delete-original --vendor="" 	\
  	--dir=$RPM_BUILD_ROOT%{_datadir}/applications 	\
@@ -100,6 +102,7 @@ fi
 
 
 %post
+/sbin/ldconfig
 touch --no-create %{_datadir}/icons/hicolor
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -q %{_datadir}/icons/hicolor
@@ -109,6 +112,7 @@ gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/cheese.schemas 
 
 
 %postun
+/sbin/ldconfig
 touch --no-create %{_datadir}/icons/hicolor
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -q %{_datadir}/icons/hicolor
@@ -126,6 +130,7 @@ fi
 %{_sysconfdir}/gconf/schemas/cheese.schemas
 %{_libexecdir}/cheese
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
+%{_libdir}/libcheese.so*
 
 %changelog
 * Tue Jan 12 2010 Matthias Clasen  <mclasen@redhat.com> 2.29.5-1
