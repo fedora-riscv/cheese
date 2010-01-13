@@ -28,6 +28,7 @@ BuildRequires: intltool
 BuildRequires: gnome-desktop-devel >= 2.25.1
 BuildRequires: libgudev1-devel
 BuildRequires: libcanberra-devel
+BuildRequires: scrollkeeper
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
