@@ -1,6 +1,7 @@
---- cheese-2.27.90/src/cheese-window.c	2009-08-10 16:03:17.000000000 -0400
-+++ hacked/src/cheese-window.c	2009-08-22 03:32:26.482193815 -0400
-@@ -172,6 +172,7 @@
+diff -up cheese-2.29.5/src/cheese-window.c.trash-menu cheese-2.29.5/src/cheese-window.c
+--- cheese-2.29.5/src/cheese-window.c.trash-menu	2009-12-23 09:08:40.000000000 -0500
++++ cheese-2.29.5/src/cheese-window.c	2010-01-12 22:53:55.606104369 -0500
+@@ -168,6 +168,7 @@ typedef struct
    GtkActionGroup *actions_burst;
    GtkActionGroup *actions_fullscreen;
    GtkActionGroup *actions_wide_mode;
@@ -8,15 +9,15 @@
  
    GtkUIManager *ui_manager;
  
-@@ -559,6 +560,7 @@
- {
-   g_object_unref (cheese_window->webcam);
-   g_object_unref (cheese_window->actions_main);
+@@ -610,6 +611,7 @@ cheese_window_cmd_close (GtkWidget *widg
+   g_object_unref (cheese_window->actions_video);
+   g_object_unref (cheese_window->actions_burst);
+   g_object_unref (cheese_window->actions_fullscreen);
 +  g_object_unref (cheese_window->actions_trash);
-   g_object_unref (cheese_window->actions_account_photo);
-   g_object_unref (cheese_window->actions_countdown);
-   g_object_unref (cheese_window->actions_effects);
-@@ -1182,6 +1184,39 @@
+   g_object_unref (cheese_window->gconf);
+ 
+   g_free (cheese_window);
+@@ -1091,6 +1093,39 @@ cheese_window_selection_changed_cb (GtkI
    }
  }
  
@@ -56,7 +57,7 @@
  static gboolean
  cheese_window_button_press_event_cb (GtkWidget *iconview, GdkEventButton *event,
                                       CheeseWindow *cheese_window)
-@@ -1549,8 +1584,6 @@
+@@ -1480,8 +1515,6 @@ static const GtkActionEntry action_entri
    {"Cheese",       NULL,            N_("_Cheese")                       },
  
    {"Edit",         NULL,            N_("_Edit")                         },
@@ -65,7 +66,7 @@
  
    {"Help",         NULL,            N_("_Help")                         },
  
-@@ -1560,6 +1593,11 @@
+@@ -1491,6 +1524,11 @@ static const GtkActionEntry action_entri
    {"About",        GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (cheese_window_cmd_about)},
  };
  
@@ -77,7 +78,7 @@
  static const GtkToggleActionEntry action_entries_countdown[] = {
    {"Countdown", NULL, N_("Countdown"), NULL, NULL, G_CALLBACK (cheese_window_set_countdown), FALSE},
  };
-@@ -1878,6 +1943,10 @@
+@@ -1799,6 +1837,10 @@ cheese_window_create_window (CheeseWindo
                                                                  "ActionsMain",
                                                                  action_entries_main,
                                                                  G_N_ELEMENTS (action_entries_main));
@@ -88,7 +89,7 @@
    cheese_window->actions_toggle = cheese_window_radio_action_group_new (cheese_window,
                                                                          "ActionsRadio",
                                                                          action_entries_toggle,
-@@ -2041,6 +2110,13 @@
+@@ -1918,6 +1960,13 @@ cheese_window_create_window (CheeseWindo
                      G_CALLBACK (cheese_window_selection_changed_cb), cheese_window);
    g_signal_connect (cheese_window->thumb_view, "button_press_event",
                      G_CALLBACK (cheese_window_button_press_event_cb), cheese_window);

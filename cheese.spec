@@ -9,25 +9,25 @@ URL:            http://projects.gnome.org/cheese/
 Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: gtk2-devel >= 2.17.3
-BuildRequires: libglade2-devel >= 2.6.0
+BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
 BuildRequires: dbus-glib-devel
-BuildRequires: gstreamer-devel >= 0.10.16
+BuildRequires: gstreamer-devel >= 0.10.23
 BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
 BuildRequires: gnome-vfs2-devel
 BuildRequires: GConf2-devel
-BuildRequires: cairo-devel >= 1.2.4
-BuildRequires: hal-devel >= 0.5.9
-BuildRequires: libgnomeui-devel
+BuildRequires: cairo-devel >= 1.4.0
 BuildRequires: librsvg2-devel >= 2.18.0
 BuildRequires: evolution-data-server-devel
 BuildRequires: libXxf86vm-devel
+BuildRequires: libXtst-devel
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
 BuildRequires: gnome-doc-utils
 BuildRequires: intltool
 BuildRequires: gnome-desktop-devel >= 2.25.1
+BuildRequires: libgudev1-devel
+BuildRequires: libcanberra-gtk
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
