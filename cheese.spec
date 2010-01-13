@@ -1,12 +1,12 @@
 Name:           cheese
-Version:        2.28.0
-Release:        2%{?dist}
+Version:        2.29.5
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
-Source0:        http://download.gnome.org/sources/cheese/2.28/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.17.3
@@ -127,6 +127,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Tue Jan 12 2010 Matthias Clasen  <mclasen@redhat.com> 2.29.5-1
+- Update to 2.29.5
+
 * Sun Sep 27 2009 Orcan Ogetbil <oget[DOT]fedora[AT]gmail[DOT]com> 2.28.0-2
 - Update desktop file according to F-12 FedoraStudio feature
 
