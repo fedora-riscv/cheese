@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.29.90
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -37,6 +37,7 @@ Requires(preun): GConf2
 
 # http://bugzilla.gnome.org/show_bug.cgi?id=592663
 Patch1: trash-menu.patch
+Patch2: 0001-Require-gstreamer-plugins-base-0.10.patch
 
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
@@ -65,6 +66,7 @@ for writing applications that require a webcam display widget.
 %prep
 %setup -q
 %patch1 -p1 -b .trash-menu
+%patch2 -p1 -b .reqs
 
 %build
 %configure --disable-static
@@ -168,6 +170,9 @@ fi
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Tue Feb 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.90-2
+- Fix include path, and missing requires for the pkg-config file
+
 * Tue Feb 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.90-1
 - Update to 2.29.90
 
