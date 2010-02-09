@@ -1,6 +1,6 @@
 Name:           cheese
-Version:        2.29.5
-Release:        2%{?dist}
+Version:        2.29.90
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -133,6 +133,9 @@ fi
 %{_libdir}/libcheese-gtk.so*
 
 %changelog
+* Tue Feb 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.90-1
+- Update to 2.29.90
+
 * Sun Jan 17 2010 Matthias Clasen  <mclasen@redhat.com> 2.29.5-2
 - Rebuild
 
