@@ -1,7 +1,41 @@
-diff -up cheese-2.29.5/src/cheese-window.c.trash-menu cheese-2.29.5/src/cheese-window.c
---- cheese-2.29.5/src/cheese-window.c.trash-menu	2009-12-23 09:08:40.000000000 -0500
-+++ cheese-2.29.5/src/cheese-window.c	2010-01-12 22:53:55.606104369 -0500
-@@ -168,6 +168,7 @@ typedef struct
+From 2a16851e43cac594bf8983221411e19aa00082cd Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Tue, 9 Feb 2010 15:46:59 +0000
+Subject: [PATCH] Update sensitivity of "move all to trash"
+
+https://bugzilla.gnome.org/show_bug.cgi?id=592663
+---
+ src/cheese-ui.h     |    7 +++++--
+ src/cheese-window.c |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 2 deletions(-)
+
+diff --git a/src/cheese-ui.h b/src/cheese-ui.h
+index 0068b73..c9c76bb 100644
+--- a/src/cheese-ui.h
++++ b/src/cheese-ui.h
+@@ -79,12 +79,15 @@ const GtkActionEntry action_entries_file[] = {
+    G_CALLBACK (cheese_cmd_file_save_as)},
+   {"MoveToTrash", "user-trash",      N_("Move to _Trash"), "Delete",        NULL,
+    G_CALLBACK (cheese_cmd_file_move_to_trash)},
+-  {"RemoveAll",    NULL,             N_("Move All to Trash"), NULL, NULL,
+-   G_CALLBACK (cheese_cmd_file_move_all_to_trash)},
+   {"Delete",      NULL,              N_("Delete"),         "<shift>Delete", NULL,
+    G_CALLBACK (cheese_cmd_file_delete)},
+ };
+ 
++static const GtkActionEntry action_entries_trash[] = {
++  {"RemoveAll",    NULL,             N_("Move All to Trash"), NULL, NULL,
++   G_CALLBACK (cheese_cmd_file_move_all_to_trash)},
++};
++
+ G_END_DECLS
+ 
+ #endif /* __CHEESE_UI_H__ */
+diff --git a/src/cheese-window.c b/src/cheese-window.c
+index e4d06fa..e1c672e 100644
+--- a/src/cheese-window.c
++++ b/src/cheese-window.c
+@@ -164,6 +164,7 @@ typedef struct
    GtkActionGroup *actions_burst;
    GtkActionGroup *actions_fullscreen;
    GtkActionGroup *actions_wide_mode;
@@ -9,15 +43,7 @@ diff -up cheese-2.29.5/src/cheese-window.c.trash-menu cheese-2.29.5/src/cheese-w
  
    GtkUIManager *ui_manager;
  
-@@ -610,6 +611,7 @@ cheese_window_cmd_close (GtkWidget *widg
-   g_object_unref (cheese_window->actions_video);
-   g_object_unref (cheese_window->actions_burst);
-   g_object_unref (cheese_window->actions_fullscreen);
-+  g_object_unref (cheese_window->actions_trash);
-   g_object_unref (cheese_window->gconf);
- 
-   g_free (cheese_window);
-@@ -1091,6 +1093,39 @@ cheese_window_selection_changed_cb (GtkI
+@@ -479,6 +480,40 @@ cheese_window_selection_changed_cb (GtkIconView  *iconview,
    }
  }
  
@@ -25,15 +51,16 @@ diff -up cheese-2.29.5/src/cheese-window.c.trash-menu cheese-2.29.5/src/cheese-w
 +cheese_window_thumbnails_changed (GtkTreeModel *model,
 +                                  CheeseWindow *cheese_window)
 +{
++  CheeseWindowPrivate *priv = CHEESE_WINDOW_GET_PRIVATE (cheese_window);
 +  GtkTreeIter iter;
 +
 +  if (gtk_tree_model_get_iter_first (model, &iter))
 +  {
-+    gtk_action_group_set_sensitive (cheese_window->actions_trash, TRUE);
++    gtk_action_group_set_sensitive (priv->actions_trash, TRUE);
 +  }
 +  else
 +  {
-+    gtk_action_group_set_sensitive (cheese_window->actions_trash, FALSE);
++    gtk_action_group_set_sensitive (priv->actions_trash, FALSE);
 +  }
 +}
 +
@@ -57,49 +84,40 @@ diff -up cheese-2.29.5/src/cheese-window.c.trash-menu cheese-2.29.5/src/cheese-w
  static gboolean
  cheese_window_button_press_event_cb (GtkWidget *iconview, GdkEventButton *event,
                                       CheeseWindow *cheese_window)
-@@ -1480,8 +1515,6 @@ static const GtkActionEntry action_entri
-   {"Cheese",       NULL,            N_("_Cheese")                       },
+@@ -1085,6 +1120,11 @@ setup_menubar_and_actions (CheeseWindow *cheese_window)
+                                                        G_N_ELEMENTS (action_entries_file));
+   gtk_action_group_set_sensitive (priv->actions_file, FALSE);
  
-   {"Edit",         NULL,            N_("_Edit")                         },
--  {"RemoveAll",    NULL,            N_("Move All to Trash"), NULL, NULL,
--   G_CALLBACK (cheese_window_move_all_media_to_trash)},
- 
-   {"Help",         NULL,            N_("_Help")                         },
- 
-@@ -1491,6 +1524,11 @@ static const GtkActionEntry action_entri
-   {"About",        GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (cheese_window_cmd_about)},
- };
- 
-+static const GtkActionEntry action_entries_trash[] = {
-+  {"RemoveAll",    NULL,            N_("Move All to Trash"), NULL, NULL,
-+   G_CALLBACK (cheese_window_move_all_media_to_trash)},
-+};
++  priv->actions_trash = cheese_window_action_group_new (cheese_window,
++                                                        "ActionsTrash",
++                                                        action_entries_trash,
++                                                        G_N_ELEMENTS (action_entries_trash));
 +
- static const GtkToggleActionEntry action_entries_countdown[] = {
-   {"Countdown", NULL, N_("Countdown"), NULL, NULL, G_CALLBACK (cheese_window_set_countdown), FALSE},
- };
-@@ -1799,6 +1837,10 @@ cheese_window_create_window (CheeseWindo
-                                                                 "ActionsMain",
-                                                                 action_entries_main,
-                                                                 G_N_ELEMENTS (action_entries_main));
-+  cheese_window->actions_trash = cheese_window_action_group_new (cheese_window,
-+                                                                 "ActionsTrash",
-+                                                                 action_entries_trash,
-+                                                                 G_N_ELEMENTS (action_entries_trash));
-   cheese_window->actions_toggle = cheese_window_radio_action_group_new (cheese_window,
-                                                                         "ActionsRadio",
-                                                                         action_entries_toggle,
-@@ -1918,6 +1960,13 @@ cheese_window_create_window (CheeseWindo
-                     G_CALLBACK (cheese_window_selection_changed_cb), cheese_window);
-   g_signal_connect (cheese_window->thumb_view, "button_press_event",
+   priv->actions_photo = cheese_window_action_group_new (cheese_window,
+                                                         "ActionsPhoto",
+                                                         action_entries_photo,
+@@ -1253,6 +1293,13 @@ cheese_window_init (CheeseWindow *cheese_window)
+   g_signal_connect (priv->thumb_view, "button_press_event",
                      G_CALLBACK (cheese_window_button_press_event_cb), cheese_window);
-+
-+  g_signal_connect (gtk_icon_view_get_model (GTK_ICON_VIEW (cheese_window->thumb_view)), "row-inserted",
+ 
++  g_signal_connect (gtk_icon_view_get_model (GTK_ICON_VIEW (priv->thumb_view)), "row-inserted",
 +                    G_CALLBACK (cheese_window_thumbnail_inserted), cheese_window);
-+  g_signal_connect (gtk_icon_view_get_model (GTK_ICON_VIEW (cheese_window->thumb_view)), "row-deleted",
++  g_signal_connect (gtk_icon_view_get_model (GTK_ICON_VIEW (priv->thumb_view)), "row-deleted",
 +                    G_CALLBACK (cheese_window_thumbnail_deleted), cheese_window);
 +
-+  cheese_window_thumbnails_changed (gtk_icon_view_get_model (GTK_ICON_VIEW (cheese_window->thumb_view)), cheese_window);
++  cheese_window_thumbnails_changed (gtk_icon_view_get_model (GTK_ICON_VIEW (priv->thumb_view)), cheese_window);
++
+   cheese_window_set_mode (cheese_window, CAMERA_MODE_PHOTO);
  }
  
- void
+@@ -1331,6 +1378,7 @@ cheese_window_finalize (GObject *object)
+   g_object_unref (priv->actions_video);
+   g_object_unref (priv->actions_burst);
+   g_object_unref (priv->actions_fullscreen);
++  g_object_unref (priv->actions_trash);
+ 
+   if (G_OBJECT_CLASS (cheese_window_parent_class)->finalize)
+     G_OBJECT_CLASS (cheese_window_parent_class)->finalize (object);
+-- 
+1.6.6
+

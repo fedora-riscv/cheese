@@ -6,7 +6,7 @@ Summary:        Application for taking pictures and movies from a webcam
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
-Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gtk2-devel >= 2.19.1
@@ -41,6 +41,26 @@ Patch1: trash-menu.patch
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
+
+%package libs
+Summary:	Webcam display and capture widgets
+Group:		System Environment/Libraries
+License:	GPLv2+
+
+%description libs
+This package contains libraries needed for applications that
+want to display a webcam in their interface.
+
+%package libs-devel
+Summary:	Development files for %{name}-libs
+Group:		Development/Libraries
+License:	GPLv2+
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	gtk-doc pkgconfig
+
+%description libs-devel
+This package contains the libraries and header files that are needed
+for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
@@ -118,8 +138,13 @@ if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -q %{_datadir}/icons/hicolor
 fi
 
+%post libs
+/sbin/ldconfig
 
-%files -f %{name}.lang
+%postun libs
+/sbin/ldconfig
+
+%files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
 %{_bindir}/cheese
@@ -130,7 +155,17 @@ fi
 %{_sysconfdir}/gconf/schemas/cheese.schemas
 %{_libexecdir}/cheese
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
-%{_libdir}/libcheese-gtk.so*
+
+%files -f %{name}.lang libs
+%defattr(-,root,root,-)
+%{_libdir}/libcheese-gtk.so.*
+
+%files libs-devel
+%defattr(-,root,root,-)
+%{_libdir}/libcheese-gtk.so
+%{_includedir}/cheese/
+%{_datadir}/gtk-doc/html/cheese/
+%{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
 * Tue Feb 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.90-1
