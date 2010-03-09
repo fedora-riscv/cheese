@@ -1,6 +1,6 @@
 Name:           cheese
-Version:        2.29.90
-Release:        2%{?dist}
+Version:        2.29.92
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -170,6 +170,9 @@ fi
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Tue Mar 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.92-1
+- Update to 2.29.92
+
 * Tue Feb 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.90-2
 - Fix include path, and missing requires for the pkg-config file
 
