@@ -1,0 +1,14 @@
+diff -up cheese-2.29.92/libcheese/cheese-widget.c.no-webcam cheese-2.29.92/libcheese/cheese-widget.c
+--- cheese-2.29.92/libcheese/cheese-widget.c.no-webcam	2010-03-16 13:51:03.281478874 -0400
++++ cheese-2.29.92/libcheese/cheese-widget.c	2010-03-16 13:51:07.649806018 -0400
+@@ -75,8 +75,8 @@ cheese_widget_load_pixbuf (GtkWidget  *w
+   theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+ 
+   /* FIXME special case "no-webcam" and actually use the icon_name */
+-  pixbuf = gtk_icon_theme_load_icon (theme, "error",
+-                                     size, 0, error);
++  pixbuf = gtk_icon_theme_load_icon (theme, "dialog-error",
++                                     size, GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_FORCE_SIZE, error);
+   return pixbuf;
+ }
+ 
