@@ -1,13 +1,15 @@
 Name:           cheese
 Version:        2.29.92
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
+#VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+# https://bugzilla.gnome.org/show_bug.cgi?id=613067
+Patch0:         no-webcam.patch
 
 BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
@@ -61,6 +63,7 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
+%patch0 -p1 -b .no-webcam
 
 %build
 %configure --disable-static
@@ -164,6 +167,9 @@ fi
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Tue Mar 16 2010 Matthias Clasen <mclasen@redhat.com> 2.29.92-2
+- Use an existing icon
+
 * Tue Mar 09 2010 Bastien Nocera <bnocera@redhat.com> 2.29.92-1
 - Update to 2.29.92
 
