@@ -8,7 +8,7 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}.tar.bz2
-#
+# https://bugzilla.gnome.org/show_bug.cgi?id=613067
 Patch0:         no-webcam.patch
 
 BuildRequires: gtk2-devel >= 2.19.1
