@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.28.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -36,6 +36,8 @@ Requires(preun): GConf2
 
 # http://bugzilla.gnome.org/show_bug.cgi?id=592663
 Patch1: trash-menu.patch
+# http://bugzilla.gnome.org/show_bug.cgi?id=613287
+Patch2: cheese-effects-i18n.patch
 
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
@@ -44,6 +46,7 @@ videos from a webcam. It can also apply fancy graphical effects.
 %prep
 %setup -q
 %patch1 -p1 -b .trash-menu
+%patch2 -p1 -b .effects-i18n
 
 %build
 %configure
@@ -127,6 +130,9 @@ fi
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %changelog
+* Fri Mar 19 2010 Matthias Clasen <mclasen@redhat.com> 2.28.1-2
+- Fix text rendering issues on the effects tab
+
 * Mon Oct 19 2009 Matthias Clasen  <mclasen@redhat.com> 2.28.1-1
 - Update to 2.28.1
 
