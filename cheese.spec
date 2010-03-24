@@ -1,6 +1,6 @@
 Name:           cheese
 Version:        2.29.92
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -12,6 +12,8 @@ Source0:        http://download.gnome.org/sources/cheese/2.29/%{name}-%{version}
 Patch0:         no-webcam.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=613287
 Patch1:         cheese-effects-i18n.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=592100
+Patch2:         cheese-countdown-crasher.patch
 
 BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
@@ -67,6 +69,7 @@ for writing applications that require a webcam display widget.
 %setup -q
 %patch0 -p1 -b .no-webcam
 %patch1 -p1 -b .effects-i18n
+%patch2 -p1 -b .countdown-crasher
 
 %build
 %configure --disable-static
@@ -170,6 +173,9 @@ fi
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Wed Mar 24 2010 Bastien Nocera <bnocera@redhat.com> 2.29.92-4
+- Fix possible crasher when countdown reaches zero
+
 * Fri Mar 19 2010 Matthias Clasen <mclasen@redhat.com> 2.29.92-3
 - Fix text rendering issues on the effects tab
 
