@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.30.0
+Version:        2.30.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,8 +8,6 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/2.30/%{name}-%{version}.tar.bz2
-# https://bugzilla.gnome.org/show_bug.cgi?id=613287
-Patch1:         cheese-effects-i18n.patch
 
 BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
@@ -63,7 +61,6 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-%patch1 -p1 -b .effects-i18n
 
 %build
 %configure --disable-static
@@ -107,23 +104,16 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %pre
-if [ "$1" -gt 1 ]; then
-  export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-  gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/cheese.schemas > /dev/null || :
-fi
+%gconf_schema_prepare cheese
 
 
 %preun
-if [ "$1" -gt 0 ]; then
-  export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-  gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/cheese.schemas > /dev/null || :
-fi
+%gconf_schema_remove cheese
 
 
 %post
+%gconf_schema_upgrade cheese
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
-export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/cheese.schemas > /dev/null || :
 
 
 %postun
@@ -163,6 +153,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Tue Apr 27 2010 Matthias Clasen <mclasen@redhat.com> 2.30.1-1
+- Update to 2.30.1
+- Spec file cleanups
+
 * Mon Mar 29 2010 Matthias Clasen <mclasen@redhat.com> 2.30.0-1
 - Update to 2.30.0
 
