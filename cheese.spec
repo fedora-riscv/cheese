@@ -147,6 +147,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 
 %files libs-devel
 %defattr(-,root,root,-)
+%doc COPYING
 %{_libdir}/libcheese-gtk.so
 %{_includedir}/cheese/
 %{_datadir}/gtk-doc/html/cheese/
