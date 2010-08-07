@@ -35,6 +35,7 @@ BuildRequires: clutter-gst-devel
 BuildRequires: libmx-devel
 BuildRequires: vala-devel
 BuildRequires: libgee-devel
+BuildRequires: unique-devel
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
