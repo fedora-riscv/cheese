@@ -1,5 +1,5 @@
 Name:           cheese
-Version:        2.30.1
+Version:        2.31.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -7,7 +7,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/2.30/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.31/%{name}-%{version}.tar.bz2
 
 BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
@@ -29,6 +29,13 @@ BuildRequires: gnome-desktop-devel >= 2.25.1
 BuildRequires: libgudev1-devel
 BuildRequires: libcanberra-devel
 BuildRequires: scrollkeeper
+BuildRequires: clutter-devel
+BuildRequires: clutter-gtk-devel
+BuildRequires: clutter-gst-devel
+BuildRequires: libmx-devel
+BuildRequires: vala-devel
+BuildRequires: libgee-devel
+BuildRequires: unique-devel
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
@@ -154,6 +161,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Fri Aug  6 2010 Matthias Clasen <mclasen@redhat.com> 2.31.1-1
+- Update to 2.31.1
+
 * Tue Apr 27 2010 Matthias Clasen <mclasen@redhat.com> 2.30.1-1
 - Update to 2.30.1
 - Spec file cleanups
