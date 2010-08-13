@@ -1,13 +1,14 @@
 Name:           cheese
-Version:        2.31.1
-Release:        1%{?dist}
+Epoch:          1
+Version:        2.30.1
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/2.31/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.30/%{name}-%{version}.tar.bz2
 
 BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
@@ -29,13 +30,6 @@ BuildRequires: gnome-desktop-devel >= 2.25.1
 BuildRequires: libgudev1-devel
 BuildRequires: libcanberra-devel
 BuildRequires: scrollkeeper
-BuildRequires: clutter-devel
-BuildRequires: clutter-gtk-devel
-BuildRequires: clutter-gst-devel
-BuildRequires: libmx-devel
-BuildRequires: vala-devel
-BuildRequires: libgee-devel
-BuildRequires: unique-devel
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires(post): GConf2
@@ -59,7 +53,7 @@ want to display a webcam in their interface.
 Summary:	Development files for %{name}-libs
 Group:		Development/Libraries
 License:	GPLv2+
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	gtk-doc pkgconfig
 
 %description libs-devel
@@ -154,13 +148,15 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 
 %files libs-devel
 %defattr(-,root,root,-)
-%doc COPYING
 %{_libdir}/libcheese-gtk.so
 %{_includedir}/cheese/
 %{_datadir}/gtk-doc/html/cheese/
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Fri Aug 13 2010 Matthias Clasen <mclasen@redhat.com> 1:2.30.1-2
+- Back down to 2.30.1, since 2.31 is not part of gnome 2.32
+
 * Fri Aug  6 2010 Matthias Clasen <mclasen@redhat.com> 2.31.1-1
 - Update to 2.31.1
 
