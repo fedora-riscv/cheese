@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          1
-Version:        2.31.2
+Version:        2.31.1
 Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
