@@ -1,6 +1,7 @@
 Name:           cheese
-Version:        2.31.1
-Release:        1%{?dist}
+Epoch:          1
+Version:        2.31.2
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -59,7 +60,7 @@ want to display a webcam in their interface.
 Summary:	Development files for %{name}-libs
 Group:		Development/Libraries
 License:	GPLv2+
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	gtk-doc pkgconfig
 
 %description libs-devel
@@ -161,6 +162,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Fri Aug 11 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.1-2
+- Add an epoch to stay ahead of F14
+
 * Fri Aug  6 2010 Matthias Clasen <mclasen@redhat.com> 2.31.1-1
 - Update to 2.31.1
 
