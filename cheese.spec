@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
-Version:        2.31.1
-Release:        2%{?dist}
+Version:        2.31.90
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -162,6 +162,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Thu Aug 19 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.90-1
+- Update to 2.31.90
+
 * Fri Aug 11 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.1-2
 - Add an epoch to stay ahead of F14
 
