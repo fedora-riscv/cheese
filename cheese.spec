@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        2.31.90
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -54,7 +54,6 @@ Summary:	Development files for %{name}-libs
 Group:		Development/Libraries
 License:	GPLv2+
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
-Requires:	gtk-doc pkgconfig
 
 %description libs-devel
 This package contains the libraries and header files that are needed
@@ -150,10 +149,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %defattr(-,root,root,-)
 %{_libdir}/libcheese-gtk.so
 %{_includedir}/cheese/
-%{_datadir}/gtk-doc/html/cheese/
+%{_datadir}/gtk-doc/
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Mon Aug 23 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.90-2
+- Co-own /usr/share/gtk-doc
+
 * Thu Aug 19 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.90-1
 - Update to 2.31.90
 
