@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          1
-Version:        2.32.0
+Version:        2.91.3
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/2.32/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.91/%{name}-%{version}.tar.bz2
 
 BuildRequires: gtk2-devel >= 2.19.1
 BuildRequires: dbus-devel
@@ -16,7 +16,6 @@ BuildRequires: dbus-glib-devel
 BuildRequires: gstreamer-devel >= 0.10.23
 BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
 BuildRequires: gnome-vfs2-devel
-BuildRequires: GConf2-devel
 BuildRequires: cairo-devel >= 1.4.0
 BuildRequires: librsvg2-devel >= 2.18.0
 BuildRequires: evolution-data-server-devel
@@ -39,9 +38,6 @@ BuildRequires: libgee-devel
 BuildRequires: unique-devel
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
-Requires(post): GConf2
-Requires(pre): GConf2
-Requires(preun): GConf2
 
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
@@ -75,10 +71,7 @@ make %{?_smp_mflags}
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 make install DESTDIR=$RPM_BUILD_ROOT
-unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
 
@@ -87,39 +80,10 @@ desktop-file-install --delete-original --vendor="" 	\
 	--add-category X-AudioVideoImport		\
 	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
-# save space by linking identical images in translated docs
-helpdir=$RPM_BUILD_ROOT%{_datadir}/gnome/help/%{name}
-for f in $helpdir/C/figures/*.jpg; do
-  b="$(basename $f)"
-  for d in $helpdir/*; do
-    if [ -d "$d" -a "$d" != "$helpdir/C" ]; then
-      g="$d/figures/$b"
-      if [ -f "$g" ]; then
-        if cmp -s $f $g; then
-          rm "$g"; ln -s "../../C/figures/$b" "$g"
-        fi
-      fi
-    fi
-  done
-done
-
 %find_lang %{name} --with-gnome
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
-%pre
-%gconf_schema_prepare cheese
-
-
-%preun
-%gconf_schema_remove cheese
-
-
 %post
-%gconf_schema_upgrade cheese
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
 
 
@@ -144,7 +108,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/cheese
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
-%{_sysconfdir}/gconf/schemas/cheese.schemas
 %{_libexecdir}/cheese
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
@@ -161,6 +124,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Mon Jan 10 2011 Matthias Clasen <mclasen@redhat.com> 1:2.91.3-1
+- Update to 2.91.3
+
 * Thu Sep 30 2010 Matthias Clasen <mclasen@redhat.com> 1:2.32.0-1
 - Update to 2.32.0
 
