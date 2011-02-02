@@ -30,12 +30,13 @@ BuildRequires: libgudev1-devel
 BuildRequires: libcanberra-devel
 BuildRequires: scrollkeeper
 BuildRequires: clutter-devel
-BuildRequires: clutter-gtk-devel
+BuildRequires: clutter-gtk010-devel
 BuildRequires: clutter-gst-devel
 BuildRequires: libmx-devel
 BuildRequires: vala-devel
 BuildRequires: libgee-devel
 BuildRequires: unique-devel
+BuildRequires: gnome-video-effects
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 
