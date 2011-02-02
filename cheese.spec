@@ -85,12 +85,16 @@ desktop-file-install --delete-original --vendor="" 	\
 
 %post
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
+if [ $1 -eq 1 ] ; then
+    glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+fi
 
 
 %postun
 if [ $1 -eq 0 ]; then
   touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
   gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
+  glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
 
 %posttrans
@@ -108,6 +112,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/cheese
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
+%{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
 
 %files -f %{name}.lang libs
 %defattr(-,root,root,-)
