@@ -107,7 +107,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/cheese
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
-%{_libexecdir}/cheese
 
 %files -f %{name}.lang libs
 %defattr(-,root,root,-)
