@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          1
-Version:        2.91.3
+Version:        2.91.4
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -124,6 +124,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Wed Feb  2 2011 Christopher Aillon <caillon@redhat.com> 1:2.91.4-1
+- Update to 2.91.4
+
 * Mon Jan 10 2011 Matthias Clasen <mclasen@redhat.com> 1:2.91.3-1
 - Update to 2.91.3
 
