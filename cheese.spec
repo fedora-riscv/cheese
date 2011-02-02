@@ -11,8 +11,6 @@ URL:            http://projects.gnome.org/cheese/
 Source0:        http://download.gnome.org/sources/cheese/2.91/%{name}-%{version}.tar.bz2
 
 BuildRequires: gtk2-devel >= 2.19.1
-BuildRequires: dbus-devel
-BuildRequires: dbus-glib-devel
 BuildRequires: gstreamer-devel >= 0.10.23
 BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
 BuildRequires: gnome-vfs2-devel
@@ -110,7 +108,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_libexecdir}/cheese
-%{_datadir}/dbus-1/services/org.gnome.Cheese.service
 
 %files -f %{name}.lang libs
 %defattr(-,root,root,-)
