@@ -112,6 +112,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
 %{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
+%{_libdir}/girepository-1.0/Cheese-3.0.typelib
 
 %files -f %{name}.lang libs
 %defattr(-,root,root,-)
@@ -127,6 +128,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/gtk-doc/
 %{_libdir}/pkgconfig/cheese.pc
 %{_libdir}/pkgconfig/cheese-gtk.pc
+%{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
 * Sat Mar 12 2011 Bastien Nocera <bnocera@redhat.com> 2.91.91.1-1
