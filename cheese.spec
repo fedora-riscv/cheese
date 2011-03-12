@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
-Version:        2.91.4
-Release:        2%{?dist}
+Version:        2.91.91.1
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -10,10 +10,9 @@ URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/2.91/%{name}-%{version}.tar.bz2
 
-BuildRequires: gtk2-devel >= 2.19.1
+BuildRequires: gtk3-devel >= 2.19.1
 BuildRequires: gstreamer-devel >= 0.10.23
 BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
-BuildRequires: gnome-vfs2-devel
 BuildRequires: cairo-devel >= 1.4.0
 BuildRequires: librsvg2-devel >= 2.18.0
 BuildRequires: evolution-data-server-devel
@@ -28,7 +27,7 @@ BuildRequires: libgudev1-devel
 BuildRequires: libcanberra-devel
 BuildRequires: scrollkeeper
 BuildRequires: clutter-devel
-BuildRequires: clutter-gtk010-devel
+BuildRequires: clutter-gtk-devel
 BuildRequires: clutter-gst-devel
 BuildRequires: libmx-devel
 BuildRequires: vala-devel
@@ -130,6 +129,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 
 %changelog
+* Sat Mar 12 2011 Bastien Nocera <bnocera@redhat.com> 2.91.91.1-1
+- Update to 2.91.91.1
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.91.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
