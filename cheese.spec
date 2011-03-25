@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          1
-Version:        2.91.92
+Version:        2.91.93
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/2.91/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/2.91/%{name}-%{version}.tar.gz
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -131,6 +131,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Fri Mar 25 2011 Bastien Nocera <bnocera@redhat.com> 2.91.93-1
+- Update to 2.91.93
+
 * Tue Mar 22 2011 Matthias Clasen <mclasen@redhat.com> 1:2.91.92-1
 - Update to 2.91.92
 
