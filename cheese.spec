@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        2.91.93
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -36,6 +36,7 @@ BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
+Requires: gnome-video-effects
 
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
@@ -131,6 +132,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Mar 28 2011 Bastien Nocera <bnocera@redhat.com> 2.91.93-2
+- Add missing gnome-video-effects dependency
+
 * Fri Mar 25 2011 Bastien Nocera <bnocera@redhat.com> 2.91.93-1
 - Update to 2.91.93
 
