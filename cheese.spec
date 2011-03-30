@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        2.91.93
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -85,24 +85,26 @@ desktop-file-install --delete-original --vendor="" 	\
 
 %post
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
-if [ $1 -eq 1 ] ; then
-    glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
-fi
 
 
 %postun
 if [ $1 -eq 0 ]; then
   touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
   gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
-  glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
 
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 
-%post libs -p /sbin/ldconfig
+%post libs
+/sbin/ldconfig
+if [ $1 -eq 1 ] ; then
+    glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+fi
 
-%postun libs -p /sbin/ldconfig
+%postun libs
+/sbin/ldconfig
+glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %files
 %defattr(-,root,root,-)
@@ -112,13 +114,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/cheese
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/scalable/apps/cheese.svg
-%{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
-%{_libdir}/girepository-1.0/Cheese-3.0.typelib
 
 %files -f %{name}.lang libs
 %defattr(-,root,root,-)
 %{_libdir}/libcheese.so.*
 %{_libdir}/libcheese-gtk.so.*
+%{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
+%{_libdir}/girepository-1.0/Cheese-3.0.typelib
 
 %files libs-devel
 %defattr(-,root,root,-)
@@ -132,6 +134,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Wed Mar 30 2011 Alexander Larsson <alexl@redhat.com> - 1:2.91.93-3
+- Move gsettings schema to cheese-libs, fixes control-center crash (#691667)
+- Move typelib to cheese-libs
+
 * Mon Mar 28 2011 Bastien Nocera <bnocera@redhat.com> 2.91.93-2
 - Add missing gnome-video-effects dependency
 
