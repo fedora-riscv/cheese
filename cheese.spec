@@ -1,14 +1,14 @@
 Name:           cheese
 Epoch:          1
-Version:        2.91.93
-Release:        3%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/2.91/%{name}-%{version}.tar.gz
+Source0:        http://download.gnome.org/sources/cheese/3.0/%{name}-%{version}.tar.gz
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -134,6 +134,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Apr  4 2011 Christopher Aillon <caillon@redhat.com> 1:3.0.0-1
+- Update to 3.0
+
 * Wed Mar 30 2011 Alexander Larsson <alexl@redhat.com> - 1:2.91.93-3
 - Move gsettings schema to cheese-libs, fixes control-center crash (#691667)
 - Move typelib to cheese-libs
