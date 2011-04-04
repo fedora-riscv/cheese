@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.0/%{name}-%{version}.tar.gz
+Source0:        http://download.gnome.org/sources/cheese/3.0/%{name}-%{version}.tar.bz2
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
