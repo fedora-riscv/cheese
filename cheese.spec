@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        3.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -9,6 +9,8 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.0/%{name}-%{version}.tar.bz2
+# https://bugzilla.gnome.org/show_bug.cgi?id=646770
+Source1:         cheese-icons.tar.bz2
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -80,6 +82,8 @@ desktop-file-install --delete-original --vendor="" 	\
 	--add-category X-AudioVideoImport		\
 	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
+tar xf %{SOURCE1} -C $RPM_BUILD_ROOT%{_datadir}/icons --strip-components=1 cheese/hicolor
+
 %find_lang %{name} --with-gnome
 
 
@@ -134,6 +138,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Apr  5 2011 Matthias Clasen <mclasen@redhat.com> 1:3.0.0-2
+- Add newer icons from upstream
+
 * Mon Apr  4 2011 Christopher Aillon <caillon@redhat.com> 1:3.0.0-1
 - Update to 3.0
 
