@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        3.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -67,7 +67,7 @@ for writing applications that require a webcam display widget.
 %setup -q
 
 %build
-%configure --disable-static
+%configure --disable-static --disable-rpath
 make %{?_smp_mflags}
 
 
@@ -138,6 +138,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Jun 20 2011 Adam Williamson <awilliam@redhat.com> 3.0.1-3
+- disable rpath (per packaging policy, and RH #703636)
+
 * Wed Jun 15 2011 Bastien Nocera <bnocera@redhat.com> 3.0.1-2
 - Rebuild against newest gnome-desktop3
 
