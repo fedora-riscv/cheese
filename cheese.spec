@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        3.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -36,6 +36,7 @@ BuildRequires: vala-devel
 BuildRequires: libgee-devel
 BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
+BuildRequires: chrpath
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires: gnome-video-effects
@@ -85,6 +86,9 @@ desktop-file-install --delete-original --vendor="" 	\
 tar xf %{SOURCE1} -C $RPM_BUILD_ROOT%{_datadir}/icons --strip-components=1 cheese/hicolor
 
 %find_lang %{name} --with-gnome
+
+chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
+chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.so.*
 
 
 %post
@@ -138,6 +142,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Sat Jun 04 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1:3.0.1-2
+- Removed RPATHS (RH #703636)
+
 * Tue Apr 26 2011 Matthias Clasen <mclasen@redhat.com> 1:3.0.1-1
 - Update to 3.0.1
 
