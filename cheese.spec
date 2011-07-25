@@ -1,14 +1,14 @@
 Name:           cheese
 Epoch:          1
-Version:        3.0.1
-Release:        3%{?dist}
+Version:        3.0.2
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.0/%{name}-%{version}.tar.bz2
+Source0:        http://download.gnome.org/sources/cheese/3.0/%{name}-%{version}.tar.xz
 # https://bugzilla.gnome.org/show_bug.cgi?id=646770
 Source1:         cheese-icons.tar.bz2
 
@@ -141,6 +141,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Jul 25 2011 Matthias Clasen <mclasen@redhat.com> - 1:3.0.2-1
+- Update to 3.0.2
+
 * Wed Jun 29 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1:3.0.1-3
 - Removed RPATHS (RH #703636)
 
