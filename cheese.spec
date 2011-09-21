@@ -33,7 +33,7 @@ BuildRequires: clutter-gtk-devel
 BuildRequires: clutter-gst-devel
 BuildRequires: libmx-devel
 BuildRequires: vala-devel
-BuildRequires: libgee-devel
+BuildRequires: pkgconfig(gee-1.0)
 BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
@@ -139,6 +139,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %changelog
 * Wed Sep 21 2011 Brian Pepple <bpepple@fedoraproject.org> - 1:3.1.92-2
 - Rebuld for new libcogl.
+- Use old libgee api.
 
 * Tue Sep 20 2011 Matthias Clasen <mclasen@redhat.com> - 1:3.1.92-1
 - Update to 3.1.92
