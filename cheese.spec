@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
-Version:        3.0.1
-Release:        2%{?dist}
+Version:        3.0.2
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -142,6 +142,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Sep 27 2011 Hans de Goede <hdegoede@redhat.com> - 1:3.0.2-1
+- Update to 3.0.2
+- This fixes the crash on changing effect (rhbz#701039)
+
 * Sat Jun 04 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1:3.0.1-2
 - Removed RPATHS (RH #703636)
 
