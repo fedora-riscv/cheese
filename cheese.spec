@@ -140,9 +140,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 * Tue Sep 27 2011 Ray <rstrode@redhat.com> - 1:3.2.0-1
 - Update to 3.2.0
 
-* Tue Sep 27 2011 Ray <rstrode@redhat.com> - 1:3.2.0-1
-- Update to 3.2.0
-
 * Tue Sep 20 2011 Matthias Clasen <mclasen@redhat.com> - 1:3.1.92-1
 - Update to 3.1.92
 
