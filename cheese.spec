@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
-Version:        3.1.92
-Release:        2%{?dist}
+Version:        3.2.0
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -137,6 +137,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Sep 27 2011 Ray <rstrode@redhat.com> - 1:3.2.0-1
+- Update to 3.2.0
+
 * Wed Sep 21 2011 Brian Pepple <bpepple@fedoraproject.org> - 1:3.1.92-2
 - Rebuld for new libcogl.
 - Use old libgee api.
