@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
 Version:        3.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -33,12 +33,13 @@ BuildRequires: clutter-gtk-devel
 BuildRequires: clutter-gst-devel
 BuildRequires: libmx-devel
 BuildRequires: vala-devel
-BuildRequires: libgee-devel
+BuildRequires: pkgconfig(gee-1.0)
 BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
+Requires: gstreamer-plugins-bad-free
 Requires: gnome-video-effects
 
 %description
@@ -137,8 +138,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Thu Sep 29 2011 Hans de Goede <hdegoede@redhat.com> - 1:3.2.0-2
+- Add Requires: gstreamer-plugins-bad-free for the camerabin element (#717872)
+
 * Tue Sep 27 2011 Ray <rstrode@redhat.com> - 1:3.2.0-1
 - Update to 3.2.0
+
+* Wed Sep 21 2011 Brian Pepple <bpepple@fedoraproject.org> - 1:3.1.92-2
+- Rebuld for new libcogl.
+- Use old libgee api.
 
 * Tue Sep 20 2011 Matthias Clasen <mclasen@redhat.com> - 1:3.1.92-1
 - Update to 3.1.92
