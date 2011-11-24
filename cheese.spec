@@ -9,8 +9,6 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.3/%{name}-%{version}.tar.xz
-# https://bugzilla.gnome.org/show_bug.cgi?id=646770
-Source1:         cheese-icons.tar.bz2
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
