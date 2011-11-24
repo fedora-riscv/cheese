@@ -118,6 +118,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/icons/hicolor/*/actions/*.png
 %{_datadir}/icons/hicolor/scalable/actions/*.svg
+%{_mandir}/man1/cheese.1.gz
 
 %files -f %{name}.lang libs
 %{_libdir}/libcheese.so.*
