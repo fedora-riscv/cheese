@@ -82,8 +82,6 @@ desktop-file-install --delete-original --vendor="" 	\
 	--add-category X-AudioVideoImport		\
 	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
-tar xf %{SOURCE1} -C $RPM_BUILD_ROOT%{_datadir}/icons --strip-components=1 cheese/hicolor
-
 %find_lang %{name} --with-gnome
 
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
