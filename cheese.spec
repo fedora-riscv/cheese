@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          1
-Version:        3.2.1
-Release:        2%{?dist}
+Version:        3.2.2
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -9,8 +9,6 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.2/%{name}-%{version}.tar.xz
-# https://bugzilla.gnome.org/show_bug.cgi?id=646770
-Source1:         cheese-icons.tar.bz2
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -84,8 +82,6 @@ desktop-file-install --delete-original --vendor="" 	\
 	--add-category X-AudioVideoImport		\
 	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
-tar xf %{SOURCE1} -C $RPM_BUILD_ROOT%{_datadir}/icons --strip-components=1 cheese/hicolor
-
 %find_lang %{name} --with-gnome
 
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
@@ -138,6 +134,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Wed Nov 23 2011 Matthias Clasen <mclasen@redhat.com> - 3.2.2-1
+- Update to 3.2.2
+
 * Wed Oct 26 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:3.2.1-2
 - Rebuilt for glibc bug#747377
 
