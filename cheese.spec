@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.3.3
-Release:        3%{?dist}
+Version:        3.3.4
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -138,6 +138,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Jan 17 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.3.4-1
+- Update to 3.3.4
+
 * Mon Jan 16 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.3.3-3
 - Add a BuildRequires for itstool
 
