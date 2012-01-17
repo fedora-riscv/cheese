@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.3.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -35,6 +35,7 @@ BuildRequires: pkgconfig(gee-1.0)
 BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
+BuildRequires: itstool
 
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires: gstreamer-plugins-bad-free
@@ -137,6 +138,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Jan 16 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.3.3-3
+- Add a BuildRequires for itstool
+
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2:3.3.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
