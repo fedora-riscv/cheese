@@ -120,6 +120,8 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/actions/*.png
 %{_datadir}/icons/hicolor/scalable/actions/*.svg
 %{_mandir}/man1/cheese.1.gz
+# FIXME find-lang is supposed to pick these up
+%doc %{_datadir}/help/*/cheese
 
 %files -f %{name}.lang libs
 %{_libdir}/libcheese.so.*
