@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.4.0
+Version:        3.4.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.3/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cheese/3.4/%{name}-%{version}.tar.xz
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=671110
 Patch0: 0001-Avoid-a-code-generation-problem.patch
@@ -144,6 +144,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Apr 17 2012 Kalev Lember <kalevlember@gmail.com> - 2:3.4.1-1
+- Update to 3.4.1
+
 * Tue Mar 27 2012 Richard Hughes <hughsient@gmail.com> - 2:3.4.0-1
 - Update to 3.4.0
 
