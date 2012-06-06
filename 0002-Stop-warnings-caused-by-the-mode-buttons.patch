@@ -1,0 +1,53 @@
+From 99991c361340fc0372fc65b039a051638f04a49b Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Mon, 12 Mar 2012 15:52:56 +0100
+Subject: [PATCH 2/4] Stop warnings caused by the mode buttons
+
+Once we've set the related action, the label will have been synced, and
+we won't be able to add an image to the button.
+
+Setting "use-action-appearance" to False before setting the
+related-action works around the problem. See GTK+ bug 671912.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=671913
+---
+ data/cheese-main-window.ui |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/data/cheese-main-window.ui b/data/cheese-main-window.ui
+index a435114..bdc84c5 100644
+--- a/data/cheese-main-window.ui
++++ b/data/cheese-main-window.ui
+@@ -50,8 +50,8 @@
+                         <property name="column-spacing">2</property>
+                         <child>
+                           <object class="GtkToggleButton" id="photo_toggle_button">
+-                            <property name="related-action">photo_mode</property>
+                             <property name="use-action-appearance">False</property>
++                            <property name="related-action">photo_mode</property>
+                             <property name="tooltip_text" translatable="yes">Photo mode</property>
+                             <child>
+                               <object class="GtkImage" id="photo_toggle_button_image">
+@@ -62,8 +62,8 @@
+                         </child>
+                         <child>
+                           <object class="GtkToggleButton" id="video_toggle_button">
+-                            <property name="related-action">video_mode</property>
+                             <property name="use-action-appearance">False</property>
++                            <property name="related-action">video_mode</property>
+                             <property name="tooltip_text" translatable="yes">Video mode</property>
+                             <child>
+                               <object class="GtkImage" id="video_toggle_button_image">
+@@ -74,8 +74,8 @@
+                         </child>
+                         <child>
+                           <object class="GtkToggleButton" id="burst_toggle_button">
+-                            <property name="related-action">burst_mode</property>
+                             <property name="use-action-appearance">False</property>
++                            <property name="related-action">burst_mode</property>
+                             <property name="tooltip_text" translatable="yes">Photo burst mode</property>
+                             <child>
+                               <object class="GtkImage" id="burst_toggle_button_image">
+-- 
+1.7.10.2
+

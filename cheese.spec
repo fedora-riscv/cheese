@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -11,7 +11,13 @@ URL:            http://projects.gnome.org/cheese/
 Source0:        http://download.gnome.org/sources/cheese/3.4/%{name}-%{version}.tar.xz
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=671110
-Patch0: 0001-Avoid-a-code-generation-problem.patch
+Patch1: 0001-Avoid-a-code-generation-problem.patch
+# Cherry picked from upstream git
+Patch2: 0002-Stop-warnings-caused-by-the-mode-buttons.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=677543
+Patch3: 0003-main-window-ui-Fix-images-missing-from-effect-button.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=677544
+Patch4: 0004-camera-device-monitor-Don-t-add-NULL-devices-to-the-.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -69,7 +75,11 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+
 
 %build
 %configure --disable-static
@@ -144,6 +154,12 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Jun  5 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-2
+- Fix missing images on buttons, also fixes the "Gtk-WARNING **: Attempting to
+  add a widget with type GtkImage to a GtkButton ..." warnings (gnome#677543)
+- Fix cheese crashing when started on machines with v4l2 radio or vbi devices
+  (rhbz#810429, gnome#677544)
+
 * Tue May 15 2012 Richard Hughes <hughsient@gmail.com> - 2:3.4.2-1
 - Update to 3.4.2
 
