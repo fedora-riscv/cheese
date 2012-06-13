@@ -1,5 +1,5 @@
 Name:           cheese
-Epoch:          2
+Epoch:          3
 Version:        3.5.2
 Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
@@ -41,6 +41,7 @@ BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
 BuildRequires: itstool
 
+Requires: %{name}-libs = %{epoch}:%{version}-%{release}
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires: gstreamer-plugins-bad-free
 Requires: gnome-video-effects
@@ -146,6 +147,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Wed Jun 13 2012 Owen Taylor <otaylor@redhat.com> - 3:3.5.2-2
+- Require matching version of cheese-libs for cheese
+
 * Thu Jun 07 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.5.2-2
 - Rebuild against new gnome-desktop
 
