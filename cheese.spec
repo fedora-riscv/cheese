@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.5.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -13,6 +13,13 @@ Source0:        http://download.gnome.org/sources/cheese/3.5/%{name}-%{version}.
 Patch3: 0003-main-window-ui-Fix-images-missing-from-effect-button.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=677544
 Patch4: 0004-camera-device-monitor-Don-t-add-NULL-devices-to-the-.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=677731
+Patch5: 0005-cheese-camera-Don-t-overwrite-camerabin-s-default-fl.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=677735
+Patch6: 0006-cheese-thumb-view-Don-t-add-0-sized-files-to-the-thu.patch
+# FIXME file upstream bugs for these 2 (gnome bz is down atm)
+Patch7: 0007-cheese-thumb-view-Don-t-set-columns-to-5000-in-horiz.patch
+Patch8: 0008-cheese-optimize-encoding.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -73,6 +80,11 @@ for writing applications that require a webcam display widget.
 %setup -q
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+
 
 %build
 %configure --disable-static
@@ -147,6 +159,12 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Jun 19 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-3
+- Reduce camerabin pipeline creation time (rhbz#797188, gnome#677731)
+- Don't add 0 byte sized files to the thumb-view (rhbz#830166, gnome#677735)
+- Fix sizing of horizontal thumbnail list (rhbz#829957)
+- Optimize encoding parameters (rhbz#572169)
+
 * Wed Jun 13 2012 Owen Taylor <otaylor@redhat.com> - 2:3.5.2-3
 - Require matching version of cheese-libs for cheese
 
