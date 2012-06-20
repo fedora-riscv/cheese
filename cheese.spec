@@ -17,8 +17,9 @@ Patch4: 0004-camera-device-monitor-Don-t-add-NULL-devices-to-the-.patch
 Patch5: 0005-cheese-camera-Don-t-overwrite-camerabin-s-default-fl.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=677735
 Patch6: 0006-cheese-thumb-view-Don-t-add-0-sized-files-to-the-thu.patch
-# FIXME file upstream bugs for these 2 (gnome bz is down atm)
+# https://bugzilla.gnome.org/show_bug.cgi?id=678446
 Patch7: 0007-cheese-thumb-view-Don-t-set-columns-to-5000-in-horiz.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=678447
 Patch8: 0008-cheese-optimize-encoding.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
