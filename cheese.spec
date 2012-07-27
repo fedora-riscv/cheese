@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.5.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -160,6 +160,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Fri Jul 27 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2:3.5.2-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue Jun 19 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-3
 - Reduce camerabin pipeline creation time (rhbz#797188, gnome#677731)
 - Don't add 0 byte sized files to the thumb-view (rhbz#830166, gnome#677735)
