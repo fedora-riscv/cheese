@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.4.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -26,6 +26,9 @@ Patch6: 0006-cheese-thumb-view-Don-t-add-0-sized-files-to-the-thu.patch
 Patch7: 0007-cheese-thumb-view-Don-t-set-columns-to-5000-in-horiz.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 Patch8: 0008-cheese-optimize-encoding.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=850505
+Patch9:  0009-Fix-cheese_camera_device_update_format_table-going-i.patch
+Patch10: 0010-Ensure-width-is-a-multiple-of-8-and-height-a-multipl.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -91,6 +94,8 @@ for writing applications that require a webcam display widget.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 
 %build
@@ -166,6 +171,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Wed Aug 22 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-4
+- Fix cheese crashing on tvcards which report they can capture 0x0 as
+  minimum resolution (rhbz#850505)
+
 * Tue Jun 19 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-3
 - Reduce camerabin pipeline creation time (rhbz#797188, gnome#677731)
 - Don't add 0 byte sized files to the thumb-view (rhbz#830166, gnome#677735)
