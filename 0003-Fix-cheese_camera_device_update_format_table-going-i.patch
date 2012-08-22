@@ -1,0 +1,45 @@
+From 9c2b429ec0b027657c0767103fbbfebbc8a992ed Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 22 Aug 2012 10:02:08 +0200
+Subject: [PATCH 3/4] Fix cheese_camera_device_update_format_table() going
+ into an infinite loop
+
+Some devices report a very small min_width / height down to reporting
+0x0 as minimum resolution, which causes an infinte loop in
+cheese_camera_device_update_format_table().
+
+This patch limits the minimum resultion to 160x120, both to fix the
+infinite loop issue, and to remove ridiculous resolutions such as
+2x2, 5x3, 11x7, 22x15 etc. which are seen in the resolution drop down on
+some devices.
+
+For more details on the infinite loop issue, see:
+https://bugzilla.redhat.com/show_bug.cgi?id=850505
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index 9b977a4..653cba9 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -296,6 +296,14 @@ cheese_camera_device_update_format_table (CheeseCameraDevice *device)
+       min_height = gst_value_get_int_range_min (height);
+       max_height = gst_value_get_int_range_max (height);
+ 
++      /* Some devices report a very small min_width / height down to reporting
++       * 0x0 as minimum resolution, which causes an infinte loop below, limit
++       * these to something reasonable. */
++      if (min_width < 160)
++        min_width = 160;
++      if (min_height < 120)
++        min_height = 120;
++
+       cur_width  = min_width;
+       cur_height = min_height;
+ 
+-- 
+1.7.11.4
+

@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.5.2
-Release:        6%{?dist}
+Version:        3.5.5
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -9,18 +9,13 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.5/%{name}-%{version}.tar.xz
-# https://bugzilla.gnome.org/show_bug.cgi?id=677543
-Patch3: 0003-main-window-ui-Fix-images-missing-from-effect-button.patch
-# https://bugzilla.gnome.org/show_bug.cgi?id=677544
-Patch4: 0004-camera-device-monitor-Don-t-add-NULL-devices-to-the-.patch
-# https://bugzilla.gnome.org/show_bug.cgi?id=677731
-Patch5: 0005-cheese-camera-Don-t-overwrite-camerabin-s-default-fl.patch
-# https://bugzilla.gnome.org/show_bug.cgi?id=677735
-Patch6: 0006-cheese-thumb-view-Don-t-add-0-sized-files-to-the-thu.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=678446
-Patch7: 0007-cheese-thumb-view-Don-t-set-columns-to-5000-in-horiz.patch
+Patch1: 0001-cheese-thumb-view-Don-t-set-columns-to-5000-in-horiz.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
-Patch8: 0008-cheese-optimize-encoding.patch
+Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=850505
+Patch3: 0003-Fix-cheese_camera_device_update_format_table-going-i.patch
+Patch4: 0004-Ensure-width-is-a-multiple-of-8-and-height-a-multipl.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -79,12 +74,10 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
+%patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
 
 
 %build
@@ -160,6 +153,11 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Wed Aug 22 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.5.5-1
+- New upstream release 3.5.5
+- Fix cheese crashing on tvcards which report they can capture 0x0 as
+  minimum resolution (rhbz#850505)
+
 * Tue Aug 21 2012 Brian Pepple <bpepple@fedoraproject.org> - 2:3.5.2-6
 - Rebuild for new libcogl.
 

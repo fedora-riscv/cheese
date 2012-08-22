@@ -1,0 +1,87 @@
+From 09c6b1c1f17ad20c87a3bee7c4665bb6ef34a211 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 22 Aug 2012 10:32:08 +0200
+Subject: [PATCH 2/4] Setup vp8enc in a way suitable for realtime encoding
+
+Note that upstream has nacked this patch wanting to fix it instead by
+using a realtime vp8enc preset, and teaching vp8enc to automatically pick
+a number of threads when threads == 0, see:
+https://bugzilla.gnome.org/show_bug.cgi?id=678447
+
+Although that would indeed be better, unfortunately code for neither exists
+atm, so for now we carry this patch in Fedora, since it makes the difference
+between making recordings in cheese working or not working.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index af073f3..d41a669 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -32,6 +32,7 @@
+ #include <clutter-gst/clutter-gst.h>
+ #include <gst/gst.h>
+ #include <X11/Xlib.h>
++#include <unistd.h>
+ 
+ #include "cheese-camera.h"
+ #include "cheese-camera-device.h"
+@@ -444,6 +445,7 @@ cheese_camera_set_video_recording (CheeseCamera *camera, GError **error)
+   CheeseCameraPrivate *priv = camera->priv;
+   GstElement          *video_enc;
+   GstElement          *mux;
++  int                 n_threads;
+ 
+   g_return_if_fail (error == NULL || *error == NULL);
+ 
+@@ -453,11 +455,18 @@ cheese_camera_set_video_recording (CheeseCamera *camera, GError **error)
+     return;
+   }
+   g_object_set (priv->camerabin, "video-encoder", video_enc, NULL);
+-  /* Use a preset, or set some reasonable defaults. */
+-  if (!gst_preset_load_preset (GST_PRESET (video_enc), "Profile Realtime"))
+-  {
+-    g_object_set (G_OBJECT (video_enc), "max-latency", 1, "speed", 2, NULL);
+-  }
++
++  /* Since we do realtime encoding setup the encoder for speed without
++     sacrificing too much quality */
++  g_object_set (G_OBJECT (video_enc), "max-latency", 1, NULL);
++  g_object_set (G_OBJECT (video_enc), "speed", 6, NULL);
++#ifdef _SC_NPROCESSORS_ONLN
++  n_threads = sysconf (_SC_NPROCESSORS_ONLN); /* includes hyper-threading */
++  n_threads = MIN (n_threads, 64);
++#else
++  n_threads = 3;
++#endif
++  g_object_set (G_OBJECT (video_enc), "threads", n_threads, NULL);
+ 
+   if ((mux = gst_element_factory_make ("webmmux", "webmmux")) == NULL)
+   {
+@@ -692,6 +701,7 @@ cheese_camera_play (CheeseCamera *camera)
+ {
+   CheeseCameraPrivate *priv;
+   CheeseCameraDevice *device;
++  GObject *video_enc;
+   GstCaps *caps;
+ 
+   g_return_if_fail (CHEESE_IS_CAMERA (camera));
+@@ -714,6 +724,12 @@ cheese_camera_play (CheeseCamera *camera)
+     g_signal_emit_by_name (priv->camerabin, "set-video-resolution-fps",
+                            priv->current_format->width,
+                            priv->current_format->height, 0, 1, 0);
++    if (priv->current_format->width >= 1280 &&
++        priv->current_format->height >= 720)
++    {
++      g_object_get (priv->camerabin, "video-encoder", &video_enc, NULL);
++      g_object_set (video_enc, "token-parts", 2, NULL);
++    }
+   }
+   gst_caps_unref (caps);
+ 
+-- 
+1.7.11.4
+

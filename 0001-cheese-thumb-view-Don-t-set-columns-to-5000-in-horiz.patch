@@ -1,25 +1,25 @@
-From 4f6953de531316e0385aaace9ae5f2400e4451c8 Mon Sep 17 00:00:00 2001
+From 486bfc9c76ec05d469ec124407cbaa026544c620 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Sun, 10 Jun 2012 14:50:54 +0200
-Subject: [PATCH] cheese-thumb-view: Don't set columns to 5000 in horizontal
- mode
+Subject: [PATCH 1/4] cheese-thumb-view: Don't set columns to 5000 in
+ horizontal mode
 
 Rather then assuming 5000 will be enough, just set the number of columns to
 the number of thumbnails we have.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- src/cheese-window.vala            |    4 ++--
- src/thumbview/cheese-thumb-view.c |   21 ++++++++++++++++++++-
- src/thumbview/cheese-thumb-view.h |    1 +
- src/vapi/cheese-thumbview.vapi    |    1 +
+ src/cheese-window.vala            |  4 ++--
+ src/thumbview/cheese-thumb-view.c | 21 ++++++++++++++++++++-
+ src/thumbview/cheese-thumb-view.h |  1 +
+ src/vapi/cheese-thumbview.vapi    |  1 +
  4 files changed, 24 insertions(+), 3 deletions(-)
 
 diff --git a/src/cheese-window.vala b/src/cheese-window.vala
-index 12ef2e0..0ab0d2d 100644
+index 26f5524..cb4eeb4 100644
 --- a/src/cheese-window.vala
 +++ b/src/cheese-window.vala
-@@ -837,7 +837,7 @@ public class Cheese.MainWindow : Gtk.Window
+@@ -724,7 +724,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
  
      if (is_wide_mode)
      {
@@ -28,7 +28,7 @@ index 12ef2e0..0ab0d2d 100644
        thumb_nav.set_vertical (true);
        if (thumbnails_bottom.get_child () != null)
        {
-@@ -850,7 +850,7 @@ public class Cheese.MainWindow : Gtk.Window
+@@ -737,7 +737,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
      }
      else
      {
@@ -38,7 +38,7 @@ index 12ef2e0..0ab0d2d 100644
        if (thumbnails_right.get_child () != null)
        {
 diff --git a/src/thumbview/cheese-thumb-view.c b/src/thumbview/cheese-thumb-view.c
-index 49bc31a..243d325 100644
+index f4694f5..4ce8f56 100644
 --- a/src/thumbview/cheese-thumb-view.c
 +++ b/src/thumbview/cheese-thumb-view.c
 @@ -51,6 +51,7 @@ typedef struct
@@ -49,7 +49,7 @@ index 49bc31a..243d325 100644
    guint n_items;
    guint idle_id;
    GQueue *thumbnails;
-@@ -601,7 +602,10 @@ cheese_thumb_view_row_inserted_cb (GtkTreeModel    *tree_model,
+@@ -602,7 +603,10 @@ cheese_thumb_view_row_inserted_cb (GtkTreeModel    *tree_model,
    CheeseThumbViewPrivate *priv = CHEESE_THUMB_VIEW_GET_PRIVATE (thumb_view);
  
    priv->n_items++;
@@ -61,7 +61,7 @@ index 49bc31a..243d325 100644
  }
  
  static void
-@@ -616,6 +620,8 @@ cheese_thumb_view_row_deleted_cb (GtkTreeModel    *tree_model,
+@@ -617,6 +621,8 @@ cheese_thumb_view_row_deleted_cb (GtkTreeModel    *tree_model,
      gtk_widget_set_size_request (GTK_WIDGET (thumb_view),
                                   THUMB_VIEW_MINIMUM_WIDTH,
                                   THUMB_VIEW_MINIMUM_HEIGHT);
@@ -70,7 +70,7 @@ index 49bc31a..243d325 100644
  }
  
  static void
-@@ -684,6 +690,7 @@ cheese_thumb_view_constructed (GObject *object)
+@@ -685,6 +691,7 @@ cheese_thumb_view_constructed (GObject *object)
                                          THUMBNAIL_BASENAME_URL_COLUMN, GTK_SORT_ASCENDING);
                                          
    cheese_thumb_view_fill (thumb_view);
@@ -78,7 +78,7 @@ index 49bc31a..243d325 100644
  }
  
  GtkWidget *
-@@ -696,6 +703,18 @@ cheese_thumb_view_new ()
+@@ -697,6 +704,18 @@ cheese_thumb_view_new ()
  }
  
  void
@@ -122,5 +122,5 @@ index 669b724..61b323e 100644
      public void            start_monitoring_video_path (string path_videos);
    }
 -- 
-1.7.10.2
+1.7.11.4
 
