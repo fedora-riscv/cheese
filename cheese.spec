@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.4.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -60,6 +60,7 @@ BuildRequires: itstool
 Requires: gstreamer-plugins-good >= 0.10.6-2
 Requires: gstreamer-plugins-bad-free
 Requires: gnome-video-effects
+Requires: frei0r-plugins
 
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
@@ -171,6 +172,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Fri Aug 24 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-5
+- Add missing "Requires: frei0r-plugins" to make sure we've all plugins needed
+  for the effects
+
 * Wed Aug 22 2012 Hans de Goede <hdegoede@redhat.com> - 2:3.4.2-4
 - Fix cheese crashing on tvcards which report they can capture 0x0 as
   minimum resolution (rhbz#850505)
