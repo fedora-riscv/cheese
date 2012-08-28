@@ -1,7 +1,7 @@
 Name:           cheese
-Epoch:          3
+Epoch:          2
 Version:        3.5.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
