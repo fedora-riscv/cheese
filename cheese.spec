@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.5.5
-Release:        2%{?dist}
+Version:        3.5.91
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -9,8 +9,6 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.5/%{name}-%{version}.tar.xz
-# https://bugzilla.gnome.org/show_bug.cgi?id=678446
-Patch1: 0001-cheese-thumb-view-Don-t-set-columns-to-5000-in-horiz.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=850505
@@ -74,7 +72,6 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -153,6 +150,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Thu Sep  6 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.5.91-1
+- Update to 3.5.91
+- Drop upstreamed patch
+
 * Tue Aug 28 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.5.5-2
 - Rebuild against new cogl/clutter
 
