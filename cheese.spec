@@ -13,8 +13,8 @@ Source0:        http://download.gnome.org/sources/cheese/3.5/%{name}-%{version}.
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
-BuildRequires: gstreamer-devel >= 0.10.23
-BuildRequires: gstreamer-plugins-base-devel >= 0.10.12
+BuildRequires: gstreamer1-devel >= 0.10.23
+BuildRequires: gstreamer1-plugins-base-devel >= 0.10.12
 BuildRequires: cairo-devel >= 1.4.0
 BuildRequires: librsvg2-devel >= 2.18.0
 BuildRequires: evolution-data-server-devel
