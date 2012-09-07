@@ -30,7 +30,7 @@ BuildRequires: libcanberra-devel
 BuildRequires: scrollkeeper
 BuildRequires: clutter-devel
 BuildRequires: clutter-gtk-devel
-BuildRequires: clutter-gst-devel
+BuildRequires: clutter-gst2-devel
 BuildRequires: libmx-devel
 BuildRequires: vala-devel
 BuildRequires: pkgconfig(gee-1.0)
