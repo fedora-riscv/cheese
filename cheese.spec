@@ -10,10 +10,7 @@ URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.5/%{name}-%{version}.tar.xz
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
-Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=850505
-Patch3: 0003-Fix-cheese_camera_device_update_format_table-going-i.patch
-Patch4: 0004-Ensure-width-is-a-multiple-of-8-and-height-a-multipl.patch
+# Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer-devel >= 0.10.23
@@ -72,9 +69,7 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+# %patch2 -p1
 
 
 %build
@@ -152,7 +147,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %changelog
 * Thu Sep  6 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.5.91-1
 - Update to 3.5.91
-- Drop upstreamed patch
+- Drop upstreamed patches
 
 * Tue Aug 28 2012 Matthias Clasen <mclasen@redhat.com> - 2:3.5.5-2
 - Rebuild against new cogl/clutter
