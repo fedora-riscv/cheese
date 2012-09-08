@@ -40,8 +40,8 @@ BuildRequires: chrpath
 BuildRequires: itstool
 
 Requires: %{name}-libs = %{epoch}:%{version}-%{release}
-Requires: gstreamer-plugins-good >= 0.10.6-2
-Requires: gstreamer-plugins-bad-free
+Requires: gstreamer1-plugins-good
+Requires: gstreamer1-plugins-bad-free
 Requires: gnome-video-effects
 
 %description
