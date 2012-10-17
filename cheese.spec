@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.6.0
+Version:        3.6.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.5/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cheese/3.6/%{name}-%{version}.tar.xz
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 
@@ -23,12 +23,10 @@ BuildRequires: libXxf86vm-devel
 BuildRequires: libXtst-devel
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
-BuildRequires: gnome-doc-utils
 BuildRequires: intltool
 BuildRequires: gnome-desktop3-devel >= 2.91.0
 BuildRequires: libgudev1-devel
 BuildRequires: libcanberra-devel
-BuildRequires: scrollkeeper
 BuildRequires: clutter-devel
 BuildRequires: clutter-gtk-devel
 BuildRequires: clutter-gst2-devel
@@ -146,6 +144,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Wed Oct 17 2012 Kalev Lember <kalevlember@gmail.com> - 2:3.6.1-1
+- Update to 3.6.1
+
 * Tue Sep 25 2012 Richard Hughes <hughsient@gmail.com> - 2:3.6.0-1
 - Update to 3.6.0
 
