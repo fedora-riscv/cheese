@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.6.2
+Version:        3.7.3
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.6/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cheese/3.7/%{name}-%{version}.tar.xz
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 
@@ -144,6 +144,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Thu Dec 20 2012 Kalev Lember <kalevlember@gmail.com> - 2:3.7.3-1
+- Update to 3.7.3
+
 * Tue Nov 13 2012 Kalev Lember <kalevlember@gmail.com> - 2:3.6.2-1
 - Update to 3.6.2
 
