@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.7.90
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -144,6 +144,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Thu Feb 21 2013 Kalev Lember <kalevlember@gmail.com> - 2:3.7.90-3
+- Rebuilt for cogl soname bump
+
 * Wed Feb 20 2013 Kalev Lember <kalevlember@gmail.com> - 2:3.7.90-2
 - Rebuilt for libgnome-desktop soname bump
 
