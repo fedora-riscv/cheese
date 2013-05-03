@@ -17,6 +17,8 @@ BuildRequires: gstreamer1-devel
 BuildRequires: gstreamer1-plugins-bad-free-devel
 BuildRequires: gstreamer1-plugins-base-devel
 BuildRequires: cairo-devel >= 1.4.0
+BuildRequires: docbook-dtds
+BuildRequires: docbook-style-xsl
 BuildRequires: librsvg2-devel >= 2.18.0
 BuildRequires: evolution-data-server-devel
 BuildRequires: libXxf86vm-devel
