@@ -37,7 +37,7 @@ BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
 BuildRequires: itstool
 # 3.8.2 tarball misses man page
-BuildRequires: xsltproc
+BuildRequires: libxslt
 BuildRequires: docbook-style-xsl
 
 Requires: %{name}-libs = %{epoch}:%{version}-%{release}
