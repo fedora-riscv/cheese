@@ -36,6 +36,9 @@ BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
 BuildRequires: itstool
+# 3.8.2 tarball misses man page
+BuildRequires: xsltproc
+BuildRequires: docbook-style-xsl
 
 Requires: %{name}-libs = %{epoch}:%{version}-%{release}
 Requires: gstreamer1-plugins-good
@@ -71,7 +74,7 @@ for writing applications that require a webcam display widget.
 
 
 %build
-%configure --disable-static
+%configure --disable-static --enable-man
 make %{?_smp_mflags}
 
 
