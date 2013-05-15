@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.8.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -39,6 +39,7 @@ BuildRequires: itstool
 # 3.8.2 tarball misses man page
 BuildRequires: libxslt
 BuildRequires: docbook-style-xsl
+BuildRequires: /usr/bin/convert
 
 Requires: %{name}-libs = %{epoch}:%{version}-%{release}
 Requires: gstreamer1-plugins-good
@@ -94,6 +95,10 @@ desktop-file-install --delete-original --vendor="" 	\
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.so.*
 
+# hack to conserve space on the live image
+convert $RPM_BUILD_ROOT%{_datadir}/help/C/cheese/figures/effects.png -resize 850x320 effects.png
+mv effects.png $RPM_BUILD_ROOT%{_datadir}/help/C/cheese/figures/effects.png
+
 %post
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
 
@@ -146,6 +151,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue May 14 2013 Matthias Clasen <mclasen@redhat.com> - 2:3.8.2-2
+- Conserve space by shrinking images
+
 * Mon May 13 2013 Matthias Clasen <mclasen@redhat.com> - 2:3.8.2-1
 - Update to 3.8.2
 
