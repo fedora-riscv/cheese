@@ -1,0 +1,52 @@
+From b0bdc5489ab2476bac63fcf2919f92efe743c828 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Jun 2013 17:54:02 +0200
+Subject: [PATCH 26/35] cheese: Protect set_wide_mode / set_fullscreen against
+ double calls
+
+Make it safe to call set_wide_mode / set_fullscreen twice with the same
+value.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 6425a7f..906105b 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -86,6 +86,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+   private bool is_fullscreen;
+   private bool is_wide_mode;
++  private bool is_wide_mode_initialized;
+   private bool is_recording;       /* Video Recording Flag */
+   private bool is_bursting;
+   private bool is_effects_selector_active;
+@@ -633,6 +634,10 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+      * So that the next time leave_fullscreen_button_container.show_all () is called, the button is actually shown
+      * FIXME: If this code can be made cleaner/clearer, please do */
+ 
++    if (is_fullscreen == fullscreen)
++    {
++      return;
++    }
+     is_fullscreen = fullscreen;
+ 
+     if (!is_command_line_startup)
+@@ -703,6 +708,11 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   [CCode (instance_pos = -1)]
+   public void set_wide_mode (bool wide_mode)
+   {
++    if (is_wide_mode_initialized && is_wide_mode == wide_mode)
++    {
++      return;
++    }
++    is_wide_mode_initialized = true;
+     is_wide_mode = wide_mode;
+ 
+     if (!is_command_line_startup)
+-- 
+1.8.2.1
+

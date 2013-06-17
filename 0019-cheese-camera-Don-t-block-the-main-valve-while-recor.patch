@@ -1,0 +1,30 @@
+From 39c02d60193596a61c00cdc5b5952a425bb5e34b Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 11 Jun 2013 13:14:14 +0200
+Subject: [PATCH 19/35] cheese-camera: Don't block the main valve while
+ recording
+
+Otherwise we end up dropping frames intended for the recording.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index 9cfaf7e..2dc5655 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -942,7 +942,8 @@ cheese_camera_toggle_effects_pipeline (CheeseCamera *camera, gboolean active)
+   if (active)
+   {
+     g_object_set (G_OBJECT (priv->effects_valve), "drop", FALSE, NULL);
+-    g_object_set (G_OBJECT (priv->main_valve), "drop", TRUE, NULL);
++    if (!priv->is_recording)
++      g_object_set (G_OBJECT (priv->main_valve), "drop", TRUE, NULL);
+   }
+   else
+   {
+-- 
+1.8.2.1
+

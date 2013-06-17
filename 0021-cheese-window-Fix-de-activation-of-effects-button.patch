@@ -1,0 +1,51 @@
+From 775c5d479d47c96a1a0e78a852ec31418809c0dc Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 11 Jun 2013 12:51:09 +0200
+Subject: [PATCH 21/35] cheese-window: Fix de-activation of effects button
+
+So that the user does not need to click twice on the effect button to change
+the effect (after the first time the effect was changed).
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 70293aa..9ebb5e1 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -895,7 +895,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+       else
+       if (is_effects_selector_active)
+       {
+-        // FIXME: Set the effects action to be inactive.
++        effects_toggle_button.set_active (false);
+       }
+     }
+     return false;
+@@ -1031,7 +1031,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     public void set_effects (bool effects)
+     {
+         toggle_effects_selector (effects);
+-        // FIXME: Set the mode action to be inverse sensitivity to effects.
+     }
+ 
+   /**
+@@ -1045,12 +1044,11 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+                                          Clutter.ButtonEvent event)
+   {
+     /* Disable the effects selector after selecting an effect. */
+-    toggle_effects_selector(false);
++    effects_toggle_button.set_active (false);
+ 
+     selected_effect = source.get_data ("effect");
+     camera.set_effect (selected_effect);
+     settings.set_string ("selected-effect", selected_effect.name);
+-    // FIXME: Set the effects action to be inactive.
+     return false;
+   }
+ 
+-- 
+1.8.2.1
+

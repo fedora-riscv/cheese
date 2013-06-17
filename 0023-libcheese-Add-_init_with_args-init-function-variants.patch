@@ -1,0 +1,213 @@
+From e7b7314b5af40aaf9aa2a782a1fd025f2e08345e Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Jun 2013 12:07:20 +0200
+Subject: [PATCH 23/35] libcheese: Add _init_with_args init function variants
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ docs/reference/cheese-sections.txt |  2 ++
+ libcheese/cheese-gtk.c             | 57 ++++++++++++++++++++++++++++++++++++++
+ libcheese/cheese-gtk.h             |  5 ++++
+ libcheese/cheese-gtk.symbols       |  1 +
+ libcheese/cheese.c                 | 25 +++++++++++++++++
+ libcheese/cheese.h                 |  5 ++++
+ src/vapi/cheese-common.vapi        | 14 ++++++++++
+ 7 files changed, 109 insertions(+)
+
+diff --git a/docs/reference/cheese-sections.txt b/docs/reference/cheese-sections.txt
+index 81e835c..bed1e75 100644
+--- a/docs/reference/cheese-sections.txt
++++ b/docs/reference/cheese-sections.txt
+@@ -2,12 +2,14 @@
+ <FILE>cheese-init</FILE>
+ <TITLE>Initializing libcheese</TITLE>
+ cheese_init
++cheese_init_with_args
+ </SECTION>
+ 
+ <SECTION>
+ <FILE>cheese-gtk-init</FILE>
+ <TITLE>Initializing libcheese-gtk</TITLE>
+ cheese_gtk_init
++cheese_gtk_init_with_args
+ </SECTION>
+ 
+ <SECTION>
+diff --git a/libcheese/cheese-gtk.c b/libcheese/cheese-gtk.c
+index f6f7715..008ebef 100644
+--- a/libcheese/cheese-gtk.c
++++ b/libcheese/cheese-gtk.c
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <gtk/gtk.h>
++#include <gst/gst.h>
+ #ifdef GDK_WINDOWING_X11
+   #include <X11/Xlib.h>
+ #endif
+@@ -65,3 +66,59 @@ cheese_gtk_init (int *argc, char ***argv)
+ 
+     return TRUE;
+ }
++
++/**
++ * cheese_gtk_init_with_args:
++ * @argc: pointer to the argument list count
++ * @argv: pointer to the argument list vector
++ * @parameter_string:  string which is displayed in the first line of --help
++ * output, after programname [OPTION...]
++ * @entries: a NULL-terminated array of GOptionEntries describing the options
++ * of your program
++ * @translation_domain: a translation domain to use for translating the
++ * --help output for the options in entries with gettext(), or NULL
++ * @error: a return location for errors
++ *
++ * Initialize libcheese-gtk, by initializing Clutter, GStreamer and GTK+. This
++ * automatically calls cheese_init_with_args(), initializing libcheese.
++ *
++ * Returns: %TRUE if the initialization was successful, %FALSE otherwise
++ */
++gboolean
++cheese_gtk_init_with_args (int *argc, char ***argv,
++                           const char *parameter_string,
++                           GOptionEntry *entries,
++                           const char *translation_domain,
++                           GError **error)
++{
++    GOptionContext *context;
++    gboolean res;
++
++#ifdef GDK_WINDOWING_X11
++    /* We can't call clutter_gst_init() before gtk_clutter_init(), so no
++     * choice but to initialise X11 threading ourself */
++    XInitThreads ();
++#endif
++
++    /* We cannot simply call gtk_clutter_init_with_args() here, since that
++     * will result in the commandline being parsed without gst support. */
++    context = g_option_context_new (parameter_string);
++    g_option_context_add_main_entries (context, entries, translation_domain);
++    g_option_context_set_translation_domain (context, translation_domain);
++    g_option_context_add_group (context, gst_init_get_option_group ());
++    g_option_context_add_group (context, gtk_get_option_group (TRUE));
++    g_option_context_add_group (context, cogl_get_option_group ());
++    g_option_context_add_group (context,
++        clutter_get_option_group_without_init ());
++    g_option_context_add_group (context, gtk_clutter_get_option_group ());
++
++    res = g_option_context_parse (context, argc, argv, error);
++
++    g_option_context_free (context);
++
++    if (!res)
++        return FALSE;
++
++    return cheese_init_with_args (argc, argv, parameter_string, entries,
++                                  translation_domain, error);
++}
+diff --git a/libcheese/cheese-gtk.h b/libcheese/cheese-gtk.h
+index 77640e2..1a4f1b8 100644
+--- a/libcheese/cheese-gtk.h
++++ b/libcheese/cheese-gtk.h
+@@ -25,6 +25,11 @@
+ G_BEGIN_DECLS
+ 
+ gboolean cheese_gtk_init (int *argc, char ***argv);
++gboolean cheese_gtk_init_with_args (int *argc, char ***argv,
++                                    const char *parameter_string,
++                                    GOptionEntry *entries,
++                                    const char *translation_domain,
++                                    GError **error);
+ 
+ G_END_DECLS
+ 
+diff --git a/libcheese/cheese-gtk.symbols b/libcheese/cheese-gtk.symbols
+index fc43faf..a207c3d 100644
+--- a/libcheese/cheese-gtk.symbols
++++ b/libcheese/cheese-gtk.symbols
+@@ -1,4 +1,5 @@
+ cheese_gtk_init
++cheese_gtk_init_with_args
+ cheese_widget_get_type
+ cheese_widget_new
+ cheese_widget_get_camera
+diff --git a/libcheese/cheese.c b/libcheese/cheese.c
+index 0393562..fcab5a8 100644
+--- a/libcheese/cheese.c
++++ b/libcheese/cheese.c
+@@ -52,3 +52,28 @@ cheese_init (int *argc, char ***argv)
+ 
+     return TRUE;
+ }
++
++/**
++ * cheese_init_with_args:
++ * @argc: pointer to the argument list count
++ * @argv: pointer to the argument list vector
++ * @parameter_string:  string which is displayed in the first line of --help
++ * output, after programname [OPTION...]
++ * @entries: a NULL-terminated array of GOptionEntries describing the options
++ * of your program
++ * @translation_domain: a translation domain to use for translating the
++ * --help output for the options in entries with gettext(), or NULL
++ * @error: a return location for errors
++ *
++ * Initialize libcheese, by initializing Clutter and GStreamer.
++ *
++ * Returns: %TRUE if the initialization was successful, %FALSE otherwise
++ */
++gboolean
++cheese_init_with_args (int *argc, char ***argv, const char *parameter_string,
++                       GOptionEntry *entries, const char *translation_domain,
++                       GError **error)
++{
++    return clutter_gst_init_with_args (argc, argv, parameter_string, entries,
++                translation_domain, error) == CLUTTER_INIT_SUCCESS;
++}
+diff --git a/libcheese/cheese.h b/libcheese/cheese.h
+index ec3239f..0f6e06c 100644
+--- a/libcheese/cheese.h
++++ b/libcheese/cheese.h
+@@ -25,6 +25,11 @@
+ G_BEGIN_DECLS
+ 
+ gboolean cheese_init (int *argc, char ***argv);
++gboolean cheese_init_with_args (int *argc, char ***argv,
++                                const char *parameter_string,
++                                GOptionEntry *entries,
++                                const char *translation_domain,
++                                GError **error);
+ 
+ G_END_DECLS
+ 
+diff --git a/src/vapi/cheese-common.vapi b/src/vapi/cheese-common.vapi
+index 075b594..e4d4bec 100644
+--- a/src/vapi/cheese-common.vapi
++++ b/src/vapi/cheese-common.vapi
+@@ -6,9 +6,23 @@ namespace Cheese
+   [CCode (cheader_filename = "cheese.h")]
+   public static bool init([CCode (array_length_pos = 0.9)] ref unowned string[] argv);
+ 
++  [CCode (cheader_filename = "cheese.h")]
++  public static bool init_with_args(
++    [CCode (array_length_pos = 0.9)] ref unowned string[] argv,
++    string parameter_string,
++    [CCode (array_length = false)] GLib.OptionEntry[] entries,
++    string? translation_domain) throws GLib.OptionError;
++
+   [CCode (cheader_filename = "cheese-gtk.h")]
+   public static bool gtk_init([CCode (array_length_pos = 0.9)] ref unowned string[] argv);
+ 
++  [CCode (cheader_filename = "cheese-gtk.h")]
++  public static bool gtk_init_with_args(
++    [CCode (array_length_pos = 0.9)] ref unowned string[] argv,
++    string parameter_string,
++    [CCode (array_length = false)] GLib.OptionEntry[] entries,
++    string? translation_domain) throws GLib.OptionError;
++
+   [CCode (cheader_filename = "cheese-effect.h")]
+   public class Effect : GLib.Object
+   {
+-- 
+1.8.2.1
+

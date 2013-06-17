@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.8.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -9,6 +9,49 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.8/%{name}-%{version}.tar.xz
+
+# HdG: since I hit a couple of issues in cheese, and cheese needed some loving
+# in general I ended up doing a whole lot of *bugfix* patches for cheese,
+# fixing various performance / device compatibility issues, but also things
+# like needing to press some buttons twice before they work, etc.
+# See here for a bug for tracking the upstreaming of this patchset:
+# https://bugzilla.gnome.org/show_bug.cgi?id=702264
+Patch1:         0001-cheese-camera-Add-a-capsfilter-to-our-video-source-b.patch
+Patch2:         0002-cheese-camera-remove-extranous-csp_post_balance-vide.patch
+Patch3:         0003-cheese-camera-Set-image-and-video-capture-caps.patch
+Patch4:         0004-cheese-camera-Fix-the-no-video-after-switching-resol.patch
+Patch5:         0005-cheese-camera-2-minor-error-handling-cleanups.patch
+Patch6:         0006-cheese-camera-Fix-video-source-memleak-when-switchin.patch
+Patch7:         0007-cheese-camera-Remove-unused-enum.patch
+Patch8:         0008-cheese-camera-device-Fix-compiler-warning.patch
+Patch9:         0009-cheese-camera-device-Fix-memleak-in-get_best_format.patch
+Patch10:        0010-cheese-camera-device-Keep-track-of-highest-available.patch
+Patch11:        0011-cheese-camera-device-Add-cheese_camera_device_find_f.patch
+Patch12:        0012-cheese-camera-device-limit-caps-to-the-maximum-frame.patch
+Patch13:        0013-cheese-camera-device-get_caps_for_format-simplify-th.patch
+Patch14:        0014-cheese-camera-device-Make-get_best_format-smarter.patch
+Patch15:        0015-cheese-camera-device-Plug-some-memory-leaks.patch
+Patch16:        0016-cheese-camera-Drop-unused-preview_caps.patch
+Patch17:        0017-cheese-camera-Do-not-add-videoconvert-elements-aroun.patch
+Patch18:        0018-cheese-camera-Check-for-the-current-effect-being-the.patch
+Patch19:        0019-cheese-camera-Don-t-block-the-main-valve-while-recor.patch
+Patch20:        0020-cheese-camera-Downscale-image-for-effects-preview-pi.patch
+Patch21:        0021-cheese-window-Fix-de-activation-of-effects-button.patch
+Patch22:        0022-cheese-window-Make-mode-toggle-and-effects-button-in.patch
+Patch23:        0023-libcheese-Add-_init_with_args-init-function-variants.patch
+Patch24:        0024-cheese-Use-cheese_gtk_init_with_args.patch
+Patch25:        0025-cheese-Remove-last-remnants-of-the-old-menu-code.patch
+Patch26:        0026-cheese-Protect-set_wide_mode-set_fullscreen-against-.patch
+Patch27:        0027-cheese-Get-rid-of-special-set_startup_foo-functions.patch
+Patch28:        0028-cheese-Fix-the-need-to-press-F11-twice-after-startin.patch
+Patch29:        0029-cheese-Make-widemode-controllable-from-the-app-menu.patch
+Patch30:        0030-cheese-Move-reading-of-widemode-setting-to-cheese-ma.patch
+Patch31:        0031-cheese-Fix-reading-of-fullscreen-setting-from-config.patch
+Patch32:        0032-cheese-Don-t-show-thumbnails-when-toggling-widemode-.patch
+Patch33:        0033-cheese-Fix-updating-of-device-selection-combo-sensit.patch
+Patch34:        0034-cheese-Fix-assert-failures-when-taking-a-photo.patch
+Patch35:        0035-cheese-flash-Fix-the-flash-no-longer-being-white.patch
+
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 
@@ -41,7 +84,7 @@ BuildRequires: libxslt
 BuildRequires: docbook-style-xsl
 BuildRequires: /usr/bin/convert
 
-Requires: %{name}-libs = %{epoch}:%{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: gstreamer1-plugins-good
 Requires: gstreamer1-plugins-bad-free
 Requires: gnome-video-effects
@@ -51,19 +94,19 @@ Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
 
 %package libs
-Summary:	Webcam display and capture widgets
-Group:		System Environment/Libraries
-License:	GPLv2+
+Summary:        Webcam display and capture widgets
+Group:          System Environment/Libraries
+License:        GPLv2+
 
 %description libs
 This package contains libraries needed for applications that
 want to display a webcam in their interface.
 
 %package libs-devel
-Summary:	Development files for %{name}-libs
-Group:		Development/Libraries
-License:	GPLv2+
-Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Summary:        Development files for %{name}-libs
+Group:          Development/Libraries
+License:        GPLv2+
+Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description libs-devel
 This package contains the libraries and header files that are needed
@@ -71,7 +114,41 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-# %patch2 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
+%patch17 -p1
+%patch18 -p1
+%patch19 -p1
+%patch20 -p1
+%patch21 -p1
+%patch22 -p1
+%patch23 -p1
+%patch24 -p1
+%patch25 -p1
+%patch26 -p1
+%patch27 -p1
+%patch28 -p1
+%patch29 -p1
+%patch30 -p1
+%patch31 -p1
+%patch32 -p1
+%patch33 -p1
+%patch34 -p1
+%patch35 -p1
 
 
 %build
@@ -85,10 +162,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese.{a,la}
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
 
-desktop-file-install --delete-original --vendor="" 	\
- 	--dir=$RPM_BUILD_ROOT%{_datadir}/applications 	\
-	--add-category X-AudioVideoImport		\
-	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
+desktop-file-install --delete-original --vendor=""    \
+    --dir=$RPM_BUILD_ROOT%{_datadir}/applications     \
+    --add-category X-AudioVideoImport                 \
+    $RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
 %find_lang %{name} --with-gnome
 
@@ -123,7 +200,7 @@ fi
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %files
-%doc AUTHORS COPYING README
+%doc AUTHORS README
 %{_bindir}/cheese
 %{_datadir}/applications/cheese.desktop
 %{_datadir}/cheese
@@ -131,17 +208,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/actions/*.png
 %{_datadir}/icons/hicolor/scalable/actions/*.svg
 %{_mandir}/man1/cheese.1.gz
-# FIXME find-lang is supposed to pick these up
-%doc %{_datadir}/help/*/cheese
 
 %files -f %{name}.lang libs
+%doc COPYING
 %{_libdir}/libcheese.so.*
 %{_libdir}/libcheese-gtk.so.*
 %{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
 %{_libdir}/girepository-1.0/Cheese-3.0.typelib
 
 %files libs-devel
-%doc COPYING
 %{_libdir}/libcheese.so
 %{_libdir}/libcheese-gtk.so
 %{_includedir}/cheese/
@@ -151,6 +226,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Jun 17 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.8.2-3
+- Add a number of bug-fixes to deal better with high res cams (#873434)
+- Fix cheese-introduction.png being in both cheese and cheese-libs (#893756)
+- Put the COPYING file in the docs for cheese-libs (#893800)
+- Fix the flash when taking a photo being dark grey instead of white (#965813)
+- Fix needing to press the effects button twice to select effects after
+  selecting an effect for the first time
+- Various other bug-fixes
+
 * Tue May 14 2013 Matthias Clasen <mclasen@redhat.com> - 2:3.8.2-2
 - Conserve space by shrinking images
 
@@ -357,7 +441,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 * Thu Aug 19 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.90-1
 - Update to 2.31.90
 
-* Fri Aug 11 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.1-2
+* Wed Aug 11 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.1-2
 - Add an epoch to stay ahead of F14
 
 * Fri Aug  6 2010 Matthias Clasen <mclasen@redhat.com> 2.31.1-1
@@ -457,7 +541,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 * Wed Dec  3 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.2-1
 - Update to 2.25.2
 
-* Thu Nov 21 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-4
+* Fri Nov 21 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-4
 - Better URL
 
 * Thu Nov 13 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-3

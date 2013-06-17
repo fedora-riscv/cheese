@@ -1,0 +1,94 @@
+From bd78a9a2a02dbc8c7513c73579dfd5ce848ae9f2 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Jun 2013 17:59:13 +0200
+Subject: [PATCH 27/35] cheese: Get rid of special set_startup_foo() functions
+
+So that cheese-main can toggle / activate the related actions when parsing
+the cmdline and thus have the action state properly reflects the actual state,
+avoiding ie the need to press F11 twice to leave fullscreen after starting
+cheese with -f.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala   |  7 +++++--
+ src/cheese-window.vala | 31 ++-----------------------------
+ 2 files changed, 7 insertions(+), 31 deletions(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index 5905597..e4f2460 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -126,9 +126,12 @@ public class Cheese.Main : Gtk.Application
+       main_window.start_thumbview_monitors ();
+ 
+       if (wide)
+-        main_window.set_startup_wide_mode ();
++        main_window.set_wide_mode (true);
+       if (fullscreen)
+-        main_window.set_startup_fullscreen_mode ();
++        main_window.set_fullscreen (true);
++
++      /* Tell the main window to save any changes from here on to GSettings */
++      main_window.is_command_line_startup = false;
+ 
+       /* Shoot when the webcam capture button is pressed. */
+       main_window.add_events (Gdk.EventMask.KEY_PRESS_MASK
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 906105b..7a3db6b 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -92,7 +92,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private bool is_effects_selector_active;
+   private bool is_camera_actions_sensitive;
+   private bool action_cancelled;
+-  private bool is_command_line_startup;
++  public  bool is_command_line_startup;
+ 
+   private Gtk.Button[] buttons;
+   private Gtk.Button[] mode_buttons;
+@@ -122,6 +122,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     public MainWindow (Gtk.Application application)
+     {
+         GLib.Object (application: application);
++        is_command_line_startup = true;
+     }
+ 
+   /**
+@@ -1337,34 +1338,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     }
+ 
+   /**
+-   * Set wide mode active when started from the command line (and do not change
+-   * the GSetting).
+-   */
+-  public void set_startup_wide_mode ()
+-  {
+-    if (is_wide_mode)
+-    {
+-      /* Cheese was already in wide mode, avoid setting it again. */
+-      return;
+-    }
+-
+-    is_command_line_startup = true;
+-    set_wide_mode (true);
+-    is_command_line_startup = false;
+-  }
+-
+-  /**
+-   * Set fullscreen mode active when started from the command line (and do not
+-   * change the GSetting).
+-   */
+-  public void set_startup_fullscreen_mode ()
+-  {
+-    is_command_line_startup = true;
+-    set_fullscreen (true);
+-    is_command_line_startup = false;
+-  }
+-
+-  /**
+    * Load the UI from the GtkBuilder description.
+    */
+   public void setup_ui ()
+-- 
+1.8.2.1
+

@@ -1,0 +1,26 @@
+From 5df60ca7f29d6008f894e8b702b288dad55851f9 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 10:56:25 +0200
+Subject: [PATCH 08/35] cheese-camera-device: Fix compiler warning
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index 92d03a3..c7b7a07 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -165,7 +165,7 @@ compare_formats (gconstpointer a, gconstpointer b)
+  * Returns: the filtered #GstCaps
+  */
+ static GstCaps *
+-cheese_camera_device_filter_caps (CheeseCameraDevice *device, const GstCaps *caps, GStrv formats)
++cheese_camera_device_filter_caps (CheeseCameraDevice *device, GstCaps *caps, GStrv formats)
+ {
+   GstCaps *filter;
+   GstCaps *allowed;
+-- 
+1.8.2.1
+

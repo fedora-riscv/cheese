@@ -1,0 +1,52 @@
+From 8e50910e9604c5d719397dd3f6a5fccc463eaa35 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 11 Jun 2013 09:05:51 +0200
+Subject: [PATCH 17/35] cheese-camera: Do not add videoconvert elements around
+ the "no effect" effect
+
+The "no effect" effect is our default value, and thus worth optimizing a bit
+for. Clearly in the "no effect" effect case adding a videoconvert element both
+before and after the element is not needed.
+
+Note we also don't add the videoconvert elements when creating the initial
+pipeline, so this also keeps the way the pipeline looks initially and when
+"no-effect" is selected consistent.
+
+When starting cheese with "no-effect" selected, this shaves of another 130ms
+of the initial pipeline creation time, for a total improvement for this patch
+set from aprox 1.1 sec to aprox 220 ms.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index eafc381..7b7fac5 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -888,12 +888,20 @@ void
+ cheese_camera_set_effect (CheeseCamera *camera, CheeseEffect *effect)
+ {
+   GstElement *effect_filter;
++  gchar      *effect_desc;
+ 
+   g_return_if_fail (CHEESE_IS_CAMERA (camera));
+ 
+-  effect_filter = cheese_camera_element_from_effect (camera, effect);
++  g_object_get (G_OBJECT (effect), "pipeline-desc", &effect_desc, NULL);
++
++  if (strcmp(effect_desc, "identity") == 0)
++    effect_filter = gst_element_factory_make ("identity", "effect");
++  else
++    effect_filter = cheese_camera_element_from_effect (camera, effect);
+   if (effect_filter != NULL)
+     cheese_camera_change_effect_filter (camera, effect_filter);
++
++  g_free (effect_desc);
+ }
+ 
+ /**
+-- 
+1.8.2.1
+

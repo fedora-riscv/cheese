@@ -1,0 +1,98 @@
+From 113a466ab26633d765cb76461ef8a63b0fa86911 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 11 Jun 2013 13:09:39 +0200
+Subject: [PATCH 22/35] cheese-window: Make mode-toggle and effects button
+ inactive when recording
+
+While at it also fixup the indentation of enable_mode_change / disable, to
+be 2 spaces like most other code in cheese-window.vala.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 44 +++++++++++++++++++++++++++++++-------------
+ 1 file changed, 31 insertions(+), 13 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 9ebb5e1..e8ccb47 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -95,6 +95,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private bool is_command_line_startup;
+ 
+   private Gtk.Button[] buttons;
++  private Gtk.Button[] mode_buttons;
+ 
+   private Cheese.Camera   camera;
+   private Cheese.FileUtil fileutil;
+@@ -527,23 +528,37 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+         set_fullscreen_mode (fullscreen);
+     }
+ 
+-    /**
+-     * Make the media capture mode actions sensitive.
+-     */
+-    private void enable_mode_change ()
++  /**
++   * Make the media capture mode actions sensitive.
++   */
++  private void enable_mode_change ()
++  {
++    foreach (Gtk.Button b in mode_buttons)
+     {
+-        // FIXME: Set the mode action to be sensitive
+-        // FIXME: Set the effects action to be sensitive.
++      b.sensitive = true;
+     }
++    effects_toggle_button.sensitive = true;
++  }
+ 
+-    /**
+-     * Make the media capture mode actions insensitive.
+-     */
+-    private void disable_mode_change ()
++  /**
++   * Make the media capture mode actions insensitive.
++   */
++  private void disable_mode_change ()
++  {
++    foreach (Gtk.Button b in mode_buttons)
+     {
+-        // FIXME: Set the mode action to be sensitive
+-        // FIXME: Set the effects action to be insensitive.
++      b.sensitive = false;
+     }
++    /* Allow changing the effects while recording a video */
++    if (current_mode != MediaMode.VIDEO)
++    {
++      effects_toggle_button.sensitive = false;
++      if (is_effects_selector_active)
++      {
++        effects_toggle_button.set_active (false);
++      }
++    }
++  }
+ 
+   /**
+    * Set the capture resolution, based on the current capture mode.
+@@ -966,7 +981,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     {
+       is_bursting = true;
+       this.disable_mode_change ();
+-      // FIXME: Set the effects action to be inactive.
+       take_action_button_label.label  = "<b>" + _("Stop _Taking Pictures") + "</b>";
+       take_action_button.tooltip_text = _("Stop taking pictures");
+       burst_take_photo ();
+@@ -1416,6 +1430,10 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+                effects_toggle_button,
+                leave_fullscreen_button};
+ 
++    mode_buttons = {photo_toggle_button,
++                    video_toggle_button,
++                    burst_toggle_button};
++
+     video_preview           = clutter_builder.get_object ("video_preview") as Clutter.Texture;
+     viewport_layout         = clutter_builder.get_object ("viewport_layout") as Clutter.Box;
+     viewport_layout_manager = clutter_builder.get_object ("viewport_layout_manager") as Clutter.BinLayout;
+-- 
+1.8.2.1
+

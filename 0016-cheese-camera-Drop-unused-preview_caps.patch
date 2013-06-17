@@ -1,0 +1,26 @@
+From 7cb124b1919198af87013fa5a26d4d11250fbb9f Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 11 Jun 2013 09:22:09 +0200
+Subject: [PATCH 16/35] cheese-camera: Drop unused preview_caps
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index fd5d2bf..eafc381 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -81,8 +81,6 @@ struct _CheeseCameraPrivate
+   GstElement *camera_tee, *effects_tee;
+   GstElement *main_valve, *effects_valve;
+ 
+-  GstCaps *preview_caps;
+-
+   gboolean is_recording;
+   gboolean pipeline_is_playing;
+   gchar *photo_filename;
+-- 
+1.8.2.1
+

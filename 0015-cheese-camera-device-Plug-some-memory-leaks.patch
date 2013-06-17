@@ -1,0 +1,47 @@
+From 59811406ccd626704a0bb810032c39a089e1965a Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 14:18:52 +0200
+Subject: [PATCH 15/35] cheese-camera-device: Plug some memory leaks
+
+1) If we already have a format in the list, free it
+2) Not only free the formats in the list, but also the actual GList structures
+   themselves
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index 402bbb8..a12b0f7 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -360,6 +360,7 @@ cheese_camera_device_add_format (CheeseCameraDevice *device,
+                                                  (CheeseVideoFormat *)format);
+   if (existing)
+   {
++    g_slice_free (CheeseVideoFormatFull, format);
+     cheese_camera_device_format_update_framerate (existing, framerate);
+     return;
+   }
+@@ -380,7 +381,7 @@ cheese_camera_device_add_format (CheeseCameraDevice *device,
+  * Free the individual #CheeseVideoFormatFull.
+  */
+ static void
+-free_format_list_foreach (gpointer data, G_GNUC_UNUSED gpointer user_data)
++free_format_list_foreach (gpointer data)
+ {
+   g_slice_free (CheeseVideoFormatFull, data);
+ }
+@@ -396,7 +397,7 @@ free_format_list (CheeseCameraDevice *device)
+ {
+   CheeseCameraDevicePrivate *priv = device->priv;
+ 
+-  g_list_foreach (priv->formats, free_format_list_foreach, NULL);
++  g_list_free_full (priv->formats, free_format_list_foreach);
+   priv->formats = NULL;
+ }
+ 
+-- 
+1.8.2.1
+

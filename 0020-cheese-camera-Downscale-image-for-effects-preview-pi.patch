@@ -1,0 +1,119 @@
+From 5cb470a89ed733ef7b0db3c534d1ce6e76648fae Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 11 Jun 2013 16:16:23 +0200
+Subject: [PATCH 20/35] cheese-camera: Downscale image for effects-preview
+ pipeline
+
+Having the whole effects-preview bin deal with ie 1280x800 images is not very
+useful, esp since even when fullscreen on a full-hd monitor, the preview images
+are smaller then 640xXXX. This useless high-res processing for 9 preview images
+in paralellel brings my 2nd gen core i5 @ 3.1 GHz to its knees, resulting in a
+non fluid preview panel.
+
+Also after clicking through all effect preview pages, so that all effect
+preview textures are connected, cheese will use 1GB of *resident* ram with
+the example 1280x800 capture resolution.
+
+This patch fixes this by downscaling the images from the video-source to
+640xXXX where XXX is determined by the original resolution aspect-ratio.
+
+After this patch the effects preview framerate is much smoother, and the
+latency is noticably less. And as a bonus the maximal resident size of cheese
+in this example is reduced to 350 MB.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 42 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 34 insertions(+), 8 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index 2dc5655..31348d2 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -76,7 +76,7 @@ struct _CheeseCameraPrivate
+ 
+   ClutterTexture *video_texture;
+ 
+-  GstElement *effect_filter;
++  GstElement *effect_filter, *effects_capsfilter;
+   GstElement *video_balance;
+   GstElement *camera_tee, *effects_tee;
+   GstElement *main_valve, *effects_valve;
+@@ -517,27 +517,39 @@ cheese_camera_create_effects_preview_bin (CheeseCamera *camera, GError **error)
+   CheeseCameraPrivate *priv = camera->priv;
+ 
+   gboolean ok = TRUE;
++  GstElement *scale;
+   GstPad  *pad;
+ 
+   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+ 
+   priv->effects_preview_bin = gst_bin_new ("effects_preview_bin");
+ 
+-  if ((priv->effects_tee = gst_element_factory_make ("tee", "effects_tee")) == NULL)
++  if ((priv->effects_valve = gst_element_factory_make ("valve", "effects_valve")) == NULL)
+   {
+-    cheese_camera_set_error_element_not_found (error, "tee");
++    cheese_camera_set_error_element_not_found (error, "effects_valve");
+     return FALSE;
+   }
+-  if ((priv->effects_valve = gst_element_factory_make ("valve", "effects_valve")) == NULL)
++  if ((scale = gst_element_factory_make ("videoscale", "effects_scale")) == NULL)
+   {
+-    cheese_camera_set_error_element_not_found (error, "effects_valve");
++    cheese_camera_set_error_element_not_found (error, "videoscale");
++    return FALSE;
++  }
++  if ((priv->effects_capsfilter = gst_element_factory_make ("capsfilter", "effects_capsfilter")) == NULL)
++  {
++    cheese_camera_set_error_element_not_found (error, "capsfilter");
++    return FALSE;
++  }
++  if ((priv->effects_tee = gst_element_factory_make ("tee", "effects_tee")) == NULL)
++  {
++    cheese_camera_set_error_element_not_found (error, "tee");
+     return FALSE;
+   }
+ 
+-  gst_bin_add_many (GST_BIN (priv->effects_preview_bin),
+-		    priv->effects_valve, priv->effects_tee, NULL);
++  gst_bin_add_many (GST_BIN (priv->effects_preview_bin), priv->effects_valve,
++                    scale, priv->effects_capsfilter, priv->effects_tee, NULL);
+ 
+-  ok &= gst_element_link_many (priv->effects_valve, priv->effects_tee, NULL);
++  ok &= gst_element_link_many (priv->effects_valve, scale,
++                           priv->effects_capsfilter, priv->effects_tee, NULL);
+ 
+   /* add ghostpads */
+ 
+@@ -723,6 +735,8 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
+   CheeseCameraPrivate *priv;
+   CheeseCameraDevice *device;
+   GstCaps *caps;
++  gchar *caps_desc;
++  int width, height;
+ 
+   g_return_if_fail (CHEESE_IS_CAMERA (camera));
+ 
+@@ -746,6 +760,18 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
+     g_object_set (priv->camerabin, "viewfinder-caps", caps, NULL);
+     g_object_set (priv->camerabin, "image-capture-caps", caps, NULL);
+     g_object_set (priv->camerabin, "video-capture-caps", caps, NULL);
++    gst_caps_unref (caps);
++
++    width = priv->current_format->width;
++    width = width > 640 ? 640 : width;
++    height = width * priv->current_format->height / priv->current_format->width;
++    /* !! Gstreamer will crash if this is not a multiple of 2 !! */
++    height = (height + 1) & ~1;
++    caps_desc = g_strdup_printf ("video/x-raw, width=%d, height=%d",
++                                 width, height);
++    caps = gst_caps_from_string (caps_desc);
++    g_free (caps_desc);
++    g_object_set (priv->effects_capsfilter, "caps", caps, NULL);
+   }
+   gst_caps_unref (caps);
+ }
+-- 
+1.8.2.1
+

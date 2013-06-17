@@ -1,0 +1,196 @@
+From 5bcbdb44dd1cd4f0ed0a69a92a27634616e8df3e Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Jun 2013 13:28:11 +0200
+Subject: [PATCH 24/35] cheese: Use cheese_gtk_init_with_args
+
+Currently our --help output only shows gstreamer related info:
+
+[hans@shalem cheese]$ cheese --help
+Usage:
+  cheese [OPTION...] - GStreamer initialization
+
+Help Options:
+  -h, --help                        Show help options
+  --help-all                        Show all help options
+  --help-gst                        Show GStreamer Options
+
+This is caused by this gstreamer bug:
+https://bugzilla.gnome.org/show_bug.cgi?id=702089
+
+Besides suffering from this bug, our commandline parsing code also is not
+exactly pretty, and not a good example of how to do commandline parsing
+for other libcheese using applications.
+
+Also adding all the various option_groups manually is rather error prone
+ie currently the cogl group is missing.
+
+This patch fixes all this (including working around the --help issue)
+by using cheese_gtk_init_with_args, resulting in much simpler code.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala | 124 +++++++++++++--------------------------------------
+ 1 file changed, 30 insertions(+), 94 deletions(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index ac5ba6f..5905597 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -24,12 +24,21 @@ using Gtk;
+ using Clutter;
+ using Gst;
+ 
++static bool wide;
++static string device;
++static bool version;
++static bool fullscreen;
++
++const OptionEntry[] options = {
++  {"wide",       'w', 0, OptionArg.NONE,     ref wide,       N_("Start in wide mode"),                  null        },
++  {"device",     'd', 0, OptionArg.FILENAME, ref device,     N_("Device to use as a camera"),           N_("DEVICE")},
++  {"version",    'v', 0, OptionArg.NONE,     ref version,    N_("Output version information and exit"), null        },
++  {"fullscreen", 'f', 0, OptionArg.NONE,     ref fullscreen, N_("Start in fullscreen mode"),            null        },
++  {null}
++};
++
+ public class Cheese.Main : Gtk.Application
+ {
+-    static bool wide;
+-    static string device;
+-    static bool version;
+-    static bool fullscreen;
+ 
+     static MainWindow main_window;
+ 
+@@ -47,14 +56,6 @@ public class Cheese.Main : Gtk.Application
+         { "quit", on_quit }
+     };
+ 
+-  const OptionEntry[] options = {
+-    {"wide",       'w', 0, OptionArg.NONE,     ref wide,       N_("Start in wide mode"),                  null        },
+-    {"device",     'd', 0, OptionArg.FILENAME, ref device,     N_("Device to use as a camera"),           N_("DEVICE")},
+-    {"version",    'v', 0, OptionArg.NONE,     ref version,    N_("Output version information and exit"), null        },
+-    {"fullscreen", 'f', 0, OptionArg.NONE,     ref fullscreen, N_("Start in fullscreen mode"),            null        },
+-    {null}
+-  };
+-
+   public Main (string app_id, ApplicationFlags flags)
+   {
+     GLib.Object (application_id: app_id, flags: flags);
+@@ -140,87 +141,6 @@ public class Cheese.Main : Gtk.Application
+     }
+   }
+ 
+-  /**
+-   * Overridden method of GApplication, to handle the arguments locally.
+-   *
+-   * @param arguments the command-line arguments
+-   * @param exit_status the exit status to return to the OS
+-   * @return true if the arguments were successfully processed, false otherwise
+-   */
+-  public override bool local_command_line ([CCode (array_null_terminated = true, array_length = false)]
+-                                           ref unowned string[] arguments,
+-                                           out int exit_status)
+-  {
+-    // Try to register.
+-    try
+-    {
+-      register();
+-    }
+-    catch (Error e)
+-    {
+-      stdout.printf ("Error: %s\n", e.message);
+-      exit_status = 1;
+-      return true;
+-    }
+-
+-    // Workaround until bug 642885 is solved.
+-    unowned string[] local_args = arguments;
+-
+-    // Check command line parameters.
+-    int n_args = local_args.length;
+-    if (n_args <= 1)
+-    {
+-      Gst.init (ref local_args);
+-      activate ();
+-      exit_status = 0;
+-    }
+-    else
+-    {
+-      // Set parser.
+-      try
+-      {
+-        var context = new OptionContext (_("- Take photos and videos from your webcam"));
+-        context.set_translation_domain (Config.GETTEXT_PACKAGE);
+-        context.set_help_enabled (true);
+-        context.add_main_entries (options, null);
+-        context.add_group (Gtk.get_option_group (true));
+-        context.add_group (Clutter.get_option_group ());
+-        context.add_group (Gst.init_get_option_group ());
+-        context.parse (ref local_args);
+-      }
+-      catch (OptionError e)
+-      {
+-        stdout.printf ("%s\n", e.message);
+-        stdout.printf (_("Run '%s --help' to see a full list of available command line options.\n"), arguments[0]);
+-        exit_status = 1;
+-        return true;
+-      }
+-
+-      if (version)
+-      {
+-        stdout.printf ("%s %s\n", Config.PACKAGE_NAME, Config.PACKAGE_VERSION);
+-        exit_status = 1;
+-        return true;
+-      }
+-
+-      //Remote instance process commands locally.
+-      if (get_is_remote ())
+-      {
+-          stdout.printf (_("Another instance of Cheese is currently running\n"));
+-          exit_status = 1;
+-          return true;
+-      }
+-      //Primary instance.
+-      else
+-      {
+-        Gst.init (ref local_args);
+-        activate ();
+-        exit_status=0;
+-      }
+-    }
+-    return true;
+-  }
+-
+     /**
+      * Setup the camera listed in GSettings.
+      *
+@@ -543,8 +463,24 @@ public class Cheese.Main : Gtk.Application
+     Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
+     Intl.textdomain (Config.GETTEXT_PACKAGE);
+ 
+-    if (!Cheese.gtk_init (ref args))
++    try
++    {
++      Cheese.gtk_init_with_args (ref args,
++                            _("- Take photos and videos from your webcam"),
++                            options, Config.GETTEXT_PACKAGE);
++    }
++    catch (OptionError e)
++    {
++      stdout.printf ("%s\n", e.message);
++      stdout.printf (_("Run '%s --help' to see a full list of available command line options.\n"), args[0]);
+       return Posix.EXIT_FAILURE;
++    }
++
++    if (version)
++    {
++      stdout.printf ("%s %s\n", Config.PACKAGE_NAME, Config.PACKAGE_VERSION);
++      return Posix.EXIT_SUCCESS;
++    }
+ 
+     Cheese.Main app;
+     app = new Cheese.Main ("org.gnome.Cheese", ApplicationFlags.FLAGS_NONE);
+-- 
+1.8.2.1
+

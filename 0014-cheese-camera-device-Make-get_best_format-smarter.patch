@@ -1,0 +1,67 @@
+From 4711194d75b412fe1ba092adbe3101f252ac77fb Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 11:07:37 +0200
+Subject: [PATCH 14/35] cheese-camera-device: Make get_best_format smarter
+
+If we've a device which can do 1600x900 at 10 fps and 1280x800 @ 25 fps,
+then 1600x900 is not really the best format, as 10 fps leads to a bad
+user experience.
+
+So this patch makes get_best_format return the highest resolution at which
+the device can do atleast 15 fps.
+
+Since some (older) cameras may have something like 640x480 @ 10 fps and
+320x240 @ 30 fps as modes, there is an additional check that the mode
+must also have a width of at least 640 pixels.
+
+If no mode matching the widh >= 640 && frame_rate >= 15 criteria is found,
+get_best_format will behave as before as simply return the highest resolution
+mode.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index c23069d..402bbb8 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -935,14 +935,30 @@ cheese_camera_device_get_device_node (CheeseCameraDevice *device)
+ CheeseVideoFormat *
+ cheese_camera_device_get_best_format (CheeseCameraDevice *device)
+ {
+-  CheeseVideoFormat *format;
++  CheeseVideoFormatFull *format = NULL;
++  GList *l;
+ 
+   g_return_val_if_fail (CHEESE_IS_CAMERA_DEVICE (device), NULL);
+ 
+-  format = g_boxed_copy (CHEESE_TYPE_VIDEO_FORMAT, device->priv->formats->data);
++  /* First check for the highest res with width >= 640 and fps >= 15 */
++  for (l = device->priv->formats; l != NULL; l = l->next)
++  {
++    CheeseVideoFormatFull *item = l->data;
++    float frame_rate = (float)item->fr_numerator / (float)item->fr_denominator;
++    if (item->width >= 640 && frame_rate >= 15)
++    {
++      format = item;
++      break;
++    }
++  }
++  /* Else simply return the highest res */
++  if (!format)
++    format = device->priv->formats->data;
++
++  GST_INFO ("%dx%d@%d/%d", format->width, format->height,
++            format->fr_numerator, format->fr_denominator);
+ 
+-  GST_INFO ("%dx%d", format->width, format->height);
+-  return format;
++  return g_boxed_copy (CHEESE_TYPE_VIDEO_FORMAT, format);;
+ }
+ 
+ /**
+-- 
+1.8.2.1
+

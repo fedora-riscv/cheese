@@ -1,0 +1,206 @@
+From 29a1bab965e67b39eb0eef44038a1400d6de6029 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Jun 2013 17:26:25 +0200
+Subject: [PATCH 25/35] cheese: Remove last remnants of the old menu code
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ data/cheese-actions.ui | 18 -----------
+ src/cheese-window.vala | 85 +++++++++++++++++---------------------------------
+ 2 files changed, 29 insertions(+), 74 deletions(-)
+
+diff --git a/data/cheese-actions.ui b/data/cheese-actions.ui
+index 2374c36..8657c08 100644
+--- a/data/cheese-actions.ui
++++ b/data/cheese-actions.ui
+@@ -46,24 +46,6 @@
+           </object>
+           <accelerator key="Delete" modifiers="GDK_SHIFT_MASK"/>
+         </child>
+-        <child>
+-          <object class="GtkAction" id="move_all_to_trash">
+-            <property name="name">RemoveAll</property>
+-            <property name="label" translatable="yes">Move _All to Trash</property>
+-            <signal name="activate" handler="cheese_main_window_on_file_move_to_trash_all"/>
+-          </object>
+-        </child>
+-      </object>
+-    </child>
+-    <child>
+-      <object class="GtkActionGroup" id="layout_actions">
+-        <child>
+-          <object class="GtkToggleAction" id="wide_mode">
+-            <property name="name">WideMode</property>
+-            <property name="label" translatable="yes">_Wide Mode</property>
+-            <signal name="toggled" handler="cheese_main_window_on_layout_wide_mode"/>
+-          </object>
+-        </child>
+       </object>
+     </child>
+     <child>
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index e8ccb47..6425a7f 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -79,7 +79,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private List<Clutter.Box> effects_grids;
+ 
+   private HashTable<string, bool> action_sensitivities;
+-  private Gtk.ToggleAction wide_mode_action;
+   private Gtk.Action       countdown_action;
+   private Gtk.Action       effects_page_prev_action;
+   private Gtk.Action       effects_page_next_action;
+@@ -494,41 +493,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   }
+ 
+   /**
+-   * Toggle wide mode and save the preference to GSettings.
+-   *
+-   * @param action the action that emitted the signal
+-   */
+-  [CCode (instance_pos = -1)]
+-  public void on_layout_wide_mode (ToggleAction action)
+-  {
+-    if (!is_command_line_startup)
+-    {
+-     /* Don't save to settings when using -w mode from command-line, so
+-      * command-line options change the mode for one run only. */
+-      settings.set_boolean ("wide-mode", action.active);
+-    }
+-    set_wide_mode (action.active);
+-  }
+-
+-    /**
+-     * Toggle fullscreen mode and save the preference to GSettings.
+-     *
+-     * @param fullscreen whether the window should be fullscreean
+-     */
+-    [CCode (instance_pos = -1)]
+-    public void set_fullscreen (bool fullscreen)
+-    {
+-        if (!is_command_line_startup)
+-        {
+-            /* Don't save to settings when using -f mode from command-line, so
+-             * command-line options change the mode for one run only. */
+-            settings.set_boolean ("fullscreen", fullscreen);
+-        }
+-
+-        set_fullscreen_mode (fullscreen);
+-    }
+-
+-  /**
+    * Make the media capture mode actions sensitive.
+    */
+   private void enable_mode_change ()
+@@ -657,19 +621,28 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   }
+ 
+   /**
+-   * Enable or disable fullscreen mode to the requested state.
++   * Enable or disable fullscreen mode
+    *
+-   * @param fullscreen_mode whether to enable or disable fullscreen mode
++   * @param fullscreen whether the window should be fullscreean
+    */
+-  private void set_fullscreen_mode (bool fullscreen_mode)
++  [CCode (instance_pos = -1)]
++  public void set_fullscreen (bool fullscreen)
+   {
+     /* After the first time the window has been shown using this.show_all (),
+      * the value of leave_fullscreen_button_container.no_show_all should be set to false
+      * So that the next time leave_fullscreen_button_container.show_all () is called, the button is actually shown
+      * FIXME: If this code can be made cleaner/clearer, please do */
+ 
+-    is_fullscreen = fullscreen_mode;
+-    if (fullscreen_mode)
++    is_fullscreen = fullscreen;
++
++    if (!is_command_line_startup)
++    {
++      /* Don't save to settings when using -f mode from command-line, so
++       * command-line options change the mode for one run only. */
++      settings.set_boolean ("fullscreen", is_fullscreen);
++    }
++
++    if (is_fullscreen)
+     {
+       if (is_wide_mode)
+       {
+@@ -722,14 +695,23 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   }
+ 
+   /**
+-   * Enable or disable wide mode to the requested state.
++   * Enable or disable wide mode to the requested state and save the
++   * preference to GSettings.
+    *
+    * @param wide_mode whether to enable or disable wide mode
+    */
+-  private void set_wide_mode (bool wide_mode)
++  [CCode (instance_pos = -1)]
++  public void set_wide_mode (bool wide_mode)
+   {
+     is_wide_mode = wide_mode;
+ 
++    if (!is_command_line_startup)
++    {
++     /* Don't save to settings when using -w mode from command-line, so
++      * command-line options change the mode for one run only. */
++      settings.set_boolean ("wide-mode", is_wide_mode);
++    }
++
+     /* keep the viewport to its current size while rearranging the ui,
+      * so that thumbview moves from right to bottom and viceversa
+      * while the rest of the window stays unchanged */
+@@ -1298,13 +1280,12 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+           /* Keep only these actions sensitive. */
+           string [] active_actions = { "quit",
+-                                       "help_contents",
++                                       "help",
+                                        "about",
+                                        "open",
+                                        "save_as",
+                                        "move_to_trash",
+-                                       "delete",
+-                                       "move_all_to_trash"};
++                                       "delete"};
+ 
+           /* Gross hack because Vala's `in` operator doesn't really work */
+           bool flag;
+@@ -1358,7 +1339,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     }
+ 
+     is_command_line_startup = true;
+-    wide_mode_action.set_active (true);
++    set_wide_mode (true);
+     is_command_line_startup = false;
+   }
+ 
+@@ -1414,7 +1395,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     thumbnail_popup                   = gtk_builder.get_object ("thumbnail_popup") as Gtk.Menu;
+ 
+     countdown_action         = gtk_builder.get_object ("countdown") as Gtk.Action;
+-    wide_mode_action         = gtk_builder.get_object ("wide_mode") as Gtk.ToggleAction;
+     effects_page_next_action = gtk_builder.get_object ("effects_page_next") as Gtk.Action;
+     effects_page_prev_action = gtk_builder.get_object ("effects_page_prev") as Gtk.Action;
+     share_action             = gtk_builder.get_object ("share") as Gtk.Action;
+@@ -1477,14 +1457,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+      * if the widget is not realized */
+     viewport_widget.realize ();
+ 
+-    /* call set_active instead of our set_wide_mode so that the toggle
+-     * action state is updated */
+-    wide_mode_action.set_active (settings.get_boolean ("wide-mode"));
+-
+-    /* apparently set_active doesn't emit toggled nothing has
+-     * changed, do it manually */
+-    if (!settings.get_boolean ("wide-mode"))
+-      wide_mode_action.toggled ();
++    set_wide_mode (settings.get_boolean ("wide-mode"));
+ 
+     set_mode (MediaMode.PHOTO);
+     setup_effects_selector ();
+-- 
+1.8.2.1
+

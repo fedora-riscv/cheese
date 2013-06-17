@@ -1,0 +1,94 @@
+From b9720475545f37baeb2eb1da4f45ca29faeb482f Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 14:47:40 +0200
+Subject: [PATCH 12/35] cheese-camera-device: limit caps to the maximum
+ framerate
+
+Limit the caps returned by cheese_camera_device_get_caps_for_format() to
+the maximum framerate supported at the requested resolution. This is
+necessary because gstreamer first selects a format and then a framerate,
+resulting in it picking for 1280x720 ie yuyv @ 15 fps, instead of mjpg @ 30
+fps (*), or at 1600x1200 yuyv @ 5 fps instead of mjpeg @ 10 fps.
+
+*) Which will be converted to i420 by the videoconvert element in camerabin
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 46 ++++++++++++++++++++++++++++------------
+ 1 file changed, 32 insertions(+), 14 deletions(-)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index 25d4a51..273d530 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -954,35 +954,53 @@ cheese_camera_device_get_best_format (CheeseCameraDevice *device)
+  *
+  * Returns: (transfer full): the #GstCaps for the given @format
+  */
++
++static GstCaps *
++cheese_camera_device_format_to_caps (const char *media_type,
++                                     CheeseVideoFormatFull *format)
++{
++  if (format->fr_numerator != 0 && format->fr_denominator != 0)
++    return gst_caps_new_simple (media_type,
++                                "framerate", GST_TYPE_FRACTION,
++                                  format->fr_numerator, format->fr_denominator,
++                                "width", G_TYPE_INT, format->width,
++                                "height", G_TYPE_INT, format->height, NULL);
++  else
++    return gst_caps_new_simple (media_type,
++                                "width", G_TYPE_INT, format->width,
++                                "height", G_TYPE_INT, format->height, NULL);
++}
++ 
+ GstCaps *
+ cheese_camera_device_get_caps_for_format (CheeseCameraDevice *device,
+                                           CheeseVideoFormat  *format)
+ {
++  CheeseVideoFormatFull *full_format;
+   GstCaps *desired_caps;
+   GstCaps *subset_caps;
+   guint    i, length;
+ 
+   g_return_val_if_fail (CHEESE_IS_CAMERA_DEVICE (device), NULL);
+ 
+-  GST_INFO ("Getting caps for %dx%d", format->width, format->height);
+-
+-  desired_caps = gst_caps_new_simple (supported_formats[0],
+-                                      "width", G_TYPE_INT,
+-                                      format->width,
+-                                      "height", G_TYPE_INT,
+-                                      format->height,
+-                                      NULL);
++  full_format = cheese_camera_device_find_full_format(device, format);
++  if (!full_format)
++  {
++    GST_INFO ("Getting caps for %dx%d: no such format!",
++              format->width, format->height);
++    return gst_caps_new_empty ();
++  }
++  GST_INFO ("Getting caps for %dx%d @ %d/%d fps",
++            full_format->width, full_format->height,
++            full_format->fr_numerator, full_format->fr_denominator);
+ 
++  desired_caps = cheese_camera_device_format_to_caps(supported_formats[0],
++                                                     full_format);
+   length = g_strv_length (supported_formats);
+   for (i = 1; i < length; i++)
+   {
+     gst_caps_append (desired_caps,
+-                     gst_caps_new_simple (supported_formats[i],
+-                                          "width", G_TYPE_INT,
+-                                          format->width,
+-                                          "height", G_TYPE_INT,
+-                                          format->height,
+-                                          NULL));
++                     cheese_camera_device_format_to_caps(supported_formats[i],
++                                                         full_format));
+   }
+ 
+   subset_caps = gst_caps_intersect (desired_caps, device->priv->caps);
+-- 
+1.8.2.1
+

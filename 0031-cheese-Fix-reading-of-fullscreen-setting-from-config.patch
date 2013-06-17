@@ -1,0 +1,34 @@
+From 435f7bb98f99affa437dd3cc2cd71fafb4a42332 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 09:51:04 +0200
+Subject: [PATCH 31/35] cheese: Fix reading of fullscreen setting from config
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index d0f9b41..9ba1a5f 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -124,14 +124,14 @@ public class Cheese.Main : Gtk.Application
+             section.append_item (item);
+             set_app_menu (menu);
+ 
+-            // FIXME: Read fullscreen state from GSettings.
+-
+       main_window.setup_ui ();
+       main_window.start_thumbview_monitors ();
+ 
+       /* If not set from the cmdline, get the settings from config file */
+       if (!wide)
+         wide = main_window.settings.get_boolean ("wide-mode");
++      if (!fullscreen)
++        fullscreen = main_window.settings.get_boolean ("fullscreen");
+ 
+       if (wide)
+         change_action_state("widemode", true);
+-- 
+1.8.2.1
+

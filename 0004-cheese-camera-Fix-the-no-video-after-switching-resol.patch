@@ -1,0 +1,57 @@
+From 62d880a4f15b2a4ccf84c7078b9c7232b27cd228 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 10:26:39 +0200
+Subject: [PATCH 04/35] cheese-camera: Fix the no video after switching
+ resolution problem
+
+There is a bug in wrappercamerabinsrc which causes it to loose its video-source
+setting after the pipeline has started, so on a stop / re-start, as we
+do when changing resolution, its video-source has become NULL, and we no
+longer have video.
+
+This patch works around this by moving the setting of the video-source
+property to cheese_camera_play(), so that it gets (re)set each time before
+we start the pipeline.
+
+I've also written a patch fixing the underlying cause, but since the workaround
+is simple, and has no adverse effects when the underlying issue is fixed,
+it seems a good idea to have this workaround in cheese, see here for the
+gst-plugins-bad fix: https://bugzilla.gnome.org/show_bug.cgi?id=701915
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index 9eeb245..b353152 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -424,7 +424,7 @@ cheese_camera_set_camera_source (CheeseCamera *camera)
+   priv->video_source = gst_parse_bin_from_description (camera_input, TRUE, &err);
+   g_free (camera_input);
+ 
+-  if (priv->video_source == NULL || priv->camera_source == NULL)
++  if (priv->video_source == NULL)
+   {
+     if (err != NULL)
+     {
+@@ -433,7 +433,6 @@ cheese_camera_set_camera_source (CheeseCamera *camera)
+     }
+     return FALSE;
+   }
+-  g_object_set (priv->camera_source, "video-source", priv->video_source, NULL);
+ 
+   return TRUE;
+ }
+@@ -769,6 +768,7 @@ cheese_camera_play (CheeseCamera *camera)
+ {
+   CheeseCameraPrivate *priv   = CHEESE_CAMERA_GET_PRIVATE (camera);
+   cheese_camera_set_new_caps (camera);
++  g_object_set (priv->camera_source, "video-source", priv->video_source, NULL);
+   gst_element_set_state (priv->camerabin, GST_STATE_PLAYING);
+   priv->pipeline_is_playing = TRUE;
+ }
+-- 
+1.8.2.1
+

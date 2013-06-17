@@ -1,0 +1,68 @@
+From 7ca2edc8abfcba8384455a180a3c2e4f841abdfd Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 09:40:18 +0200
+Subject: [PATCH 29/35] cheese: Make widemode controllable from the app menu
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index 032e8cb..2adfdc0 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -49,6 +49,7 @@ public class Cheese.Main : Gtk.Application
+         { "shoot", on_shoot },
+         { "mode", on_action_radio, "s", "'photo'", on_mode_change },
+         { "fullscreen", on_action_toggle, null, "false", on_fullscreen_change },
++        { "widemode", on_action_toggle, null, "false", on_widemode_change },
+         { "effects", on_action_toggle, null, "false", on_effects_change },
+         { "preferences", on_preferences },
+         { "about", on_about },
+@@ -103,6 +104,9 @@ public class Cheese.Main : Gtk.Application
+             item = new GLib.MenuItem (_("_Fullscreen"), "app.fullscreen");
+             item.set_attribute ("accel", "s", "F11");
+             section.append_item (item);
++            item = new GLib.MenuItem (_("_Wide Mode"), "app.widemode");
++            item.set_attribute ("accel", "s", "w");
++            section.append_item (item);
+             section = new GLib.Menu ();
+             menu.append_section (null, section);
+             section.append (_("_Effects"), "app.effects");
+@@ -126,7 +130,7 @@ public class Cheese.Main : Gtk.Application
+       main_window.start_thumbview_monitors ();
+ 
+       if (wide)
+-        main_window.set_wide_mode (true);
++        change_action_state("widemode", true);
+       if (fullscreen)
+         change_action_state("fullscreen", true);
+ 
+@@ -324,6 +328,23 @@ public class Cheese.Main : Gtk.Application
+     }
+ 
+     /**
++     * Handle wide mode being toggled on / off.
++     *
++     * @param action the action that emitted the signal
++     * @param value the state to switch to
++     */
++    private void on_widemode_change (SimpleAction action, Variant? value)
++    {
++        return_if_fail (value != null);
++
++        var state = value.get_boolean ();
++
++        main_window.set_wide_mode (state);
++
++        action.set_state (value);
++    }
++
++    /**
+      * Handle the effects state being changed.
+      *
+      * @param action the action that emitted the signal
+-- 
+1.8.2.1
+

@@ -1,0 +1,54 @@
+From 1b2af9add59924b46b524bd7b64bbaf12e875a57 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 10:30:02 +0200
+Subject: [PATCH 33/35] cheese: Fix updating of device selection combo
+ sensitivity on hotplug
+
+If one started cheese with 1 device, and then added a 2nd, the device selection
+stayed inactive, making it impossible to select the 2nd device.
+
+This fixes this, and also makes the combo go insensitive again when going from
+>= 2 devices to <= 1 device.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index d4d5501..e078cbb 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -136,8 +136,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+     camera_model = new ListStore (2, typeof (string), typeof (Cheese.CameraDevice));
+ 
+     source_combo.model = camera_model;
+-    if (devices.len <= 1)
+-      source_combo.sensitive = false;
++    source_combo.sensitive = false;
+ 
+     devices.foreach(add_camera_device);
+ 
+@@ -499,6 +498,9 @@ public class Cheese.PreferencesDialog : GLib.Object
+ 
+     if (camera.get_selected_device ().get_device_node () == dev.get_device_node ())
+         source_combo.set_active_iter (iter);
++
++    if (camera_model.iter_n_children (null) > 1)
++      source_combo.sensitive = true;
+   }
+ 
+   /**
+@@ -522,6 +524,9 @@ public class Cheese.PreferencesDialog : GLib.Object
+           this.dialog.hide();
+       }
+       camera_model.remove (iter);
++
++      if (camera_model.iter_n_children (null) <= 1)
++        source_combo.sensitive = false;
+   }
+ 
+   /**
+-- 
+1.8.2.1
+

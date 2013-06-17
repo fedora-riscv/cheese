@@ -1,0 +1,54 @@
+From d5e114ae636089ff6c1554c1d98b1ea8d8ad3ff3 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 13:44:47 +0200
+Subject: [PATCH 09/35] cheese-camera-device: Fix memleak in get_best_format
+
+cheese_camera_device_get_best_format() calls
+cheese_camera_device_get_format_list(), which returns a sorted copy of the
+format lists, then takes the first element of that list, and returns a
+copy of that element. While never freeing the list copy.
+
+This patch fixes this leak by simply making the priv->formats list sorted
+so that cheese_camera_device_get_best_format can use it directly without
+the need to make (and then later free) a copy.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index c7b7a07..e5ec5fa 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -219,7 +219,7 @@ cheese_camera_device_add_format (CheeseCameraDevice *device, CheeseVideoFormat *
+ 
+   GST_INFO ("%dx%d", format->width, format->height);
+ 
+-  priv->formats = g_list_append (priv->formats, format);
++  priv->formats = g_list_insert_sorted (priv->formats, format, compare_formats);
+ }
+ 
+ /*
+@@ -700,7 +700,7 @@ cheese_camera_device_get_format_list (CheeseCameraDevice *device)
+ {
+   g_return_val_if_fail (CHEESE_IS_CAMERA_DEVICE (device), NULL);
+ 
+-  return g_list_sort (g_list_copy (device->priv->formats), compare_formats);
++  return g_list_copy (device->priv->formats);
+ }
+ 
+ /**
+@@ -788,8 +788,7 @@ cheese_camera_device_get_best_format (CheeseCameraDevice *device)
+ 
+   g_return_val_if_fail (CHEESE_IS_CAMERA_DEVICE (device), NULL);
+ 
+-  format = g_boxed_copy (CHEESE_TYPE_VIDEO_FORMAT,
+-                         cheese_camera_device_get_format_list (device)->data);
++  format = g_boxed_copy (CHEESE_TYPE_VIDEO_FORMAT, device->priv->formats->data);
+ 
+   GST_INFO ("%dx%d", format->width, format->height);
+   return format;
+-- 
+1.8.2.1
+

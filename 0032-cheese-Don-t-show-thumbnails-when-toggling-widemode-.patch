@@ -1,0 +1,53 @@
+From fa71136c97624724befd0d35cb5a319da30c0afd Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 10:05:46 +0200
+Subject: [PATCH 32/35] cheese: Don't show thumbnails when toggling widemode in
+ fullscreen
+
+This can be done for example from the app-menu when in fullscreen mode on
+a secondary monitor.
+
+Also remove the unnecessary resize calls.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index c75c5f0..25d9506 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -739,9 +739,11 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+         thumbnails_bottom.remove (thumb_nav);
+       }
+       thumbnails_right.add (thumb_nav);
+-      thumbnails_right.show_all ();
+-      thumbnails_right.resize_children ();
+-      thumbnails_bottom.hide ();
++      if (!is_fullscreen)
++      {
++        thumbnails_right.show_all ();
++        thumbnails_bottom.hide ();
++      }
+     }
+     else
+     {
+@@ -752,9 +754,11 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+         thumbnails_right.remove (thumb_nav);
+       }
+       thumbnails_bottom.add (thumb_nav);
+-      thumbnails_bottom.show_all ();
+-      thumbnails_bottom.resize_children ();
+-      thumbnails_right.hide ();
++      if (!is_fullscreen)
++      {
++        thumbnails_bottom.show_all ();
++        thumbnails_right.hide ();
++      }
+     }
+ 
+     /* handy trick to keep the window to the desired size while not
+-- 
+1.8.2.1
+

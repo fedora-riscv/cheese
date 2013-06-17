@@ -1,0 +1,29 @@
+From af213c390521acf0c73a440a8f0ccf42e7393195 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 20:25:44 +0200
+Subject: [PATCH 13/35] cheese-camera-device: get_caps_for_format: simplify the
+ returned caps
+
+This results in much simpler caps, which as main advantage that they are
+way easier to read when trawling to debug logs.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera-device.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libcheese/cheese-camera-device.c b/libcheese/cheese-camera-device.c
+index 273d530..c23069d 100644
+--- a/libcheese/cheese-camera-device.c
++++ b/libcheese/cheese-camera-device.c
+@@ -1004,6 +1004,7 @@ cheese_camera_device_get_caps_for_format (CheeseCameraDevice *device,
+   }
+ 
+   subset_caps = gst_caps_intersect (desired_caps, device->priv->caps);
++  subset_caps = gst_caps_simplify (subset_caps);
+   gst_caps_unref (desired_caps);
+ 
+   GST_INFO ("Got %" GST_PTR_FORMAT, subset_caps);
+-- 
+1.8.2.1
+

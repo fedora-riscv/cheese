@@ -1,0 +1,49 @@
+From a602ffdd541b828ab9b8aac9b20db31ce427ba8b Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 19:48:47 +0200
+Subject: [PATCH 01/35] cheese-camera: Add a capsfilter to our video-source bin
+
+This serves 2 purposes:
+1) It forces gstreamer to actually run the video source at the configured
+   resolution, rather then say run it at 1600x1200 @ 5 fps and downscale
+   that to 800x600 (still at 5 fps), as gstreamer opts to do with my
+   Logitech Webcam Pro 9000, when left to its own auto negotiate code.
+2) By greatly reducing the amount of advertised caps (this cam supports lots
+   of different resolutions at many different framerates per resolution), it
+   avoids a caps intersect "explosion", reducing the pipeline caps negotiation
+   on my core i5 @ 3.1Ghz from aprox 1.1 sec to aprox 350 ms (*).
+
+*) When combined with later patches in this patchset which also limit the
+framerates in the filtered caps.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index a78affd..c42d896 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -417,7 +417,7 @@ cheese_camera_set_camera_source (CheeseCamera *camera)
+   }
+ 
+   camera_input = g_strdup_printf (
+-    "%s name=video_source device=%s",
++    "%s name=video_source device=%s ! capsfilter name=video_source_filter",
+     cheese_camera_device_get_src (selected_camera),
+     cheese_camera_device_get_device_node (selected_camera));
+ 
+@@ -762,7 +762,8 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
+ 
+   if (!gst_caps_is_empty (caps))
+   {
+-    GST_INFO_OBJECT (camera, "SETTING caps%" GST_PTR_FORMAT, caps);
++    GST_INFO_OBJECT (camera, "SETTING caps %" GST_PTR_FORMAT, caps);
++    g_object_set (gst_bin_get_by_name (GST_BIN (priv->video_source), "video_source_filter"), "caps", caps, NULL);
+     g_object_set (priv->camerabin, "viewfinder-caps", caps, NULL);
+   }
+   gst_caps_unref (caps);
+-- 
+1.8.2.1
+

@@ -1,0 +1,30 @@
+From aedbd71c2c57b6555744a8ecf35f50816a809d97 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 10:12:41 +0200
+Subject: [PATCH 03/35] cheese-camera: Set image- and video-capture-caps
+
+Force the image / video capture to be in our desired resolution, rather then
+relying on constraints elsewhere in the pipeline resulting in us getting
+the desired resolution.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index 7737209..9eeb245 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -758,6 +758,8 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
+     GST_INFO_OBJECT (camera, "SETTING caps %" GST_PTR_FORMAT, caps);
+     g_object_set (gst_bin_get_by_name (GST_BIN (priv->video_source), "video_source_filter"), "caps", caps, NULL);
+     g_object_set (priv->camerabin, "viewfinder-caps", caps, NULL);
++    g_object_set (priv->camerabin, "image-capture-caps", caps, NULL);
++    g_object_set (priv->camerabin, "video-capture-caps", caps, NULL);
+   }
+   gst_caps_unref (caps);
+ }
+-- 
+1.8.2.1
+

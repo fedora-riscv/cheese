@@ -1,0 +1,43 @@
+From b770f7675a42a0ff0bc0845aff1af1a739525e3c Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 10:39:16 +0200
+Subject: [PATCH 05/35] cheese-camera: 2 minor error handling cleanups
+
+1) Simplify error cleanup in cheese_camera_set_camera_source()
+2) Don't call g_error_free on a possible NULL error in
+   cheese_camera_element_from_effect()
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index b353152..b55dc82 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -426,11 +426,7 @@ cheese_camera_set_camera_source (CheeseCamera *camera)
+ 
+   if (priv->video_source == NULL)
+   {
+-    if (err != NULL)
+-    {
+-      g_error_free (err);
+-      err = NULL;
+-    }
++    g_clear_error(&err);
+     return FALSE;
+   }
+ 
+@@ -867,7 +863,7 @@ cheese_camera_element_from_effect (CheeseCamera *camera, CheeseEffect *effect)
+   g_free (effects_pipeline_desc);
+   if (!effect_filter || (err != NULL))
+   {
+-    g_error_free (err);
++    g_clear_error (&err);
+     g_warning ("Error with effect filter %s. Ignored", name);
+     g_free (name);
+     return NULL;
+-- 
+1.8.2.1
+

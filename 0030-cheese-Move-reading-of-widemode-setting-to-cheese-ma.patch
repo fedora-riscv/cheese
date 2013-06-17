@@ -1,0 +1,54 @@
+From ac1d5ac64b9c8371bfabb144a77e053b38ff63c5 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 09:48:11 +0200
+Subject: [PATCH 30/35] cheese: Move reading of widemode setting to cheese-main
+
+So that the actiontoggle's state always properly reflects the actual
+wide-mode setting.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala   | 4 ++++
+ src/cheese-window.vala | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index 2adfdc0..d0f9b41 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -129,6 +129,10 @@ public class Cheese.Main : Gtk.Application
+       main_window.setup_ui ();
+       main_window.start_thumbview_monitors ();
+ 
++      /* If not set from the cmdline, get the settings from config file */
++      if (!wide)
++        wide = main_window.settings.get_boolean ("wide-mode");
++
+       if (wide)
+         change_action_state("widemode", true);
+       if (fullscreen)
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 7a3db6b..c75c5f0 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -44,7 +44,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private Gtk.Builder    gtk_builder;
+   private Clutter.Script clutter_builder;
+ 
+-  private GLib.Settings settings;
++  public  GLib.Settings settings;
+ 
+   private Gtk.Widget       thumbnails;
+   private GtkClutter.Embed viewport_widget;
+@@ -1440,7 +1440,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+      * if the widget is not realized */
+     viewport_widget.realize ();
+ 
+-    set_wide_mode (settings.get_boolean ("wide-mode"));
++    set_wide_mode (false);
+ 
+     set_mode (MediaMode.PHOTO);
+     setup_effects_selector ();
+-- 
+1.8.2.1
+

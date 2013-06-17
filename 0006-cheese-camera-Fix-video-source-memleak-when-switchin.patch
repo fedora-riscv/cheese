@@ -1,0 +1,28 @@
+From 6d3749f799b1217363ac40eb7e618a37301b008b Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 10 Jun 2013 10:46:10 +0200
+Subject: [PATCH 06/35] cheese-camera: Fix video-source memleak when switching
+ between cameras
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index b55dc82..c6cb4eb 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -400,6 +400,9 @@ cheese_camera_set_camera_source (CheeseCamera *camera)
+   guint               i;
+   CheeseCameraDevice *selected_camera;
+ 
++  if (priv->video_source)
++    gst_object_unref (priv->video_source);
++
+   /* If we have a matching video device use that one, otherwise use the first */
+   priv->selected_device = 0;
+   selected_camera       = g_ptr_array_index (priv->camera_devices, 0);
+-- 
+1.8.2.1
+

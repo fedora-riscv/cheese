@@ -1,0 +1,38 @@
+From f6d7f1e2a240641080b8d87a169c22571d39316c Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 13 Jun 2013 11:37:19 +0200
+Subject: [PATCH 34/35] cheese: Fix assert failures when taking a photo
+
+Before this patch, cheese would log the following each time the user takes
+a photo:
+
+(cheese:21719): GLib-GIO-CRITICAL **: g_file_info_get_size: assertion `G_IS_FILE_INFO (info)' failed
+
+(cheese:21719): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/thumbview/cheese-thumb-view.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/thumbview/cheese-thumb-view.c b/src/thumbview/cheese-thumb-view.c
+index c229b1a..a702fc0 100644
+--- a/src/thumbview/cheese-thumb-view.c
++++ b/src/thumbview/cheese-thumb-view.c
+@@ -205,6 +205,13 @@ cheese_thumb_view_append_item (CheeseThumbView *thumb_view, GFile *file)
+ 
+   info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, NULL,
+                             NULL);
++  if (!info)
++  {
++    /* This is normal since photos first get created with a tmpname, ie:
++     * "2013-06-13-113155.jpg.DQRGYW" and then moved to their final name,
++     * we will get another append_item call for the final name. */
++    return;
++  }
+   size = g_file_info_get_size (info);
+   g_object_unref (info);
+ 
+-- 
+1.8.2.1
+

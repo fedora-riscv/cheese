@@ -1,0 +1,32 @@
+From cfc2a636dca6e859e0c6ae8ea4a5fd53238dc9b9 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Jun 2013 18:03:23 +0200
+Subject: [PATCH 28/35] cheese: Fix the need to press F11 twice after starting
+ with -f
+
+Change the fullscreen action state, rather then directly calling set_fullscreen
+so that the action state properly reflects the actual fullscreen state,
+avoiding the need to press F11 twice to leave fullscreen after starting
+cheese with -f.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index e4f2460..032e8cb 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -128,7 +128,7 @@ public class Cheese.Main : Gtk.Application
+       if (wide)
+         main_window.set_wide_mode (true);
+       if (fullscreen)
+-        main_window.set_fullscreen (true);
++        change_action_state("fullscreen", true);
+ 
+       /* Tell the main window to save any changes from here on to GSettings */
+       main_window.is_command_line_startup = false;
+-- 
+1.8.2.1
+
