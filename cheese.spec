@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.9.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -39,7 +39,7 @@ BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
 BuildRequires: itstool
 
-Requires: %{name}-libs = %{epoch}:%{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: gstreamer1-plugins-good
 Requires: gstreamer1-plugins-bad-free
 Requires: gnome-video-effects
@@ -49,19 +49,19 @@ Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
 
 %package libs
-Summary:	Webcam display and capture widgets
-Group:		System Environment/Libraries
-License:	GPLv2+
+Summary:        Webcam display and capture widgets
+Group:          System Environment/Libraries
+License:        GPLv2+
 
 %description libs
 This package contains libraries needed for applications that
 want to display a webcam in their interface.
 
 %package libs-devel
-Summary:	Development files for %{name}-libs
-Group:		Development/Libraries
-License:	GPLv2+
-Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Summary:        Development files for %{name}-libs
+Group:          Development/Libraries
+License:        GPLv2+
+Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description libs-devel
 This package contains the libraries and header files that are needed
@@ -83,10 +83,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese.{a,la}
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
 
-desktop-file-install --delete-original --vendor="" 	\
- 	--dir=$RPM_BUILD_ROOT%{_datadir}/applications 	\
-	--add-category X-AudioVideoImport		\
-	$RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
+desktop-file-install --delete-original --vendor=""     \
+    --dir=$RPM_BUILD_ROOT%{_datadir}/applications      \
+    --add-category X-AudioVideoImport                  \
+    $RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
 %find_lang %{name} --with-gnome
 
@@ -117,7 +117,7 @@ fi
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %files
-%doc AUTHORS COPYING README
+%doc AUTHORS README
 %{_bindir}/cheese
 %{_datadir}/applications/cheese.desktop
 %{_datadir}/cheese
@@ -125,17 +125,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/actions/*.png
 %{_datadir}/icons/hicolor/scalable/actions/*.svg
 %{_mandir}/man1/cheese.1.gz
-# FIXME find-lang is supposed to pick these up
-%doc %{_datadir}/help/*/cheese
 
 %files -f %{name}.lang libs
+%doc COPYING
 %{_libdir}/libcheese.so.*
 %{_libdir}/libcheese-gtk.so.*
 %{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
 %{_libdir}/girepository-1.0/Cheese-3.0.typelib
 
 %files libs-devel
-%doc COPYING
 %{_libdir}/libcheese.so
 %{_libdir}/libcheese-gtk.so
 %{_includedir}/cheese/
@@ -145,6 +143,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Jun 17 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.9.2-2
+- Fix cheese-introduction.png being in both cheese and cheese-libs (#893756)
+- Put the COPYING file in the docs for cheese-libs (#893800)
+
 * Sun Jun 02 2013 Kalev Lember <kalevlember@gmail.com> - 2:3.9.2-1
 - Update to 3.9.2
 
