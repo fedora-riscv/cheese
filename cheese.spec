@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.9.2
-Release:        2%{?dist}
+Version:        3.9.3
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -143,6 +143,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Fri Jun 21 2013 Kalev Lember <kalevlember@gmail.com> - 2:3.9.3-1
+- Update to 3.9.3
+
 * Mon Jun 17 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.9.2-2
 - Fix cheese-introduction.png being in both cheese and cheese-libs (#893756)
 - Put the COPYING file in the docs for cheese-libs (#893800)
