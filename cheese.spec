@@ -31,9 +31,7 @@ BuildRequires: libcanberra-devel
 BuildRequires: clutter-devel
 BuildRequires: clutter-gtk-devel
 BuildRequires: clutter-gst2-devel
-BuildRequires: libmx-devel
 BuildRequires: vala-devel
-BuildRequires: pkgconfig(gee-1.0)
 BuildRequires: gnome-video-effects
 BuildRequires: gnome-desktop3-devel
 BuildRequires: chrpath
@@ -145,6 +143,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %changelog
 * Fri Jun 21 2013 Kalev Lember <kalevlember@gmail.com> - 2:3.9.3-1
 - Update to 3.9.3
+- Drop unused mx and libgee build deps
 
 * Mon Jun 17 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.9.2-2
 - Fix cheese-introduction.png being in both cheese and cheese-libs (#893756)
