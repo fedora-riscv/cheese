@@ -1,0 +1,80 @@
+From 43667c547770778cf7c34aefb41235e6fc3c9c62 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 09:05:19 +0200
+Subject: [PATCH 39/50] cheese-window: Add cancel_running_action () method
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 47 ++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 17 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index e7b6db3..95b4e14 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -873,6 +873,34 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   }
+ 
+   /**
++   * Cancel the current action (if any)
++   */
++  private bool cancel_running_action ()
++  {
++    if ((current_countdown != null && current_countdown.running) ||
++        is_bursting || is_recording)
++    {
++      action_cancelled = true;
++      switch (current_mode)
++      {
++        case MediaMode.PHOTO:
++         current_countdown.stop ();
++         finish_countdown_callback ();
++         break;
++        case MediaMode.BURST:
++          toggle_photo_bursting (false);
++          break;
++        case MediaMode.VIDEO:
++          toggle_video_recording (false);
++          break;
++      }
++      action_cancelled = false;
++      return true;
++    }
++    return false;
++  }
++
++  /**
+    * Cancel the current activity if the escape key is pressed.
+    *
+    * @param event the key event, to check which key was pressed
+@@ -885,25 +913,10 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     key = Gdk.keyval_name (event.keyval);
+     if (strcmp (key, "Escape") == 0)
+     {
+-      if ((current_countdown != null && current_countdown.running) || is_bursting || is_recording)
++      if (cancel_running_action())
+       {
+-        action_cancelled = true;
+-        switch (current_mode)
+-        {
+-          case MediaMode.PHOTO:
+-           current_countdown.stop ();
+-           finish_countdown_callback ();
+-           break;
+-          case MediaMode.BURST:
+-            toggle_photo_bursting (false);
+-            break;
+-          case MediaMode.VIDEO:
+-            toggle_video_recording (false);
+-            break;
+-        }
+-        action_cancelled = false;
++        return false;
+       }
+-      else
+       if (is_effects_selector_active)
+       {
+         effects_toggle_button.set_active (false);
+-- 
+1.8.2.1
+

@@ -1,0 +1,131 @@
+From f9899f78b6bd7f929613f2edf7421101b79ca365 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 09:12:21 +0200
+Subject: [PATCH 40/50] cheese-window: Fix toggle_camera_actions_sensitivities
+
+The action we should disable are part of cheese-main, not of the gtkbuilder
+tree. Also:
+
+- Switch to using a whitelist rather then a blacklist, as there are
+  less actions we want to disable/enable then which we don't want to, and
+  having a whitelist allows for much simpler code.
+
+- Stop remembering the enabled state before disabling the actions, this is not
+  needed
+
+This fixes various controls not being disabled when the user starts cheese
+on a machine with no video devices.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 72 ++++++++++----------------------------------------
+ 1 file changed, 14 insertions(+), 58 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 95b4e14..ab383f9 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -78,7 +78,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private uint current_effects_page = 0;
+   private List<Clutter.Box> effects_grids;
+ 
+-  private HashTable<string, bool> action_sensitivities;
+   private Gtk.Action       countdown_action;
+   private Gtk.Action       effects_page_prev_action;
+   private Gtk.Action       effects_page_next_action;
+@@ -90,7 +89,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private bool is_recording;       /* Video Recording Flag */
+   private bool is_bursting;
+   private bool is_effects_selector_active;
+-  private bool is_camera_actions_sensitive;
+   private bool action_cancelled;
+   public  bool is_command_line_startup;
+ 
+@@ -1296,59 +1294,20 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+    */
+   public void toggle_camera_actions_sensitivities (bool active)
+   {
+-      is_camera_actions_sensitive = active;
+-      if (active)
+-      {
+-          var keys = action_sensitivities.get_keys ();
+-          foreach (var key in keys)
+-          {
+-              Gtk.Action action = gtk_builder.get_object (key) as Gtk.Action;
+-              action.sensitive = action_sensitivities.get (key);
+-          }
+-      }
+-      else
+-      {
+-          action_sensitivities = new HashTable<string, bool> (GLib.str_hash,
+-                                                              GLib.direct_equal);
+-          GLib.SList<weak GLib.Object> objects = gtk_builder.get_objects ();
+-          foreach (GLib.Object obj in objects)
+-          {
+-              if (obj is Gtk.Action)
+-              {
+-                  Gtk.Action action = (Gtk.Action)obj;
+-                  action_sensitivities.set (action.name, action.sensitive);
+-              }
+-          }
++    string [] actions = { "shoot", "mode", "effects" };
+ 
+-          /* Keep only these actions sensitive. */
+-          string [] active_actions = { "quit",
+-                                       "help",
+-                                       "about",
+-                                       "open",
+-                                       "save_as",
+-                                       "move_to_trash",
+-                                       "delete"};
+-
+-          /* Gross hack because Vala's `in` operator doesn't really work */
+-          bool flag;
+-          foreach (GLib.Object obj in objects)
+-          {
+-              flag = false;
+-              if (obj is Gtk.Action)
+-              {
+-                  Gtk.Action action = (Gtk.Action)obj;
+-                  foreach (string s in active_actions)
+-                  {
+-                      if (action.name == s)
+-                      {
+-                          flag = true;
+-                      }
+-                  }
+-                  if (!flag)
+-                      ((Gtk.Action)obj).sensitive = false;
+-              }
+-          }
+-      }
++    /* If inactive, hide the effects selector, stop recording, etc. */
++    if (!active) {
++      if (is_effects_selector_active)
++        effects_toggle_button.set_active (false);
++      cancel_running_action ();
++    }
++
++    foreach (string name in actions)
++    {
++      var action = this.application.lookup_action (name) as SimpleAction;
++      action.set_enabled (active);
++    }
+   }
+ 
+     /**
+@@ -1356,10 +1315,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+      */
+     public void camera_state_change_playing ()
+     {
+-        if (!is_camera_actions_sensitive)
+-        {
+-            toggle_camera_actions_sensitivities (true);
+-        }
++        toggle_camera_actions_sensitivities (true);
+ 
+         Effect effect = effects_manager.get_effect (settings.get_string ("selected-effect"));
+         if (effect != null)
+-- 
+1.8.2.1
+

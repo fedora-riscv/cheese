@@ -1,0 +1,56 @@
+From 1b4092c56022eb913ddc4f4c90db41ea5868a16d Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 13:45:38 +0200
+Subject: [PATCH 46/50] cheese: Avoid unnecessary calls to
+ switch_camera_device()
+
+And thus avoid stopping and restarting the stream for no reason.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index 4ec4937..1971a69 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -25,6 +25,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+ {
+   private Cheese.Camera camera;
+   private bool camera_needs_setup;
++  private string camera_device_node;
+ 
+   private GLib.Settings settings;
+ 
+@@ -163,7 +164,8 @@ public class Cheese.PreferencesDialog : GLib.Object
+     device = camera.get_selected_device ();
+     if (device == null)
+       return;
+-    settings.set_string ("camera", device.get_device_node ());
++    camera_device_node = device.get_device_node ();
++    settings.set_string ("camera", camera_device_node);
+     setup_resolutions_for_device (device);
+ 
+     for (bool next = camera_model.get_iter_first (out iter); next;
+@@ -266,10 +268,16 @@ public class Cheese.PreferencesDialog : GLib.Object
+ 
+     TreeIter iter;
+     Cheese.CameraDevice dev;
++    string dev_node;
+ 
+     combo.get_active_iter (out iter);
+     combo.model.get (iter, 1, out dev);
+-    camera.set_device_by_device_node (dev.get_device_node ());
++    dev_node = dev.get_device_node ();
++
++    if (dev_node == camera_device_node)
++      return;
++
++    camera.set_device_by_device_node (dev_node);
+     camera.switch_camera_device ();
+     camera_changed ();
+   }
+-- 
+1.8.2.1
+

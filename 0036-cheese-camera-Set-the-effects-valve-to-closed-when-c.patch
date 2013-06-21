@@ -1,0 +1,26 @@
+From 73b89ecd0149a31be7b363003a8d0eea94a679cf Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Fri, 21 Jun 2013 09:25:17 +0200
+Subject: [PATCH 36/51] cheese-camera: Set the effects valve to closed when
+ creating the pipeline
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index 31348d2..89cf029 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -529,6 +529,7 @@ cheese_camera_create_effects_preview_bin (CheeseCamera *camera, GError **error)
+     cheese_camera_set_error_element_not_found (error, "effects_valve");
+     return FALSE;
+   }
++  g_object_set (priv->effects_valve, "drop", TRUE, NULL);
+   if ((scale = gst_element_factory_make ("videoscale", "effects_scale")) == NULL)
+   {
+     cheese_camera_set_error_element_not_found (error, "videoscale");
+-- 
+1.8.2.1
+

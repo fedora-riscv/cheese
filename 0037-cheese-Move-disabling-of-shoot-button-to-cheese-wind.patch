@@ -1,0 +1,60 @@
+From f059aee32f4463378dff03a60da8b6411291df60 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 17 Jun 2013 22:44:20 +0200
+Subject: [PATCH 37/50] cheese: Move disabling of shoot button to cheese-window
+
+We also have all the other action enable/disable code in cheese-window, so
+this is more consistent.
+
+Also we have more state available in cheese-window, which allows us to leave
+the shoot button enabled if (and only if) it is the stop recording button,
+which is possible since we allow changing effects while recording a video.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 53c033d..e7b6db3 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -948,6 +948,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+       this.is_recording = false;
+       this.enable_mode_change ();
+     }
++    update_shoot_enabled ();
+   }
+ 
+   /**
+@@ -1147,6 +1148,19 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   }
+ 
+   /**
++   * Update shoot button enabled state based on effect selector status
++   */
++  private void update_shoot_enabled ()
++  {
++    var shoot = this.application.lookup_action ("shoot") as SimpleAction;
++
++    if (is_effects_selector_active && !is_recording)
++      shoot.set_enabled (false);
++    else
++      shoot.set_enabled (true);
++  }
++
++  /**
+    * Toggle the visibility of the effects selector.
+    *
+    * @param active whether the selector should be active
+@@ -1184,6 +1198,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+     camera.toggle_effects_pipeline (active);
+     setup_effects_page_switch_sensitivity ();
++    update_shoot_enabled ();
+   }
+ 
+   /**
+-- 
+1.8.2.1
+

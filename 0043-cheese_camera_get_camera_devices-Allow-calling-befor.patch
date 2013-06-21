@@ -1,0 +1,44 @@
+From 3d43b99268481346669804e8863938e4b6523985 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 11:38:05 +0200
+Subject: [PATCH 43/50] cheese_camera_get_camera_devices: Allow calling before
+ cheese_camera_setup()
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ libcheese/cheese-camera.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index fab9b03..c4d4253 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -360,6 +360,9 @@ cheese_camera_detect_camera_devices (CheeseCamera *camera)
+ {
+   CheeseCameraPrivate       *priv = camera->priv;
+ 
++  if (priv->monitor)
++    return; /* Camera devices already detected */
++
+   priv->num_camera_devices = 0;
+   priv->camera_devices     = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
+ 
+@@ -1636,13 +1639,11 @@ cheese_camera_setup (CheeseCamera *camera, const gchar *uuid, GError **error)
+ GPtrArray *
+ cheese_camera_get_camera_devices (CheeseCamera *camera)
+ {
+-  CheeseCameraPrivate *priv;
+-
+   g_return_val_if_fail (CHEESE_IS_CAMERA (camera), NULL);
+ 
+-  priv = camera->priv;
++  cheese_camera_detect_camera_devices (camera);
+ 
+-  return g_ptr_array_ref (priv->camera_devices);
++  return g_ptr_array_ref (camera->priv->camera_devices);
+ }
+ 
+ /**
+-- 
+1.8.2.1
+

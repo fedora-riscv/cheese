@@ -1,0 +1,125 @@
+From b6eb2f95f6dfac8d0f332c3fb7fca8c711f68ad6 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 20 Jun 2013 16:53:22 +0200
+Subject: [PATCH 50/50] cheese: Don't allow changing the camera and/or its
+ resolution while recording
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+Conflicts:
+	src/cheese-window.vala
+---
+ src/cheese-main.vala        |  1 +
+ src/cheese-preferences.vala | 16 +++++++++++++++-
+ src/cheese-window.vala      | 16 ++++++++++++++++
+ 3 files changed, 32 insertions(+), 1 deletion(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index 761f1b5..a62f8d0 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -155,6 +155,7 @@ public class Cheese.Main : Gtk.Application
+       main_window.show ();
+       create_camera (device);
+       preferences_dialog = new PreferencesDialog (camera);
++      main_window.set_preferences_dialog (preferences_dialog);
+       preferences_dialog.camera_error.connect (on_camera_error);
+       preferences_dialog.setup_camera ();
+     }
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index df2ded2..d16930a 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -25,6 +25,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+ {
+   private Cheese.Camera camera;
+   private bool camera_needs_setup;
++  private bool camera_controls_sensitive;
+   private string camera_device_node;
+ 
+   private GLib.Settings settings;
+@@ -58,6 +59,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+   public PreferencesDialog (Cheese.Camera camera)
+   {
+     this.camera = camera;
++    this.camera_controls_sensitive = true;
+ 
+     settings = new GLib.Settings ("org.gnome.Cheese");
+ 
+@@ -539,7 +541,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+                       0, dev.get_name () + " (" + dev.get_device_node () + ")",
+                       1, dev);
+ 
+-    if (camera_model.iter_n_children (null) > 1)
++    if (camera_model.iter_n_children (null) > 1 && camera_controls_sensitive)
+       source_combo.sensitive = true;
+ 
+     if (camera_needs_setup)
+@@ -595,6 +597,18 @@ public class Cheese.PreferencesDialog : GLib.Object
+   }
+ 
+   /**
++   * Set camera controls sensitivity
++   */
++  public void set_camera_controls_sensitivities (bool sensitive)
++  {
++    camera_controls_sensitive = sensitive;
++    photo_resolution_combo.sensitive = sensitive;
++    video_resolution_combo.sensitive = sensitive;
++    if (camera_model.iter_n_children (null) > 1)
++      source_combo.sensitive = sensitive;
++  }
++
++  /**
+    * Show the dialog.
+    */
+   public void show ()
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 77efd32..fc38850 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -104,6 +104,8 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+   private Cheese.ShareableMedia shareable_media;
+ 
++  private PreferencesDialog preferences_dialog;
++
+   /**
+    * Responses from the delete files confirmation dialog.
+    *
+@@ -501,6 +503,8 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+     var effects = this.application.lookup_action ("effects") as SimpleAction;
+     effects.set_enabled (true);    
++
++    preferences_dialog.set_camera_controls_sensitivities (true);
+   }
+ 
+   /**
+@@ -521,6 +525,8 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+         effects_toggle_button.set_active (false);
+       }
+     }
++
++    preferences_dialog.set_camera_controls_sensitivities (false);
+   }
+ 
+   /**
+@@ -1504,4 +1510,14 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     {
+         this.camera = camera;
+     }
++
++    /**
++     * Set the preferences-dialog.
++     *
++     * @param preferences_dialog the preferences-dialog to set
++     */
++    public void set_preferences_dialog (PreferencesDialog  preferences_dialog)
++    {
++        this.preferences_dialog = preferences_dialog;
++    }
+ }
+-- 
+1.8.2.1
+

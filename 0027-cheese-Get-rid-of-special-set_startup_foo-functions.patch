@@ -1,7 +1,7 @@
-From bd78a9a2a02dbc8c7513c73579dfd5ce848ae9f2 Mon Sep 17 00:00:00 2001
+From 6fc5ec37186612c38d1a94c1b1eb4b1b5b5078cf Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Wed, 12 Jun 2013 17:59:13 +0200
-Subject: [PATCH 27/35] cheese: Get rid of special set_startup_foo() functions
+Subject: [PATCH 27/50] cheese: Get rid of special set_startup_foo() functions
 
 So that cheese-main can toggle / activate the related actions when parsing
 the cmdline and thus have the action state properly reflects the actual state,
@@ -34,7 +34,7 @@ index 5905597..e4f2460 100644
        /* Shoot when the webcam capture button is pressed. */
        main_window.add_events (Gdk.EventMask.KEY_PRESS_MASK
 diff --git a/src/cheese-window.vala b/src/cheese-window.vala
-index 906105b..7a3db6b 100644
+index 35e4850..8916e95 100644
 --- a/src/cheese-window.vala
 +++ b/src/cheese-window.vala
 @@ -92,7 +92,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
@@ -45,8 +45,8 @@ index 906105b..7a3db6b 100644
 +  public  bool is_command_line_startup;
  
    private Gtk.Button[] buttons;
-   private Gtk.Button[] mode_buttons;
-@@ -122,6 +122,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+@@ -121,6 +121,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
      public MainWindow (Gtk.Application application)
      {
          GLib.Object (application: application);
@@ -54,7 +54,7 @@ index 906105b..7a3db6b 100644
      }
  
    /**
-@@ -1337,34 +1338,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+@@ -1336,34 +1337,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
      }
  
    /**

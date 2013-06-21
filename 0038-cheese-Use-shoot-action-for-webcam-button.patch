@@ -1,0 +1,29 @@
+From 56331f71eb77c437e3521dd7ef33e4616e2985cd Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 17 Jun 2013 22:54:57 +0200
+Subject: [PATCH 38/50] cheese: Use shoot action for webcam button
+
+Rather then calling on_shoot directly, so that if shoot is disabled, it also
+cannot be triggered through the webcam button.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index 9ba1a5f..b5ac6cb 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -244,7 +244,7 @@ public class Cheese.Main : Gtk.Application
+         switch (event.keyval)
+         {
+             case Gdk.Key.WebCam:
+-                on_shoot ();
++                activate_action("shoot", null);
+                 return true;
+         }
+ 
+-- 
+1.8.2.1
+

@@ -1,0 +1,72 @@
+From 4684d5a009f1bf3b4c7d2fc92456fc506ba1f254 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 19 Jun 2013 16:47:41 +0200
+Subject: [PATCH 48/50] cheese-preferences: Simplify remove_camera_device
+
+Now that we cache the device-node for the active camera, remove_camera_device
+and its callers can be simplified.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index 219c685..a1316f9 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -491,12 +491,6 @@ public class Cheese.PreferencesDialog : GLib.Object
+       TreeIter iter;
+       camera_model.get_iter_first (out iter);
+ 
+-      // Combobox active element.
+-      TreeIter active_iter;
+-      Cheese.CameraDevice active_device;
+-      source_combo.get_active_iter (out active_iter);
+-      camera_model.get (active_iter, 1, out active_device, -1);
+-
+       // Find which device was removed.
+       bool device_removed = false;
+       devices.foreach ((device) =>
+@@ -508,7 +502,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+         // Found the device that was removed.
+         if (strcmp (old_device.device_node, new_device.device_node) != 0)
+         {
+-            remove_camera_device (iter, new_device, active_device);
++            remove_camera_device (iter, new_device);
+             device_removed = true;
+             // Remember, this is from the anonymous function!
+             return;
+@@ -521,7 +515,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+       {
+         Cheese.CameraDevice old_device;
+         camera_model.get (iter, 1, out old_device, -1);
+-        remove_camera_device (iter, old_device, active_device);
++        remove_camera_device (iter, old_device);
+       }
+     }
+   }
+@@ -555,16 +549,15 @@ public class Cheese.PreferencesDialog : GLib.Object
+    * Remove the supplied camera device from the device combo box model.
+    *
+    * @param iter the iterator of the device to remove
+-   * @param device_node the device to remove from the combo box model
+-   * @param active_device_node the currently-active camera device
++   * @param device the device to remove from the combo box model
+    */
+-  private void remove_camera_device (TreeIter iter, Cheese.CameraDevice device_node,
+-                             Cheese.CameraDevice active_device_node)
++  private void remove_camera_device (TreeIter iter,
++                                     Cheese.CameraDevice device)
+   {
+       unowned GLib.PtrArray devices = camera.get_camera_devices ();
+ 
+       // Check if the camera that we want to remove, is the active one
+-      if (strcmp (device_node.device_node, active_device_node.device_node) == 0)
++      if (device.device_node == camera_device_node)
+       {
+         if (devices.len > 0)
+           set_new_available_camera_device (iter);
+-- 
+1.8.2.1
+

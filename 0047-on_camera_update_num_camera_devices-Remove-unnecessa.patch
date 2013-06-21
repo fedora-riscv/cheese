@@ -1,0 +1,30 @@
+From fa3ebcbd5891d422aae86c2852070b235cf3768d Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 14:01:45 +0200
+Subject: [PATCH 47/50] on_camera_update_num_camera_devices: Remove unnecessary
+ camera_changed() call
+
+If the camera is actually changed then camera_changed already gets called
+from either setup_camera() or on_source_change().
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index 1971a69..219c685 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -524,8 +524,6 @@ public class Cheese.PreferencesDialog : GLib.Object
+         remove_camera_device (iter, old_device, active_device);
+       }
+     }
+-
+-    camera_changed ();
+   }
+ 
+   /**
+-- 
+1.8.2.1
+

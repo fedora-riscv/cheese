@@ -1,0 +1,145 @@
+From f1dbd7629b18f8078567e34cf3981bfbdc70b5ef Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 11:40:41 +0200
+Subject: [PATCH 44/50] cheese: Move camera_setup to cheese-preferences
+
+Since cheese-preferences already tracks how many cameras we have, it can also
+properly do delayed camera setup when going from 0 -> 1 devices while cheese
+is running, and thus is the best place to do the camera setup.
+
+As an added bonus this patch uses the new show_error function to properly
+show an error to the user when no devices are found.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-main.vala        | 28 ++++++++++------------------
+ src/cheese-preferences.vala | 24 ++++++++++++++++++++++--
+ src/vapi/cheese-common.vapi |  2 +-
+ 3 files changed, 33 insertions(+), 21 deletions(-)
+
+diff --git a/src/cheese-main.vala b/src/cheese-main.vala
+index b5ac6cb..761f1b5 100644
+--- a/src/cheese-main.vala
++++ b/src/cheese-main.vala
+@@ -62,6 +62,12 @@ public class Cheese.Main : Gtk.Application
+     GLib.Object (application_id: app_id, flags: flags);
+   }
+ 
++  private void on_camera_error (string? error)
++  {
++    main_window.toggle_camera_actions_sensitivities (false);
++    main_window.show_error (error);
++  }
++
+   /**
+    * Present the existing main window, or create a new one.
+    */
+@@ -147,8 +153,10 @@ public class Cheese.Main : Gtk.Application
+       main_window.key_press_event.connect (on_webcam_key_pressed);
+ 
+       main_window.show ();
+-      setup_camera (device);
++      create_camera (device);
+       preferences_dialog = new PreferencesDialog (camera);
++      preferences_dialog.camera_error.connect (on_camera_error);
++      preferences_dialog.setup_camera ();
+     }
+   }
+ 
+@@ -157,7 +165,7 @@ public class Cheese.Main : Gtk.Application
+      *
+      * @param uri the uri of the device node to setup, or null
+      */
+-    public void setup_camera (string? uri)
++    public void create_camera (string? uri)
+     {
+         var settings = new GLib.Settings ("org.gnome.Cheese");
+         string device;
+@@ -177,21 +185,6 @@ public class Cheese.Main : Gtk.Application
+             settings.get_int ("photo-x-resolution"),
+             settings.get_int ("photo-y-resolution"));
+ 
+-        try
+-        {
+-            camera.setup (device);
+-        }
+-        catch (Error err)
+-        {
+-            video_preview.hide ();
+-            warning ("Error: %s\n", err.message);
+-            //error_layer.text = err.message;
+-            //error_layer.show ();
+-
+-            //toggle_camera_actions_sensitivities (false);
+-            return;
+-        }
+-
+         value = settings.get_double ("brightness");
+         if (value != 0.0)
+         {
+@@ -218,7 +211,6 @@ public class Cheese.Main : Gtk.Application
+ 
+         camera.state_flags_changed.connect (on_camera_state_flags_changed);
+         main_window.set_camera (camera);
+-        camera.play ();
+     }
+ 
+     /**
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index be104a6..30b3d65 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -111,6 +111,28 @@ public class Cheese.PreferencesDialog : GLib.Object
+   }
+ 
+   /**
++   * Signal raised when there is an error with the camera device
++   */
++  public signal void camera_error (string? error);
++
++  /**
++   * Setup the camera device
++   */
++  public void setup_camera ()
++  {
++    try
++    {
++      camera.setup (null);
++      camera.play ();
++      camera_changed ();
++    }
++    catch (Error err)
++    {
++      camera_error (err.message);
++    }
++  }
++
++  /**
+    * Set up combo box cell renderers.
+    */
+   private void setup_combo_box_models ()
+@@ -161,8 +183,6 @@ public class Cheese.PreferencesDialog : GLib.Object
+     source_combo.sensitive = false;
+ 
+     devices.foreach(add_camera_device);
+-
+-    camera_changed ();
+   }
+ 
+   /**
+diff --git a/src/vapi/cheese-common.vapi b/src/vapi/cheese-common.vapi
+index e4d4bec..88f47f7 100644
+--- a/src/vapi/cheese-common.vapi
++++ b/src/vapi/cheese-common.vapi
+@@ -63,7 +63,7 @@ namespace Cheese
+     public void                        toggle_effects_pipeline (bool active);
+     public void                        connect_effect_texture (Cheese.Effect effect, Clutter.Texture texture);
+     public void                        set_video_format (Cheese.VideoFormat format);
+-    public void                        setup (string udi) throws GLib.Error;
++    public void                        setup (string? udi) throws GLib.Error;
+     public void                        start_video_recording (string filename);
+     public void                        stop ();
+     public void                        stop_video_recording ();
+-- 
+1.8.2.1
+

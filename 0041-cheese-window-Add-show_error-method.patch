@@ -1,0 +1,97 @@
+From b851a44075fea20054c4c5345da46a52e3cba91c Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 10:04:36 +0200
+Subject: [PATCH 41/50] cheese-window: Add show_error () method
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 54 +++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index ab383f9..77efd32 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -1045,6 +1045,31 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     }
+ 
+     /**
++     * Show an error.
++     *
++     * @param error the error to display, or null to hide the error layer
++     */
++    [CCode (instance_pos = -1)]
++    public void show_error (string? error)
++    {
++      if (error != null)
++      {
++        current_effects_grid.hide ();
++        video_preview.hide ();
++        error_layer.text = error;
++        error_layer.show ();
++      }
++      else
++      {
++        error_layer.hide ();
++        if (is_effects_selector_active)
++          current_effects_grid.show ();
++        else
++          video_preview.show ();
++      }
++    }
++
++    /**
+      * Toggle the display of the effect selector.
+      *
+      * @param effects whether effects should be enabled
+@@ -1179,31 +1204,19 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   private void toggle_effects_selector (bool active)
+   {
+     is_effects_selector_active = active;
+-    if (active)
++    if (effects_grids.length () == 0)
++    {
++      show_error(active ? _("No effects found") : null);
++    }
++    else if (active)
+     {
+       video_preview.hide ();
+-
+-      if (effects_grids.length () == 0)
+-      {
+-        error_layer.text = _("No effects found");
+-        error_layer.show ();
+-      }
+-      else
+-      {
+-        current_effects_grid.show ();
+-        activate_effects_page ((int)current_effects_page);
+-      }
++      current_effects_grid.show ();
++      activate_effects_page ((int)current_effects_page);
+     }
+     else
+     {
+-      if (effects_grids.length () == 0)
+-      {
+-        error_layer.hide ();
+-      }
+-      else
+-      {
+-        current_effects_grid.hide ();
+-      }
++      current_effects_grid.hide ();
+       video_preview.show ();
+     }
+ 
+@@ -1315,6 +1328,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+      */
+     public void camera_state_change_playing ()
+     {
++        show_error (null);
+         toggle_camera_actions_sensitivities (true);
+ 
+         Effect effect = effects_manager.get_effect (settings.get_string ("selected-effect"));
+-- 
+1.8.2.1
+

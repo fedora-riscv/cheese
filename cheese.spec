@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.8.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -51,6 +51,22 @@ Patch32:        0032-cheese-Don-t-show-thumbnails-when-toggling-widemode-.patch
 Patch33:        0033-cheese-Fix-updating-of-device-selection-combo-sensit.patch
 Patch34:        0034-cheese-Fix-assert-failures-when-taking-a-photo.patch
 Patch35:        0035-cheese-flash-Fix-the-flash-no-longer-being-white.patch
+Patch36:        0036-cheese-camera-Set-the-effects-valve-to-closed-when-c.patch
+Patch37:        0037-cheese-Move-disabling-of-shoot-button-to-cheese-wind.patch
+Patch38:        0038-cheese-Use-shoot-action-for-webcam-button.patch
+Patch39:        0039-cheese-window-Add-cancel_running_action-method.patch
+Patch40:        0040-cheese-window-Fix-toggle_camera_actions_sensitivitie.patch
+Patch41:        0041-cheese-window-Add-show_error-method.patch
+Patch42:        0042-cheese-preferences-Add-camera_changed-method.patch
+Patch43:        0043-cheese_camera_get_camera_devices-Allow-calling-befor.patch
+Patch44:        0044-cheese-Move-camera_setup-to-cheese-preferences.patch
+Patch45:        0045-cheese-Properly-deal-with-going-from-0-1-devices.patch
+Patch46:        0046-cheese-Avoid-unnecessary-calls-to-switch_camera_devi.patch
+Patch47:        0047-on_camera_update_num_camera_devices-Remove-unnecessa.patch
+Patch48:        0048-cheese-preferences-Simplify-remove_camera_device.patch
+Patch49:        0049-cheese-preferences-Cleanly-handle-going-from-1-0-dev.patch
+Patch50:        0050-cheese-Don-t-allow-changing-the-camera-and-or-its-re.patch
+Patch51:        0051-cheese-Leave-shoot-button-disabled-when-the-effects-.patch
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
@@ -149,6 +165,22 @@ for writing applications that require a webcam display widget.
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
+%patch36 -p1
+%patch37 -p1
+%patch38 -p1
+%patch39 -p1
+%patch40 -p1
+%patch41 -p1
+%patch42 -p1
+%patch43 -p1
+%patch44 -p1
+%patch45 -p1
+%patch46 -p1
+%patch47 -p1
+%patch48 -p1
+%patch49 -p1
+%patch50 -p1
+%patch51 -p1
 
 
 %build
@@ -226,6 +258,12 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Thu Jun 20 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.8.2-4
+- Fix misbehavior when started without a camera
+- Don't crash when the (last) camera gets unplugged
+- Automatically use a newly plugged camera when going from 0 to 1 cameras
+- Misc. other bugfixes
+
 * Mon Jun 17 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.8.2-3
 - Add a number of bug-fixes to deal better with high res cams (#873434)
 - Fix cheese-introduction.png being in both cheese and cheese-libs (#893756)

@@ -1,0 +1,86 @@
+From 490d8d832b588d7194d6be38d7152b97ea3fe572 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 19 Jun 2013 17:29:28 +0200
+Subject: [PATCH 49/50] cheese-preferences: Cleanly handle going from 1 -> 0
+ devices
+
+Cleanly handle going from 1 -> 0 devices and going from 1 -> 0 -> 1 devices.
+
+Also use camera_model.iter_n_children consistently to get the number of
+available devices, rather then mixing and matching it with num_camera_devices
+and devices.len.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index a1316f9..df2ded2 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -263,13 +263,13 @@ public class Cheese.PreferencesDialog : GLib.Object
+   [CCode (instance_pos = -1)]
+   public void on_source_change (Gtk.ComboBox combo)
+   {
+-    // TODO: Handle going from 1 to 0 devices, cleanly!
+-    return_if_fail (camera.num_camera_devices > 0);
+-
+     TreeIter iter;
+     Cheese.CameraDevice dev;
+     string dev_node;
+ 
++    if (combo.get_active () == -1)
++      return;
++
+     combo.get_active_iter (out iter);
+     combo.model.get (iter, 1, out dev);
+     dev_node = dev.get_device_node ();
+@@ -532,6 +532,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+   {
+     TreeIter iter;
+     Cheese.CameraDevice dev = (Cheese.CameraDevice) device;
++    bool was_empty = camera_model.iter_n_children (null) == 0;
+ 
+     camera_model.append (out iter);
+     camera_model.set (iter,
+@@ -543,6 +544,8 @@ public class Cheese.PreferencesDialog : GLib.Object
+ 
+     if (camera_needs_setup)
+       setup_camera ();
++    else if (was_empty)
++      source_combo.set_active_iter (iter);
+   }
+ 
+   /**
+@@ -554,16 +557,19 @@ public class Cheese.PreferencesDialog : GLib.Object
+   private void remove_camera_device (TreeIter iter,
+                                      Cheese.CameraDevice device)
+   {
+-      unowned GLib.PtrArray devices = camera.get_camera_devices ();
+-
+-      // Check if the camera that we want to remove, is the active one
+-      if (device.device_node == camera_device_node)
++      if (camera.num_camera_devices == 0) /* Last camera gone? */
+       {
+-        if (devices.len > 0)
+-          set_new_available_camera_device (iter);
+-        else
+-          this.dialog.hide();
++        ListStore resolution_model = new ListStore (2, typeof (string),
++                                                 typeof (Cheese.VideoFormat));
++        photo_resolution_combo.model = resolution_model;
++        video_resolution_combo.model = resolution_model;
++        camera_error(_("No device found"));
+       }
++      else if (device.device_node == camera_device_node)
++      {
++        set_new_available_camera_device (iter);
++      }
++
+       camera_model.remove (iter);
+ 
+       if (camera_model.iter_n_children (null) <= 1)
+-- 
+1.8.2.1
+

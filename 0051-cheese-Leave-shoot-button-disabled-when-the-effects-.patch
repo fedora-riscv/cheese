@@ -1,0 +1,45 @@
+From fdf136b10de78b84e0ae9843e2eb8f71194ab43c Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 20 Jun 2013 19:31:06 +0200
+Subject: [PATCH 51/51] cheese: Leave shoot button disabled when the effects
+ selector is showing
+
+Before this patch the shoot button would get re-enabled when changing
+resolution (or device) at the effects selector.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index fc38850..a1a645c 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -1313,13 +1313,20 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+    */
+   public void toggle_camera_actions_sensitivities (bool active)
+   {
+-    string [] actions = { "shoot", "mode", "effects" };
++    string [] actions = { "mode", "effects" };
+ 
+-    /* If inactive, hide the effects selector, stop recording, etc. */
+-    if (!active) {
++    if (active)
++    {
++      /* Use update_shoot_enabled, so as to not adversely enable it */
++      update_shoot_enabled ();
++    }
++    else
++    {
++      /* Inactive, hide the effects selector, stop recording, etc. */
+       if (is_effects_selector_active)
+         effects_toggle_button.set_active (false);
+       cancel_running_action ();
++      actions += "shoot";
+     }
+ 
+     foreach (string name in actions)
+-- 
+1.8.2.1
+

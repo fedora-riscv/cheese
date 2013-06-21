@@ -1,0 +1,56 @@
+From 937f79bdf0867f9319d53ca51c3f1437e1d8bb3a Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 11:59:55 +0200
+Subject: [PATCH 45/50] cheese: Properly deal with going from 0 -> 1 devices
+
+Before this patch cheese showed a "No device found" message when started
+without any devices connected, and would keep showing this after the user
+plugged in a webcam. The new cam also could not be selected from the
+preferences dialog.
+
+After this patch cheese will automatically switch to showing video from a
+newly plugged in webcam (when it had no devices before).
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index 30b3d65..4ec4937 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -24,6 +24,7 @@ using Gtk;
+ public class Cheese.PreferencesDialog : GLib.Object
+ {
+   private Cheese.Camera camera;
++  private bool camera_needs_setup;
+ 
+   private GLib.Settings settings;
+ 
+@@ -125,10 +126,12 @@ public class Cheese.PreferencesDialog : GLib.Object
+       camera.setup (null);
+       camera.play ();
+       camera_changed ();
++      camera_needs_setup = false;
+     }
+     catch (Error err)
+     {
+       camera_error (err.message);
++      camera_needs_setup = true;
+     }
+   }
+ 
+@@ -537,6 +540,9 @@ public class Cheese.PreferencesDialog : GLib.Object
+ 
+     if (camera_model.iter_n_children (null) > 1)
+       source_combo.sensitive = true;
++
++    if (camera_needs_setup)
++      setup_camera ();
+   }
+ 
+   /**
+-- 
+1.8.2.1
+
