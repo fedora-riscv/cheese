@@ -1,0 +1,89 @@
+From 8c401d7fe5c85e60e84d08f1562fd721bef01be0 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 09:05:19 +0200
+Subject: [PATCH 02/13] cheese-window: Add cancel_running_action () method
+
+And use it to stop recording / the photo countdown when we get an error
+while either one is active.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-window.vala | 47 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 16 deletions(-)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index bc53b4e..675a92e 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -724,6 +724,34 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   }
+ 
+   /**
++   * Cancel the current action (if any)
++   */
++  private bool cancel_running_action ()
++  {
++    if ((current_countdown != null && current_countdown.running) ||
++        is_bursting || is_recording)
++    {
++      action_cancelled = true;
++      switch (current_mode)
++      {
++        case MediaMode.PHOTO:
++         current_countdown.stop ();
++         finish_countdown_callback ();
++         break;
++        case MediaMode.BURST:
++          toggle_photo_bursting (false);
++          break;
++        case MediaMode.VIDEO:
++          toggle_video_recording (false);
++          break;
++      }
++      action_cancelled = false;
++      return true;
++    }
++    return false;
++  }
++
++  /**
+    * Cancel the current activity if the escape key is pressed.
+    *
+    * @param event the key event, to check which key was pressed
+@@ -736,23 +764,9 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     key = Gdk.keyval_name (event.keyval);
+     if (strcmp (key, "Escape") == 0)
+     {
+-      if ((current_countdown != null && current_countdown.running) || is_bursting || is_recording)
++      if (cancel_running_action())
+       {
+-        action_cancelled = true;
+-        switch (current_mode)
+-        {
+-          case MediaMode.PHOTO:
+-           current_countdown.stop ();
+-           finish_countdown_callback ();
+-           break;
+-          case MediaMode.BURST:
+-            toggle_photo_bursting (false);
+-            break;
+-          case MediaMode.VIDEO:
+-            toggle_video_recording (false);
+-            break;
+-        }
+-        action_cancelled = false;
++        return false;
+       }
+       else if (is_effects_selector_active)
+       {
+@@ -1154,6 +1168,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+      */
+     public void camera_state_change_null ()
+     {
++        cancel_running_action();
+         if (!error_layer.visible)
+         {
+             show_error (_("There was an error playing video from the webcam"));
+-- 
+1.8.3.1
+

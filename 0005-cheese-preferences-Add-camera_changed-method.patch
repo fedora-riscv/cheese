@@ -1,0 +1,90 @@
+From ce2689370cc4cfd8e2fb3f2fba154a979792d934 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Tue, 18 Jun 2013 11:14:16 +0200
+Subject: [PATCH 05/13] cheese-preferences: Add camera_changed () method
+
+This centralizes camera-change handling, and adds a check for their being
+no camera removing a whole bunch of glib Critical messages being printed
+when cheese is started without a camera.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/cheese-preferences.vala | 34 +++++++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index bad3c71..2f2d679 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -130,6 +130,28 @@ public class Cheese.PreferencesDialog : GLib.Object
+   }
+ 
+   /**
++   * Update resolution list and save the current camera to settings.
++   */
++  private void camera_changed ()
++  {
++    Cheese.CameraDevice device, iter_device;
++    TreeIter iter;
++
++    device = camera.get_selected_device ();
++    if (device == null)
++      return;
++    settings.set_string ("camera", device.get_device_node ());
++    setup_resolutions_for_device (device);
++
++    for (bool next = camera_model.get_iter_first (out iter); next;
++         next = camera_model.iter_next (ref iter)) {
++      camera_model.get (iter, 1, out iter_device, -1);
++      if (iter_device == device)
++        source_combo.set_active_iter (iter);
++    }
++  }
++
++  /**
+    * Initialize and populate the camera device combo box model.
+    */
+   private void initialize_camera_devices ()
+@@ -142,8 +164,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+ 
+     devices.foreach(add_camera_device);
+ 
+-    settings.set_string ("camera", camera.get_selected_device ().get_device_node ());
+-    setup_resolutions_for_device (camera.get_selected_device ());
++    camera_changed ();
+   }
+ 
+   /**
+@@ -229,8 +250,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+     combo.model.get (iter, 1, out dev);
+     camera.set_device_by_device_node (dev.get_device_node ());
+     camera.switch_camera_device ();
+-    setup_resolutions_for_device (camera.get_selected_device ());
+-    settings.set_string ("camera", dev.get_device_node ());
++    camera_changed ();
+   }
+ 
+   /**
+@@ -476,8 +496,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+       }
+     }
+ 
+-    settings.set_string ("camera", camera.get_selected_device ().get_device_node ());
+-    setup_resolutions_for_device (camera.get_selected_device ());
++    camera_changed ();
+   }
+ 
+   /**
+@@ -498,9 +517,6 @@ public class Cheese.PreferencesDialog : GLib.Object
+                       0, dev.get_name () + " (" + dev.get_device_node () + ")",
+                       1, dev);
+ 
+-    if (camera.get_selected_device ().get_device_node () == dev.get_device_node ())
+-        source_combo.set_active_iter (iter);
+-
+     if (camera_model.iter_n_children (null) > 1 && camera_controls_sensitive)
+       source_combo.sensitive = true;
+   }
+-- 
+1.8.3.1
+

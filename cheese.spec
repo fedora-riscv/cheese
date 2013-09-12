@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.9.91
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -11,6 +11,24 @@ URL:            http://projects.gnome.org/cheese/
 Source0:        http://download.gnome.org/sources/cheese/3.9/%{name}-%{version}.tar.xz
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
+
+# https://bugzilla.gnome.org/show_bug.cgi?id=707386
+Patch1:         0001-cheese-Don-t-allow-changing-the-camera-and-or-its-re.patch
+Patch2:         0002-cheese-window-Add-cancel_running_action-method.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=707387
+Patch3:         0003-cheese-window-Allow-changing-effects-while-shooting-.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=707391
+Patch4:         0004-cheese-camera-Fix-video-recording-with-gstreamer-1.1.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=603612
+Patch5:         0005-cheese-preferences-Add-camera_changed-method.patch
+Patch6:         0006-cheese_camera_get_camera_devices-Allow-calling-befor.patch
+Patch7:         0007-cheese-Move-camera_setup-to-cheese-preferences.patch
+Patch8:         0008-cheese-Properly-deal-with-going-from-0-1-devices.patch
+Patch9:         0009-cheese-Avoid-unnecessary-calls-to-switch_camera_devi.patch
+Patch10:        0010-on_camera_update_num_camera_devices-Remove-unnecessa.patch
+Patch11:        0011-cheese-preferences-Simplify-remove_camera_device.patch
+Patch12:        0012-cheese-preferences-Cleanly-handle-going-from-1-0-dev.patch
+Patch13:        0013-cheese-window-Disable-effect-switching-buttons-on-we.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer1-devel
@@ -67,7 +85,19 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-# %patch2 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
 
 
 %build
@@ -141,6 +171,14 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Thu Sep 12 2013 Hans de Goede <hdegoede@redhat.com> - 2:3.9.91-3
+- In F-19 we had a long list of bugfix patches, most of these have been merged
+  into gnome-3.10 but not all have been merged yet, re-add the non merged ones
+- Fix video recording not working
+- Allow changing effects while recording
+- Disallow changing camera settings while recording
+- Fix cheese misbehavior when going from 0 -> 1 or 1 -> 0 camera devices
+
 * Tue Sep 03 2013 Kalev Lember <kalevlember@gmail.com> - 2:3.9.91-2
 - Rebuilt for libgnome-desktop soname bump
 
@@ -373,7 +411,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 * Thu Aug 19 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.90-1
 - Update to 2.31.90
 
-* Fri Aug 11 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.1-2
+* Wed Aug 11 2010 Matthias Clasen <mclasen@redhat.com> 1:2.31.1-2
 - Add an epoch to stay ahead of F14
 
 * Fri Aug  6 2010 Matthias Clasen <mclasen@redhat.com> 2.31.1-1
@@ -473,7 +511,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 * Wed Dec  3 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.2-1
 - Update to 2.25.2
 
-* Thu Nov 21 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-4
+* Fri Nov 21 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-4
 - Better URL
 
 * Thu Nov 13 2008 Matthias Clasen  <mclasen@redhat.com> 2.25.1-3
