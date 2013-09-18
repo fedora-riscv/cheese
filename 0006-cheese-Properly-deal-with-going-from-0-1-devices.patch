@@ -1,7 +1,7 @@
-From 55491c023d2d08795c156beb0a43ae8292d74a49 Mon Sep 17 00:00:00 2001
+From a1805cadf3e6f7396a323c26e391cd91c28c829f Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 18 Jun 2013 11:59:55 +0200
-Subject: [PATCH 08/13] cheese: Properly deal with going from 0 -> 1 devices
+Subject: [PATCH 06/11] cheese: Properly deal with going from 0 -> 1 devices
 
 Before this patch cheese showed a "No device found" message when started
 without any devices connected, and would keep showing this after the user
@@ -18,10 +18,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  2 files changed, 26 insertions(+), 3 deletions(-)
 
 diff --git a/src/cheese-application.vala b/src/cheese-application.vala
-index b0d0dbe..be4837e 100644
+index aa62a2e..fbb1145 100644
 --- a/src/cheese-application.vala
 +++ b/src/cheese-application.vala
-@@ -367,6 +367,7 @@ public class Cheese.Application : Gtk.Application
+@@ -368,6 +368,7 @@ public class Cheese.Application : Gtk.Application
                  mode.set_enabled (false);
                  shoot.set_enabled (false);
  
@@ -30,19 +30,19 @@ index b0d0dbe..be4837e 100644
                  break;
              default:
 diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
-index 5bd2ced..04a77ac 100644
+index a73bb46..06929f5 100644
 --- a/src/cheese-preferences.vala
 +++ b/src/cheese-preferences.vala
-@@ -25,6 +25,8 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -24,6 +24,8 @@ using Gtk;
+ public class Cheese.PreferencesDialog : GLib.Object
  {
    private Cheese.Camera camera;
-   private bool camera_controls_sensitive;
 +  private bool camera_is_setup;
 +  private bool camera_is_playing;
  
    private GLib.Settings settings;
  
-@@ -124,8 +126,16 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -122,8 +124,16 @@ public class Cheese.PreferencesDialog : GLib.Object
    {
      try
      {
@@ -61,7 +61,7 @@ index 5bd2ced..04a77ac 100644
        camera_changed ();
      }
      catch (Error err)
-@@ -135,6 +145,14 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -133,6 +143,14 @@ public class Cheese.PreferencesDialog : GLib.Object
    }
  
    /**
@@ -76,7 +76,7 @@ index 5bd2ced..04a77ac 100644
     * Set up combo box cell renderers.
     */
    private void setup_combo_box_models ()
-@@ -270,7 +288,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -268,7 +286,7 @@ public class Cheese.PreferencesDialog : GLib.Object
      combo.model.get (iter, 1, out dev);
      camera.set_device_by_device_node (dev.get_device_node ());
      camera.switch_camera_device ();
@@ -85,7 +85,7 @@ index 5bd2ced..04a77ac 100644
    }
  
    /**
-@@ -531,6 +549,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -529,6 +547,7 @@ public class Cheese.PreferencesDialog : GLib.Object
    {
      TreeIter iter;
      Cheese.CameraDevice dev = (Cheese.CameraDevice) device;
@@ -93,9 +93,9 @@ index 5bd2ced..04a77ac 100644
  
      camera_model.append (out iter);
      camera_model.set (iter,
-@@ -539,6 +558,9 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -537,6 +556,9 @@ public class Cheese.PreferencesDialog : GLib.Object
  
-     if (camera_model.iter_n_children (null) > 1 && camera_controls_sensitive)
+     if (camera_model.iter_n_children (null) > 1)
        source_combo.sensitive = true;
 +
 +    if (was_empty)

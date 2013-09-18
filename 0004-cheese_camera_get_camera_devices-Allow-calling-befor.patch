@@ -1,7 +1,7 @@
-From 0d94fa92ab66b43f08b2b9d906fe0f4c963424af Mon Sep 17 00:00:00 2001
+From e3480dd3e55665e9e48a39a74fd7ee4e56bc0736 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 18 Jun 2013 11:38:05 +0200
-Subject: [PATCH 06/13] cheese_camera_get_camera_devices: Allow calling before
+Subject: [PATCH 04/11] cheese_camera_get_camera_devices: Allow calling before
  cheese_camera_setup()
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
@@ -10,7 +10,7 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
-index fdeb973..332780a 100644
+index ab5490d..de066af 100644
 --- a/libcheese/cheese-camera.c
 +++ b/libcheese/cheese-camera.c
 @@ -363,6 +363,9 @@ cheese_camera_detect_camera_devices (CheeseCamera *camera)
@@ -23,7 +23,7 @@ index fdeb973..332780a 100644
    priv->num_camera_devices = 0;
    priv->camera_devices     = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
  
-@@ -1650,13 +1653,11 @@ cheese_camera_setup (CheeseCamera *camera, const gchar *uuid, GError **error)
+@@ -1649,13 +1652,11 @@ cheese_camera_setup (CheeseCamera *camera, const gchar *uuid, GError **error)
  GPtrArray *
  cheese_camera_get_camera_devices (CheeseCamera *camera)
  {

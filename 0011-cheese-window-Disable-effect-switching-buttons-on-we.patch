@@ -1,7 +1,7 @@
-From 462287f28f87c5dd9f30f734132b5c6193a1daa1 Mon Sep 17 00:00:00 2001
+From 82d8c27242efcf40612edaccc47c37a79aeaf6c8 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 3 Sep 2013 15:39:49 +0200
-Subject: [PATCH 13/13] cheese-window: Disable effect switching buttons on
+Subject: [PATCH 11/11] cheese-window: Disable effect switching buttons on
  webcam error
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
@@ -10,10 +10,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/src/cheese-window.vala b/src/cheese-window.vala
-index 07cf0f4..bc2d3b7 100644
+index e117ec2..8e31611 100644
 --- a/src/cheese-window.vala
 +++ b/src/cheese-window.vala
-@@ -1030,9 +1030,11 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+@@ -1027,9 +1027,11 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
          var effects_next = this.lookup_action ("effects-next") as SimpleAction;
          var effects_previous = this.lookup_action ("effects-previous") as SimpleAction;
  
@@ -27,7 +27,7 @@ index 07cf0f4..bc2d3b7 100644
                                        && current_effects_page != 0);
      }
  
-@@ -1151,6 +1153,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+@@ -1148,6 +1150,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
      public void camera_state_change_playing ()
      {
          show_error (null);
@@ -35,7 +35,7 @@ index 07cf0f4..bc2d3b7 100644
  
          Effect effect = effects_manager.get_effect (settings.get_string ("selected-effect"));
          if (effect != null)
-@@ -1169,6 +1172,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+@@ -1166,6 +1169,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
          {
              show_error (_("There was an error playing video from the webcam"));
          }

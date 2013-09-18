@@ -1,7 +1,7 @@
-From ce2689370cc4cfd8e2fb3f2fba154a979792d934 Mon Sep 17 00:00:00 2001
+From 6ddb9d4fd4ccf98028c83b924705f66753a16524 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 18 Jun 2013 11:14:16 +0200
-Subject: [PATCH 05/13] cheese-preferences: Add camera_changed () method
+Subject: [PATCH 03/11] cheese-preferences: Add camera_changed () method
 
 This centralizes camera-change handling, and adds a check for their being
 no camera removing a whole bunch of glib Critical messages being printed
@@ -13,10 +13,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 25 insertions(+), 9 deletions(-)
 
 diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
-index bad3c71..2f2d679 100644
+index f04660a..44e3547 100644
 --- a/src/cheese-preferences.vala
 +++ b/src/cheese-preferences.vala
-@@ -130,6 +130,28 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -128,6 +128,28 @@ public class Cheese.PreferencesDialog : GLib.Object
    }
  
    /**
@@ -45,7 +45,7 @@ index bad3c71..2f2d679 100644
     * Initialize and populate the camera device combo box model.
     */
    private void initialize_camera_devices ()
-@@ -142,8 +164,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -140,8 +162,7 @@ public class Cheese.PreferencesDialog : GLib.Object
  
      devices.foreach(add_camera_device);
  
@@ -55,7 +55,7 @@ index bad3c71..2f2d679 100644
    }
  
    /**
-@@ -229,8 +250,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -227,8 +248,7 @@ public class Cheese.PreferencesDialog : GLib.Object
      combo.model.get (iter, 1, out dev);
      camera.set_device_by_device_node (dev.get_device_node ());
      camera.switch_camera_device ();
@@ -65,7 +65,7 @@ index bad3c71..2f2d679 100644
    }
  
    /**
-@@ -476,8 +496,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -474,8 +494,7 @@ public class Cheese.PreferencesDialog : GLib.Object
        }
      }
  
@@ -75,14 +75,14 @@ index bad3c71..2f2d679 100644
    }
  
    /**
-@@ -498,9 +517,6 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -496,9 +515,6 @@ public class Cheese.PreferencesDialog : GLib.Object
                        0, dev.get_name () + " (" + dev.get_device_node () + ")",
                        1, dev);
  
 -    if (camera.get_selected_device ().get_device_node () == dev.get_device_node ())
 -        source_combo.set_active_iter (iter);
 -
-     if (camera_model.iter_n_children (null) > 1 && camera_controls_sensitive)
+     if (camera_model.iter_n_children (null) > 1)
        source_combo.sensitive = true;
    }
 -- 

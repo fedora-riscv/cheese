@@ -1,7 +1,7 @@
-From 7be2bcd05f80ffa8ee5ec7847a527ac07b6f8b87 Mon Sep 17 00:00:00 2001
+From edaf892e8fdcf2ceb956e8dc0a41c928c3fff13f Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Wed, 19 Jun 2013 16:47:41 +0200
-Subject: [PATCH 11/13] cheese-preferences: Simplify remove_camera_device
+Subject: [PATCH 09/11] cheese-preferences: Simplify remove_camera_device
 
 Now that we cache the device-node for the active camera, remove_camera_device
 and its callers can be simplified.
@@ -12,10 +12,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 6 insertions(+), 13 deletions(-)
 
 diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
-index 2120432..faf6877 100644
+index c46a1a5..6e0bbd5 100644
 --- a/src/cheese-preferences.vala
 +++ b/src/cheese-preferences.vala
-@@ -508,12 +508,6 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -506,12 +506,6 @@ public class Cheese.PreferencesDialog : GLib.Object
        TreeIter iter;
        camera_model.get_iter_first (out iter);
  
@@ -28,7 +28,7 @@ index 2120432..faf6877 100644
        // Find which device was removed.
        bool device_removed = false;
        devices.foreach ((device) =>
-@@ -525,7 +519,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -523,7 +517,7 @@ public class Cheese.PreferencesDialog : GLib.Object
          // Found the device that was removed.
          if (strcmp (old_device.device_node, new_device.device_node) != 0)
          {
@@ -37,7 +37,7 @@ index 2120432..faf6877 100644
              device_removed = true;
              // Remember, this is from the anonymous function!
              return;
-@@ -538,7 +532,7 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -536,7 +530,7 @@ public class Cheese.PreferencesDialog : GLib.Object
        {
          Cheese.CameraDevice old_device;
          camera_model.get (iter, 1, out old_device, -1);
@@ -46,7 +46,7 @@ index 2120432..faf6877 100644
        }
      }
    }
-@@ -573,16 +567,15 @@ public class Cheese.PreferencesDialog : GLib.Object
+@@ -571,16 +565,15 @@ public class Cheese.PreferencesDialog : GLib.Object
     * Remove the supplied camera device from the device combo box model.
     *
     * @param iter the iterator of the device to remove

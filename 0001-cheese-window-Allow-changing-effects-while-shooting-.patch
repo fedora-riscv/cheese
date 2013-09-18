@@ -1,7 +1,7 @@
-From 1537ad2673843e033035edfe144ffc78bdab5a43 Mon Sep 17 00:00:00 2001
+From 65027bed3ef54b18534e7f3a552bb7275df48b33 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 6 Aug 2013 14:50:00 +0200
-Subject: [PATCH 03/13] cheese-window: Allow changing effects while shooting /
+Subject: [PATCH 01/11] cheese-window: Allow changing effects while shooting /
  recording a video
 
 There is no technical reason to disable the effect selector while shooting
@@ -18,10 +18,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  2 files changed, 3 insertions(+), 26 deletions(-)
 
 diff --git a/src/cheese-application.vala b/src/cheese-application.vala
-index 0f9f33d..9cb5ac5 100644
+index 253e57c..0b6689f 100644
 --- a/src/cheese-application.vala
 +++ b/src/cheese-application.vala
-@@ -368,17 +368,8 @@ public class Cheese.Application : Gtk.Application
+@@ -369,17 +369,8 @@ public class Cheese.Application : Gtk.Application
          switch (new_state)
          {
              case Gst.State.PLAYING:
@@ -41,7 +41,7 @@ index 0f9f33d..9cb5ac5 100644
                  effects.set_enabled (true);
  
                  main_window.camera_state_change_playing ();
-@@ -491,17 +482,7 @@ public class Cheese.Application : Gtk.Application
+@@ -492,17 +483,7 @@ public class Cheese.Application : Gtk.Application
      {
          return_if_fail (value != null);
  
@@ -61,27 +61,27 @@ index 0f9f33d..9cb5ac5 100644
      }
  
 diff --git a/src/cheese-window.vala b/src/cheese-window.vala
-index 675a92e..07cf0f4 100644
+index 4585a66..dd8fbfc 100644
 --- a/src/cheese-window.vala
 +++ b/src/cheese-window.vala
-@@ -384,8 +384,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+@@ -379,8 +379,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
      {
          var mode = this.application.lookup_action ("mode") as SimpleAction;
          mode.set_enabled (true);
 -        var effects = this.application.lookup_action ("effects") as SimpleAction;
 -        effects.set_enabled (true);
-         mode_change_changed (true);
+         var preferences = this.application.lookup_action ("preferences") as SimpleAction;
+         preferences.set_enabled (true);
      }
- 
-@@ -396,8 +394,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+@@ -392,8 +390,6 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
      {
          var mode = this.application.lookup_action ("mode") as SimpleAction;
          mode.set_enabled (false);
 -        var effects = this.application.lookup_action ("effects") as SimpleAction;
 -        effects.set_enabled (false);
-         mode_change_changed (false);
+         var preferences = this.application.lookup_action ("preferences") as SimpleAction;
+         preferences.set_enabled (false);
      }
- 
 -- 
 1.8.3.1
 
