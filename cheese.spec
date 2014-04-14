@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.10.2
+Version:        3.12.0
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,23 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.10/%{name}-%{version}.tar.xz
-# https://bugzilla.gnome.org/show_bug.cgi?id=678447
-# Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
-
-# https://bugzilla.gnome.org/show_bug.cgi?id=707387
-Patch1:         0001-cheese-window-Allow-changing-effects-while-shooting-.patch
-# https://bugzilla.gnome.org/show_bug.cgi?id=603612
-Patch2:         0002-cheese-window-Add-cancel_running_action-method.patch
-Patch3:         0003-cheese-preferences-Add-camera_changed-method.patch
-Patch4:         0004-cheese_camera_get_camera_devices-Allow-calling-befor.patch
-Patch5:         0005-cheese-Move-camera_setup-to-cheese-preferences.patch
-Patch6:         0006-cheese-Properly-deal-with-going-from-0-1-devices.patch
-Patch7:         0007-cheese-Avoid-unnecessary-calls-to-switch_camera_devi.patch
-Patch8:         0008-on_camera_update_num_camera_devices-Remove-unnecessa.patch
-Patch9:         0009-cheese-preferences-Simplify-remove_camera_device.patch
-Patch10:        0010-cheese-preferences-Cleanly-handle-going-from-1-0-dev.patch
-Patch11:        0011-cheese-window-Disable-effect-switching-buttons-on-we.patch
+Source0:        http://download.gnome.org/sources/cheese/3.12/%{name}-%{version}.tar.xz
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer1-devel
@@ -81,18 +65,6 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-
 
 %build
 %configure --disable-static
@@ -142,10 +114,8 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %doc AUTHORS README
 %{_bindir}/cheese
 %{_datadir}/applications/cheese.desktop
-%{_datadir}/cheese
 %{_datadir}/icons/hicolor/*/apps/cheese.png
-%{_datadir}/icons/hicolor/*/actions/*.png
-%{_datadir}/icons/hicolor/scalable/actions/*.svg
+%{_datadir}/appdata/cheese.appdata.xml
 %{_mandir}/man1/cheese.1.gz
 
 %files -f %{name}.lang libs
@@ -165,6 +135,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Mon Apr 14 2014 Richard Hughes <rhughes@redhat.com> - 2:3.12.0-1
+- Update to 3.12.0
+
 * Mon Nov 11 2013 Richard Hughes <rhughes@redhat.com> - 2:3.10.2-1
 - Update to 3.10.2
 
