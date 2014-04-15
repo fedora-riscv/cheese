@@ -77,15 +77,13 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese.{a,la}
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
 
-desktop-file-install --delete-original --vendor=""     \
-    --dir=$RPM_BUILD_ROOT%{_datadir}/applications      \
-    --add-category X-AudioVideoImport                  \
-    $RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
-
 %find_lang %{name} --with-gnome
 
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.so.*
+
+%check
+desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
 
 %post
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
@@ -137,6 +135,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %changelog
 * Tue Apr 15 2014 Kalev Lember <kalevlember@gmail.com> - 2:3.12.1-1
 - Update to 3.12.1
+- Use desktop-file-validate instead of desktop-file-install
 
 * Tue Mar 25 2014 Kalev Lember <kalevlember@gmail.com> - 2:3.12.0-1
 - Update to 3.12.0
