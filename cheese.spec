@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.12.1
+Version:        3.13.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.12/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cheese/3.13/%{name}-%{version}.tar.xz
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer1-devel
@@ -133,6 +133,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Apr 29 2014 Richard Hughes <rhughes@redhat.com> - 2:3.13.1-1
+- Update to 3.13.1
+
 * Tue Apr 15 2014 Kalev Lember <kalevlember@gmail.com> - 2:3.12.1-1
 - Update to 3.12.1
 - Use desktop-file-validate instead of desktop-file-install
