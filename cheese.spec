@@ -83,7 +83,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.so.*
 
 %check
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/cheese.desktop
+desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.Cheese.desktop
 
 %post
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
@@ -111,9 +111,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %files
 %doc AUTHORS README
 %{_bindir}/cheese
-%{_datadir}/applications/cheese.desktop
+%{_datadir}/applications/org.gnome.Cheese.desktop
 %{_datadir}/icons/hicolor/*/apps/cheese.png
-%{_datadir}/appdata/cheese.appdata.xml
+%{_datadir}/appdata/org.gnome.Cheese.appdata.xml
+%{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_mandir}/man1/cheese.1.gz
 
 %files -f %{name}.lang libs
