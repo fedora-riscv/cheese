@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.13.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -134,6 +134,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2:3.13.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Tue Jul 22 2014 Kalev Lember <kalevlember@gmail.com> - 2:3.13.4-2
 - Rebuilt for gobject-introspection 1.41.4
 
