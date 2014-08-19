@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.13.4
-Release:        3%{?dist}
+Version:        3.13.90.1
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -111,9 +111,11 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %files
 %doc AUTHORS README
 %{_bindir}/cheese
+%{_libexecdir}/gnome-camera-service
 %{_datadir}/applications/org.gnome.Cheese.desktop
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/appdata/org.gnome.Cheese.appdata.xml
+%{_datadir}/dbus-1/services/org.gnome.Camera.service
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_mandir}/man1/cheese.1.gz
 
@@ -134,6 +136,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Aug 19 2014 Kalev Lember <kalevlember@gmail.com> - 2:3.13.90.1-1
+- Update to 3.13.90.1
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2:3.13.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
