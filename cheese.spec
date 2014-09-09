@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.13.90.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -9,6 +9,8 @@ License:        GPLv2+
 URL:            http://projects.gnome.org/cheese/
 #VCS: git:git://git.gnome.org/cheese
 Source0:        http://download.gnome.org/sources/cheese/3.13/%{name}-%{version}.tar.xz
+# http://bugzilla.gnome.org/show_bug.cgi?id=735285
+Patch0:         cheese-3.13.90.1-fix-crash-when-animating-countdown.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer1-devel
@@ -65,6 +67,7 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure --disable-static
@@ -136,6 +139,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Tue Sep 09 2014 David King <amigadave@amigadave.com> - 2:3.13.90.1-2
+- Fix crash when showing photo countdown (#1133394)
+
 * Tue Aug 19 2014 Kalev Lember <kalevlember@gmail.com> - 2:3.13.90.1-1
 - Update to 3.13.90.1
 
