@@ -1,41 +1,39 @@
 Name:           cheese
 Epoch:          2
-Version:        3.13.90.1
-Release:        2%{?dist}
+Version:        3.13.92
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
-URL:            http://projects.gnome.org/cheese/
+URL:            https://wiki.gnome.org/Apps/Cheese
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.13/%{name}-%{version}.tar.xz
-# http://bugzilla.gnome.org/show_bug.cgi?id=735285
-Patch0:         cheese-3.13.90.1-fix-crash-when-animating-countdown.patch
+Source0:        https://download.gnome.org/sources/%{name}/3.13/%{name}-%{version}.tar.xz
 
-BuildRequires: gtk3-devel >= 3.0.0
-BuildRequires: gstreamer1-devel
-BuildRequires: gstreamer1-plugins-bad-free-devel
-BuildRequires: gstreamer1-plugins-base-devel
-BuildRequires: cairo-devel >= 1.4.0
-BuildRequires: docbook-dtds
-BuildRequires: docbook-style-xsl
-BuildRequires: librsvg2-devel >= 2.18.0
-BuildRequires: evolution-data-server-devel
-BuildRequires: libXxf86vm-devel
-BuildRequires: libXtst-devel
-BuildRequires: desktop-file-utils
-BuildRequires: gettext
-BuildRequires: intltool
-BuildRequires: libgudev1-devel
-BuildRequires: libcanberra-devel
-BuildRequires: clutter-devel
-BuildRequires: clutter-gtk-devel
-BuildRequires: clutter-gst2-devel
-BuildRequires: vala-devel
-BuildRequires: gnome-video-effects
-BuildRequires: gnome-desktop3-devel
-BuildRequires: chrpath
-BuildRequires: itstool
+BuildRequires:  chrpath
+BuildRequires:  desktop-file-utils
+BuildRequires:  docbook-dtds
+BuildRequires:  docbook-style-xsl
+BuildRequires:  gettext
+BuildRequires:  intltool
+BuildRequires:  itstool
+BuildRequires:  libXtst-devel
+BuildRequires:  vala-devel
+BuildRequires:  pkgconfig(clutter-1.0)
+BuildRequires:  pkgconfig(clutter-gst-2.0)
+BuildRequires:  pkgconfig(clutter-gtk-1.0)
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gnome-desktop-3.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gstreamer-pbutils-1.0)
+BuildRequires:  pkgconfig(gstreamer-plugins-bad-1.0)
+BuildRequires:  pkgconfig(gudev-1.0)
+BuildRequires:  pkgconfig(libcanberra-gtk3)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  /usr/bin/xsltproc
 
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: gstreamer1-plugins-good
@@ -45,6 +43,15 @@ Requires: gnome-video-effects
 %description
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
+
+%package camera-service
+Summary:        Webcam D-Bus service
+Group:          System Environment/Libraries
+License:        GPLv3+
+
+%description camera-service
+This package contains a D-Bus service needed for applications that
+want to display a webcam dialog in their interface.
 
 %package libs
 Summary:        Webcam display and capture widgets
@@ -65,28 +72,31 @@ Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 This package contains the libraries and header files that are needed
 for writing applications that require a webcam display widget.
 
+
 %prep
 %setup -q
-%patch0 -p1
+
 
 %build
 %configure --disable-static
-make %{?_smp_mflags}
+make V=1 %{?_smp_mflags}
 
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+make DESTDIR=%{buildroot} INSTALL="install -p" install
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese.{a,la}
-rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
+rm -f %{buildroot}%{_libdir}/libcheese.{a,la}
+rm -f %{buildroot}%{_libdir}/libcheese-gtk.{a,la}
 
 %find_lang %{name} --with-gnome
 
-chrpath --delete $RPM_BUILD_ROOT%{_bindir}/cheese
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.so.*
+chrpath --delete %{buildroot}%{_bindir}/cheese
+chrpath --delete %{buildroot}%{_libdir}/libcheese-gtk.so.*
+
 
 %check
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.Cheese.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desktop
+
 
 %post
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
@@ -98,8 +108,10 @@ if [ $1 -eq 0 ]; then
   gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 fi
 
+
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
+
 
 %post libs
 /sbin/ldconfig
@@ -107,20 +119,25 @@ if [ $1 -eq 1 ] ; then
     glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
 
+
 %postun libs
 /sbin/ldconfig
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
+
 %files
 %doc AUTHORS README
 %{_bindir}/cheese
-%{_libexecdir}/gnome-camera-service
 %{_datadir}/applications/org.gnome.Cheese.desktop
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/appdata/org.gnome.Cheese.appdata.xml
-%{_datadir}/dbus-1/services/org.gnome.Camera.service
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_mandir}/man1/cheese.1.gz
+
+%files camera-service
+%doc COPYING.GPL3
+%{_libexecdir}/gnome-camera-service
+%{_datadir}/dbus-1/services/org.gnome.Camera.service
 
 %files -f %{name}.lang libs
 %doc COPYING
@@ -138,7 +155,14 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_libdir}/pkgconfig/cheese-gtk.pc
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
+
 %changelog
+* Mon Sep 15 2014 David King <amigadave@amigadave.com> - 2:3.13.92-1
+- Update to 3.13.92
+- Split camera service out to a subpackage
+- Use pkgconfig for BuildRequires
+- Tidy spec file
+
 * Tue Sep 09 2014 David King <amigadave@amigadave.com> - 2:3.13.90.1-2
 - Fix crash when showing photo countdown (#1133394)
 
