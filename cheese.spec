@@ -1,14 +1,14 @@
 Name:           cheese
 Epoch:          2
 Version:        3.10.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
-URL:            http://projects.gnome.org/cheese/
+URL:            https://wiki.gnome.org/Apps/Cheese
 #VCS: git:git://git.gnome.org/cheese
-Source0:        http://download.gnome.org/sources/cheese/3.10/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/cheese/3.10/%{name}-%{version}.tar.xz
 # https://bugzilla.gnome.org/show_bug.cgi?id=678447
 # Patch2: 0002-Setup-vp8enc-in-a-way-suitable-for-realtime-encoding.patch
 
@@ -25,6 +25,8 @@ Patch8:         0008-on_camera_update_num_camera_devices-Remove-unnecessa.patch
 Patch9:         0009-cheese-preferences-Simplify-remove_camera_device.patch
 Patch10:        0010-cheese-preferences-Cleanly-handle-going-from-1-0-dev.patch
 Patch11:        0011-cheese-window-Disable-effect-switching-buttons-on-we.patch
+# Backported from https://bugzilla.gnome.org/show_bug.cgi?id=733433
+Patch12:        cheese-3.10.2-track-flash-opacity-explicitly.patch
 
 BuildRequires: gtk3-devel >= 3.0.0
 BuildRequires: gstreamer1-devel
@@ -92,6 +94,7 @@ for writing applications that require a webcam display widget.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 
 %build
@@ -100,7 +103,7 @@ make %{?_smp_mflags}
 
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese.{a,la}
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcheese-gtk.{a,la}
@@ -165,6 +168,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/Cheese-3.0.gir
 
 %changelog
+* Fri Sep 12 2014 David King <amigadave@amigadave.com> - 2:3.10.2-2
+- Apply upstream patch to improve flash opacity calculation (#981066)
+
 * Mon Nov 11 2013 Richard Hughes <rhughes@redhat.com> - 2:3.10.2-1
 - Update to 3.10.2
 
