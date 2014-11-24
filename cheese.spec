@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.15.1
+Version:        3.15.2
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -33,6 +33,7 @@ BuildRequires:  pkgconfig(gstreamer-plugins-bad-1.0)
 BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  pkgconfig(libcanberra-gtk3)
 BuildRequires:  pkgconfig(x11)
+BuildRequires:  /usr/bin/appstream-util
 BuildRequires:  /usr/bin/xsltproc
 
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
@@ -157,6 +158,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon Nov 24 2014 David King <amigadave@amigadave.com> - 2:3.15.2-1
+- Update to 3.15.2
+- Depend on appstream-util at build time for AppData check
+
 * Mon Oct 27 2014 David King <amigadave@amigadave.com> - 2:3.15.1-1
 - Update to 3.15.1
 
