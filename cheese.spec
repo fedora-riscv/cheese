@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.15.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -133,7 +133,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/apps/cheese.png
 %{_datadir}/appdata/org.gnome.Cheese.appdata.xml
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
-%{_mandir}/man1/cheese.1.gz
+%{_mandir}/man1/cheese.1*
 
 %files camera-service
 %doc COPYING.GPL3
@@ -158,6 +158,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Thu Jan 08 2015 David King <amigadave@amigadave.com> - 2:3.15.3-2
+- Update man page glob in files section
+
 * Mon Dec 15 2014 David King <amigadave@amigadave.com> - 2:3.15.3-1
 - Update to 3.15.3
 
