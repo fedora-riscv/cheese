@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.15.3
-Release:        2%{?dist}
+Version:        3.15.4
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -158,6 +158,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Jan 20 2015 Richard Hughes <rhughes@redhat.com> - 2:3.15.4-1
+- Update to 3.15.4
+
 * Thu Jan 08 2015 David King <amigadave@amigadave.com> - 2:3.15.3-2
 - Update man page glob in files section
 
