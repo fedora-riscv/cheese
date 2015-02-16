@@ -136,12 +136,12 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_mandir}/man1/cheese.1*
 
 %files camera-service
-%doc COPYING.GPL3
+%license COPYING.GPL3
 %{_libexecdir}/gnome-camera-service
 %{_datadir}/dbus-1/services/org.gnome.Camera.service
 
 %files -f %{name}.lang libs
-%doc COPYING
+%license COPYING
 %{_libdir}/libcheese.so.*
 %{_libdir}/libcheese-gtk.so.*
 %{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
@@ -160,6 +160,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %changelog
 * Mon Feb 16 2015 David King <amigadave@amigadave.com> - 2:3.15.90-1
 - Update to 3.15.90
+- Use license macro for COPYING
 
 * Tue Jan 20 2015 Richard Hughes <rhughes@redhat.com> - 2:3.15.4-1
 - Update to 3.15.4
