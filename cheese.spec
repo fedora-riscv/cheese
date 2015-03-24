@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.15.92
+Version:        3.16.0
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -8,7 +8,7 @@ Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
 #VCS: git:git://git.gnome.org/cheese
-Source0:        https://download.gnome.org/sources/%{name}/3.15/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.16/%{name}-%{version}.tar.xz
 
 BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
@@ -158,7 +158,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
-* Mon Mar 16 2015 David King <amigadave@amigadave.com> - 3.15.92-1
+* Tue Mar 24 2015 David King <amigadave@amigadave.com> - 2:3.16.0-1
+- Update to 3.16.0
+
+* Mon Mar 16 2015 David King <amigadave@amigadave.com> - 2:3.15.92-1
 - Update to 3.15.92
 
 * Mon Feb 16 2015 David King <amigadave@amigadave.com> - 2:3.15.90-1
