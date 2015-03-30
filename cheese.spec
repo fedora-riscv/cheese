@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.16.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -19,6 +19,7 @@ BuildRequires:  intltool
 BuildRequires:  itstool
 BuildRequires:  libXtst-devel
 BuildRequires:  vala-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  pkgconfig(clutter-1.0)
 BuildRequires:  pkgconfig(clutter-gst-2.0)
 BuildRequires:  pkgconfig(clutter-gtk-1.0)
@@ -89,6 +90,20 @@ make DESTDIR=%{buildroot} INSTALL="install -p" install
 rm -f %{buildroot}%{_libdir}/libcheese.{a,la}
 rm -f %{buildroot}%{_libdir}/libcheese-gtk.{a,la}
 
+# Update the screenshot shown in the software center
+#
+# NOTE: It would be *awesome* if this file was pushed upstream.
+#
+# See http://people.freedesktop.org/~hughsient/appdata/#screenshots for more details.
+#
+appstream-util replace-screenshots $RPM_BUILD_ROOT%{_datadir}/appdata/org.gnome.Cheese.appdata.xml \
+  https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/org.gnome.Cheese/a.png \
+  https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/org.gnome.Cheese/b.png \
+  https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/org.gnome.Cheese/c.png \
+  https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/org.gnome.Cheese/d.png \
+  https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/org.gnome.Cheese/e.png \
+  https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/org.gnome.Cheese/f.png 
+
 %find_lang %{name} --with-gnome
 
 chrpath --delete %{buildroot}%{_bindir}/cheese
@@ -158,6 +173,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon Mar 30 2015 Richard Hughes <rhughes@redhat.com> - 2:3.16.0-2
+- Use better AppData screenshots
+
 * Tue Mar 24 2015 David King <amigadave@amigadave.com> - 2:3.16.0-1
 - Update to 3.16.0
 
