@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.16.0
-Release:        3%{?dist}
+Version:        3.16.1
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -131,6 +131,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_bindir}/cheese
 %{_datadir}/applications/org.gnome.Cheese.desktop
 %{_datadir}/icons/hicolor/*/apps/cheese.png
+%{_datadir}/icons/hicolor/symbolic/apps/cheese-symbolic.svg
 %{_datadir}/appdata/org.gnome.Cheese.appdata.xml
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_mandir}/man1/cheese.1*
@@ -158,6 +159,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon Apr 13 2015 David King <amigadave@amigadave.com> - 2:3.16.1-1
+- Update to 3.16.1
+
 * Wed Apr 01 2015 David King <amigadave@amigadave.com> - 2:3.16.0-3
 - Drop old AppData screenshots
 
