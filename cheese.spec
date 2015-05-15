@@ -49,6 +49,7 @@ videos from a webcam. It can also apply fancy graphical effects.
 Summary:        Webcam D-Bus service
 Group:          System Environment/Libraries
 License:        GPLv3+
+Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description camera-service
 This package contains a D-Bus service needed for applications that
@@ -159,6 +160,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Fri May 15 2015 Matthias Clasen <mclasen@redhat.com>
+- Tighten up inter-subpackage deps to pacify rpmdiff
+
 * Tue Apr 28 2015 David King <amigadave@amigadave.com> - 2:3.17.1-1
 - Update to 3.17.1
 
