@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.17.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -160,6 +160,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2:3.17.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Fri May 15 2015 Matthias Clasen <mclasen@redhat.com>
 - Tighten up inter-subpackage deps to pacify rpmdiff
 
