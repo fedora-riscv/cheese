@@ -20,7 +20,7 @@ BuildRequires:  itstool
 BuildRequires:  libXtst-devel
 BuildRequires:  vala-devel
 BuildRequires:  pkgconfig(clutter-1.0)
-BuildRequires:  pkgconfig(clutter-gst-2.0)
+BuildRequires:  pkgconfig(clutter-gst-3.0)
 BuildRequires:  pkgconfig(clutter-gtk-1.0)
 BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
