@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
-Version:        3.17.1
-Release:        3%{?dist}
+Version:        3.17.90
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
@@ -160,6 +160,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon Aug 17 2015 Kalev Lember <klember@redhat.com> - 2:3.17.90-1
+- Update to 3.17.90
+
 * Wed Jul 22 2015 David King <amigadave@amigadave.com> - 2:3.17.1-3
 - Bump for new gnome-desktop3
 
