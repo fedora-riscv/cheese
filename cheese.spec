@@ -85,7 +85,7 @@ make V=1 %{?_smp_mflags}
 
 
 %install
-make DESTDIR=%{buildroot} INSTALL="install -p" install
+%make_install
 
 rm -f %{buildroot}%{_libdir}/libcheese.{a,la}
 rm -f %{buildroot}%{_libdir}/libcheese-gtk.{a,la}
@@ -162,6 +162,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %changelog
 * Mon Aug 17 2015 Kalev Lember <klember@redhat.com> - 2:3.17.90-1
 - Update to 3.17.90
+- Use make_install macro
 
 * Wed Jul 22 2015 David King <amigadave@amigadave.com> - 2:3.17.1-3
 - Bump for new gnome-desktop3
