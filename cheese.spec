@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.17.90
+Version:        3.17.91
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -160,6 +160,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Sep 01 2015 David King <amigadave@amigadave.com> - 2:3.17.91-1
+- Update to 3.17.91
+
 * Mon Aug 17 2015 Kalev Lember <klember@redhat.com> - 2:3.17.90-1
 - Update to 3.17.90
 - Use make_install macro
