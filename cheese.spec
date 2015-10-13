@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.18.0
+Version:        3.18.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -9,8 +9,6 @@ License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
 #VCS: git:git://git.gnome.org/cheese
 Source0:        https://download.gnome.org/sources/%{name}/3.18/%{name}-%{version}.tar.xz
-# Upstream fix for desktop file validation.
-Patch0:         cheese-3.18.0-fix-desktop-translation.patch
 
 BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
@@ -79,7 +77,6 @@ for writing applications that require a webcam display widget.
 
 %prep
 %setup -q
-%patch0 -p1
 
 
 %build
@@ -163,6 +160,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Oct 13 2015 David King <amigadave@amigadave.com> - 1:3.18.1-1
+- Update to 3.18.1
+
 * Tue Sep 22 2015 David King <amigadave@amigadave.com> - 2:3.18.0-1
 - Update to 3.18.0
 
