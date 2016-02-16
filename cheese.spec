@@ -1,14 +1,14 @@
 Name:           cheese
 Epoch:          2
-Version:        3.18.1
-Release:        2%{?dist}
+Version:        3.19.90
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
 #VCS: git:git://git.gnome.org/cheese
-Source0:        https://download.gnome.org/sources/%{name}/3.18/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.19/%{name}-%{version}.tar.xz
 
 BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
@@ -30,7 +30,6 @@ BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gstreamer-pbutils-1.0)
 BuildRequires:  pkgconfig(gstreamer-plugins-bad-1.0)
-BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  pkgconfig(libcanberra-gtk3)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  /usr/bin/appstream-util
@@ -131,8 +130,8 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %doc AUTHORS README
 %{_bindir}/cheese
 %{_datadir}/applications/org.gnome.Cheese.desktop
-%{_datadir}/icons/hicolor/*/apps/cheese.png
-%{_datadir}/icons/hicolor/symbolic/apps/cheese-symbolic.svg
+%{_datadir}/icons/hicolor/*/apps/org.gnome.Cheese.png
+%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Cheese-symbolic.svg
 %{_datadir}/appdata/org.gnome.Cheese.appdata.xml
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_mandir}/man1/cheese.1*
@@ -160,10 +159,13 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Feb 16 2016 David King <amigadave@amigadave.com> - 2:3.19.90-1
+- Update to 3.19.90
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.18.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
-* Tue Oct 13 2015 David King <amigadave@amigadave.com> - 1:3.18.1-1
+* Tue Oct 13 2015 David King <amigadave@amigadave.com> - 2:3.18.1-1
 - Update to 3.18.1
 
 * Tue Sep 22 2015 David King <amigadave@amigadave.com> - 2:3.18.0-1
