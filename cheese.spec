@@ -1,13 +1,11 @@
 Name:           cheese
 Epoch:          2
 Version:        3.22.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
-Group:          Amusements/Graphics
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
-#VCS: git:git://git.gnome.org/cheese
 Source0:        https://download.gnome.org/sources/%{name}/3.22/%{name}-%{version}.tar.xz
 
 BuildRequires:  chrpath
@@ -46,7 +44,6 @@ videos from a webcam. It can also apply fancy graphical effects.
 
 %package camera-service
 Summary:        Webcam D-Bus service
-Group:          System Environment/Libraries
 License:        GPLv3+
 Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
@@ -56,7 +53,6 @@ want to display a webcam dialog in their interface.
 
 %package libs
 Summary:        Webcam display and capture widgets
-Group:          System Environment/Libraries
 License:        GPLv2+
 
 %description libs
@@ -65,7 +61,6 @@ want to display a webcam in their interface.
 
 %package libs-devel
 Summary:        Development files for %{name}-libs
-Group:          Development/Libraries
 License:        GPLv2+
 Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
@@ -159,6 +154,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Wed Oct 12 2016 Kalev Lember <klember@redhat.com> - 2:3.22.1-2
+- Minor spec file cleanups
+
 * Mon Oct 10 2016 David King <amigadave@amigadave.com> - 2:3.22.1-1
 - Update to 3.22.1
 
