@@ -1,12 +1,12 @@
 Name:           cheese
 Epoch:          2
-Version:        3.22.1
-Release:        3%{?dist}
+Version:        3.24.0
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
-Source0:        https://download.gnome.org/sources/%{name}/3.22/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.24/%{name}-%{version}.tar.xz
 
 BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
@@ -154,6 +154,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Mar 21 2017 David King <amigadave@amigadave.com> - 3.24.0-1
+- Update to 3.24.0
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.22.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
