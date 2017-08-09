@@ -1,12 +1,12 @@
 Name:           cheese
 Epoch:          2
-Version:        3.24.0
-Release:        3%{?dist}
+Version:        3.25.90
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
-Source0:        https://download.gnome.org/sources/%{name}/3.24/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.25/%{name}-%{version}.tar.xz
 
 BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
@@ -42,18 +42,11 @@ Requires: gnome-video-effects
 Cheese is a Photobooth-inspired GNOME application for taking pictures and
 videos from a webcam. It can also apply fancy graphical effects.
 
-%package camera-service
-Summary:        Webcam D-Bus service
-License:        GPLv3+
-Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description camera-service
-This package contains a D-Bus service needed for applications that
-want to display a webcam dialog in their interface.
-
 %package libs
 Summary:        Webcam display and capture widgets
 License:        GPLv2+
+# Camera service was removed upstream in 3.25.90
+Obsoletes: cheese-camera-service < 2:3.24.0-4
 
 %description libs
 This package contains libraries needed for applications that
@@ -131,11 +124,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_mandir}/man1/cheese.1*
 
-%files camera-service
-%license COPYING.GPL3
-%{_libexecdir}/gnome-camera-service
-%{_datadir}/dbus-1/services/org.gnome.Camera.service
-
 %files -f %{name}.lang libs
 %license COPYING
 %{_libdir}/libcheese.so.*
@@ -154,13 +142,16 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Aug 08 2017 David King <amigadave@amigadave.com> - 2:3.25.90-1
+- Update to 3.25.90
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.24.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.24.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
-* Tue Mar 21 2017 David King <amigadave@amigadave.com> - 3.24.0-1
+* Tue Mar 21 2017 David King <amigadave@amigadave.com> - 2:3.24.0-1
 - Update to 3.24.0
 
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.22.1-3
