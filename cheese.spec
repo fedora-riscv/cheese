@@ -46,7 +46,7 @@ videos from a webcam. It can also apply fancy graphical effects.
 Summary:        Webcam display and capture widgets
 License:        GPLv2+
 # Camera service was removed upstream in 3.25.90
-Obsoletes: cheese-camera-service < 2:3.24.0-4
+Obsoletes: cheese-camera-service < 2:3.25.90
 
 %description libs
 This package contains libraries needed for applications that
