@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.26.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -87,31 +87,8 @@ chrpath --delete %{buildroot}%{_libdir}/libcheese-gtk.so.*
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desktop
 
 
-%post
-touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
-
-
-%postun
-if [ $1 -eq 0 ]; then
-  touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
-  gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
-fi
-
-
-%posttrans
-gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
-
-
-%post libs
-/sbin/ldconfig
-if [ $1 -eq 1 ] ; then
-    glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
-fi
-
-
-%postun libs
-/sbin/ldconfig
-glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+%post libs   -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 
 %files
@@ -142,6 +119,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Fri Jan 05 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2:3.26.0-2
+- Remove obsolete scriptlets
+
 * Mon Sep 11 2017 David King <amigadave@amigadave.com> - 2:3.26.0-1
 - Update to 3.26.0
 
