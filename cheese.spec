@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.26.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -87,8 +87,7 @@ chrpath --delete %{buildroot}%{_libdir}/libcheese-gtk.so.*
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desktop
 
 
-%post libs   -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%ldconfig_scriptlets libs
 
 
 %files
@@ -119,6 +118,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Sat Feb 03 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2:3.26.0-3
+- Switch to %%ldconfig_scriptlets
+
 * Fri Jan 05 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2:3.26.0-2
 - Remove obsolete scriptlets
 
