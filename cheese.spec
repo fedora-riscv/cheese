@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.26.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -23,7 +23,7 @@ BuildRequires:  pkgconfig(clutter-gtk-1.0)
 BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(gnome-desktop-3.0)
+BuildRequires:  pkgconfig(gnome-desktop-3.0) >= 3.27.90
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gstreamer-pbutils-1.0)
@@ -118,6 +118,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Sat Feb 10 2018 Bastien Nocera <bnocera@redhat.com> - 2:3.26.0-5
+- Rebuild against newer gnome-desktop3 package
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.26.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
