@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.26.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -118,6 +118,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Tue Feb 13 2018 Björn Esser <besser82@fedoraproject.org> - 2:3.26.0-6
+- Rebuild against newer gnome-desktop3 package, again
+
 * Sat Feb 10 2018 Bastien Nocera <bnocera@redhat.com> - 2:3.26.0-5
 - Rebuild against newer gnome-desktop3 package
 
