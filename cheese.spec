@@ -16,7 +16,7 @@ BuildRequires:  gettext
 BuildRequires:  intltool
 BuildRequires:  itstool
 BuildRequires:  libXtst-devel
-BuildRequires:  vala-devel
+BuildRequires:  vala
 BuildRequires:  pkgconfig(clutter-1.0)
 BuildRequires:  pkgconfig(clutter-gst-3.0)
 BuildRequires:  pkgconfig(clutter-gtk-1.0)
