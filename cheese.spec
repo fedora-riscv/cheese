@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.30.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -118,6 +118,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Fri Sep 07 2018 Kalev Lember <klember@redhat.com> - 2:3.30.0-2
+- Rebuilt against fixed atk (#1626575)
+
 * Tue Sep 04 2018 David King <amigadave@amigadave.com> - 2:3.30.0-1
 - Update to 3.30.0
 
