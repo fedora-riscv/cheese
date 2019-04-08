@@ -1,6 +1,6 @@
 Name:           cheese
 Epoch:          2
-Version:        3.32.0
+Version:        3.32.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
@@ -94,10 +94,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 %doc AUTHORS README
 %{_bindir}/cheese
 %{_datadir}/applications/org.gnome.Cheese.desktop
-%{_datadir}/icons/hicolor/*/apps/org.gnome.Cheese.png
-%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Cheese-symbolic.svg
 %{_datadir}/appdata/org.gnome.Cheese.appdata.xml
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
+%{_datadir}/icons/hicolor/scalable/apps/org.gnome.Cheese.svg
+%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Cheese-symbolic.svg
 %{_mandir}/man1/cheese.1*
 
 %files -f %{name}.lang libs
@@ -118,6 +118,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Mon Apr 08 2019 Kalev Lember <klember@redhat.com> - 2:3.32.1-1
+- Update to 3.32.1
+
 * Tue Mar 12 2019 David King <amigadave@amigadave.com> - 2:3.32.0-1
 - Update to 3.32.0
 
