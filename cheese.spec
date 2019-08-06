@@ -1,19 +1,21 @@
 Name:           cheese
 Epoch:          2
-Version:        3.32.1
-Release:        3%{?dist}
+Version:        3.33.90.1
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
 Source0:        https://download.gnome.org/sources/%{name}/3.32/%{name}-%{version}.tar.xz
 
+BuildRequires:  gcc
+BuildRequires:  meson
+BuildRequires:  gtk-doc
 BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
 BuildRequires:  docbook-dtds
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
-BuildRequires:  intltool
 BuildRequires:  itstool
 BuildRequires:  libXtst-devel
 BuildRequires:  vala
@@ -63,16 +65,16 @@ for writing applications that require a webcam display widget.
 
 
 %prep
-%setup -q
+%autosetup
 
 
 %build
-%configure --disable-static
-make V=1 %{?_smp_mflags}
+%meson -Dtests=false
+%meson_build
 
 
 %install
-%make_install
+%meson_install
 
 rm -f %{buildroot}%{_libdir}/libcheese.{a,la}
 rm -f %{buildroot}%{_libdir}/libcheese-gtk.{a,la}
@@ -85,7 +87,7 @@ chrpath --delete %{buildroot}%{_libdir}/libcheese-gtk.so.*
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desktop
-
+%meson_test
 
 %ldconfig_scriptlets libs
 
@@ -94,7 +96,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 %doc AUTHORS README
 %{_bindir}/cheese
 %{_datadir}/applications/org.gnome.Cheese.desktop
-%{_datadir}/appdata/org.gnome.Cheese.appdata.xml
+%{_datadir}/metainfo/org.gnome.Cheese.appdata.xml
 %{_datadir}/dbus-1/services/org.gnome.Cheese.service
 %{_datadir}/icons/hicolor/scalable/apps/org.gnome.Cheese.svg
 %{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Cheese-symbolic.svg
@@ -118,6 +120,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Tue Aug 06 2019 Phil Wyett <philwyett@kathenas.org> - 2:3.33.90.1-1
+- Convert to using meson build system.
+- Update to 3.33.90.1.
+
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.32.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
