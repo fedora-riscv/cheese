@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.34.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -120,6 +120,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.34.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Thu Jan 16 2020 Kalev Lember <klember@redhat.com> - 2:3.34.0-2
 - Rebuilt for libgnome-desktop soname bump
 
