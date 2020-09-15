@@ -1,12 +1,12 @@
 Name:           cheese
 Epoch:          2
-Version:        3.34.0
-Release:        4%{?dist}
+Version:        3.38.0
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
-Source0:        https://download.gnome.org/sources/%{name}/3.34/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.38/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -120,6 +120,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Tue Sep 15 2020 Kalev Lember <klember@redhat.com> - 2:3.38.0-1
+- Update to 3.38.0
+
 * Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.34.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
