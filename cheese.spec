@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.38.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -124,6 +124,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.38.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Fri Sep 18 2020 Bastien Nocera <bnocera@redhat.com> - 3.38.0-2
 + cheese-3.38.0-2
 - Fix infinite loop on exit
