@@ -1,7 +1,7 @@
 Name:           cheese
 Epoch:          2
 Version:        3.38.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -10,6 +10,7 @@ Source0:        https://download.gnome.org/sources/%{name}/3.38/%{name}-%{versio
 
 # https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/39
 Patch0: 0001-Fix-infinite-loop-if-thumbnailer-is-not-available.patch
+Patch1:         cheese-3.38.0-vala-genericarray.patch
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -22,7 +23,6 @@ BuildRequires:  gettext
 BuildRequires:  itstool
 BuildRequires:  libXtst-devel
 BuildRequires:  vala
-BuildRequires:  git
 BuildRequires:  pkgconfig(clutter-1.0)
 BuildRequires:  pkgconfig(clutter-gst-3.0)
 BuildRequires:  pkgconfig(clutter-gtk-1.0)
@@ -40,8 +40,8 @@ BuildRequires:  /usr/bin/appstream-util
 BuildRequires:  /usr/bin/xsltproc
 
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-Requires: gstreamer1-plugins-good
-Requires: gstreamer1-plugins-bad-free
+Requires: gstreamer1-plugins-good%{?_isa}
+Requires: gstreamer1-plugins-bad-free%{?_isa}
 Requires: gnome-video-effects
 
 %description
@@ -69,7 +69,7 @@ for writing applications that require a webcam display widget.
 
 
 %prep
-%autosetup -p1 -S git
+%autosetup -p1
 
 
 %build
@@ -124,6 +124,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Wed Jul 28 2021 David King <amigadave@amigadave.com> - 2:3.38.0-5
+- Add isa to gstreamer plugin Requires (#1986432)
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2:3.38.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
