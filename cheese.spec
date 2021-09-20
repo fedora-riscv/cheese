@@ -1,16 +1,14 @@
 Name:           cheese
 Epoch:          2
-Version:        3.38.0
-Release:        5%{?dist}
+Version:        41.0
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
-Source0:        https://download.gnome.org/sources/%{name}/3.38/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/41/%{name}-%{version}.tar.xz
 
-# https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/39
-Patch0: 0001-Fix-infinite-loop-if-thumbnailer-is-not-available.patch
-Patch1:         cheese-3.38.0-vala-genericarray.patch
+Patch0:         cheese-41.0-introspection.patch
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -124,6 +122,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Mon Sep 20 2021 David King <amigadave@amigadave.com> - 2:41.0-1
+- Update to 41.0
+
 * Wed Jul 28 2021 David King <amigadave@amigadave.com> - 2:3.38.0-5
 - Add isa to gstreamer plugin Requires (#1986432)
 
