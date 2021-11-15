@@ -1,14 +1,12 @@
 Name:           cheese
 Epoch:          2
-Version:        41.0
+Version:        41.1
 Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
 Source0:        https://download.gnome.org/sources/%{name}/41/%{name}-%{version}.tar.xz
-
-Patch0:         cheese-41.0-introspection.patch
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -122,6 +120,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Mon Nov 15 2021 David King <amigadave@amigadave.com> - 2:41.1-1
+- Update to 41.1
+
 * Mon Sep 20 2021 David King <amigadave@amigadave.com> - 2:41.0-1
 - Update to 41.0
 
