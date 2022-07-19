@@ -1,12 +1,14 @@
+%global tarball_version %%(echo %{version} | tr '~' '.')
+
 Name:           cheese
 Epoch:          2
-Version:        41.1
-Release:        2%{?dist}
+Version:        43~alpha
+Release:        1%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Apps/Cheese
-Source0:        https://download.gnome.org/sources/%{name}/41/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/43/%{name}-%{tarball_version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -65,7 +67,7 @@ for writing applications that require a webcam display widget.
 
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{tarball_version}
 
 
 %build
@@ -120,6 +122,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Tue Jul 19 2022 Kalev Lember <klember@redhat.com> - 2:43~alpha-1
+- Update to 43.alpha
+
 * Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2:41.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
