@@ -97,8 +97,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 %files -f %{name}.lang libs
 %license COPYING
-%{_libdir}/libcheese.so.*
-%{_libdir}/libcheese-gtk.so.*
+%{_libdir}/libcheese.so.8*
+%{_libdir}/libcheese-gtk.so.25*
 %{_datadir}/glib-2.0/schemas/org.gnome.Cheese.gschema.xml
 %{_libdir}/girepository-1.0/Cheese-3.0.typelib
 
@@ -117,6 +117,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 - Update to 43.alpha
 - Remove ldconfig_scriptlets use
 - Remove some leftover from autotools build
+- Tighten soname globs
 
 * Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2:41.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
