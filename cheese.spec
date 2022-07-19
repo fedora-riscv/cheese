@@ -91,8 +91,6 @@ chrpath --delete %{buildroot}%{_libdir}/libcheese-gtk.so.*
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desktop
 %meson_test
 
-%ldconfig_scriptlets libs
-
 
 %files
 %doc AUTHORS README
@@ -124,6 +122,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 %changelog
 * Tue Jul 19 2022 Kalev Lember <klember@redhat.com> - 2:43~alpha-1
 - Update to 43.alpha
+- Remove ldconfig_scriptlets use
 
 * Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2:41.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
