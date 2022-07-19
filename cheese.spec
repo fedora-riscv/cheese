@@ -13,7 +13,6 @@ Source0:        https://download.gnome.org/sources/%{name}/43/%{name}-%{tarball_
 BuildRequires:  gcc
 BuildRequires:  meson
 BuildRequires:  gtk-doc
-BuildRequires:  chrpath
 BuildRequires:  desktop-file-utils
 BuildRequires:  docbook-dtds
 BuildRequires:  docbook-style-xsl
@@ -78,13 +77,7 @@ for writing applications that require a webcam display widget.
 %install
 %meson_install
 
-rm -f %{buildroot}%{_libdir}/libcheese.{a,la}
-rm -f %{buildroot}%{_libdir}/libcheese-gtk.{a,la}
-
 %find_lang %{name} --with-gnome
-
-chrpath --delete %{buildroot}%{_bindir}/cheese
-chrpath --delete %{buildroot}%{_libdir}/libcheese-gtk.so.*
 
 
 %check
@@ -123,6 +116,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 * Tue Jul 19 2022 Kalev Lember <klember@redhat.com> - 2:43~alpha-1
 - Update to 43.alpha
 - Remove ldconfig_scriptlets use
+- Remove some leftover from autotools build
 
 * Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2:41.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
