@@ -3,7 +3,7 @@
 Name:           cheese
 Epoch:          2
 Version:        43~alpha
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPLv2+
@@ -113,6 +113,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Cheese.desk
 
 
 %changelog
+* Wed Jul 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2:43~alpha-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Tue Jul 19 2022 Kalev Lember <klember@redhat.com> - 2:43~alpha-1
 - Update to 43.alpha
 - Remove ldconfig_scriptlets use
